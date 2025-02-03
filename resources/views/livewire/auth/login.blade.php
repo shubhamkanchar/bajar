@@ -1,5 +1,4 @@
-@extends('layouts.auth-layout')
-@section('content')
+<div>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -12,6 +11,11 @@
                     <div class="card-body p-xl-5">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <img src="{{asset('assests/logo/logo.png')}}">
+                                </div>
+                            </div>
                             <div class="row">
                                 <h3>Sign In</h3>
                                 <p>Great to have you back!</p>
@@ -75,7 +79,7 @@
             </div>
         </div>
     </div>
-@endsection
+</div>
 @push('script')
     <script type="module">
         $(document).on('click','.email-toggle-btn',function(){

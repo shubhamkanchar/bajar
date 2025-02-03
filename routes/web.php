@@ -1,4 +1,7 @@
 <?php
+
+use App\Livewire\Auth\Login;
+use App\Livewire\Auth\Otp;
 use App\Livewire\Onboarding as LivewireOnboarding;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +25,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/', LivewireOnboarding::class);
+
+Route::get('/test', Login::class);
+Route::get('/otp', Otp::class);
 
 
