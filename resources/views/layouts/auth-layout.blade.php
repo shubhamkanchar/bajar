@@ -25,7 +25,7 @@
 </head>
 <body>
     <div id="app">
-        <main class="py-md-4 m-md-5 rounded-4" style="background-image: url({{asset('assests/bg/bg1.jpeg')}});background-repeat: no-repeat; background-size: cover;">
+        <main class="py-md-4 m-md-5 rounded-4" style="background-image: url({{asset('assets/bg/bg1.jpeg')}});background-repeat: no-repeat; background-size: cover;">
             @yield('content')
         </main>
     </div>

@@ -19,7 +19,7 @@
                             @csrf
                             <div class="row mb-5">
                                 <div class="col-md-12">
-                                    <img src="{{ asset('assests/logo/logo.png') }}">
+                                    <img src="{{ asset('assets/logo/logo.png') }}">
                                 </div>
                             </div>
                             <div class="row">

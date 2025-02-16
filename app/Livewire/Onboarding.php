@@ -59,9 +59,9 @@ class Onboarding extends Component
 
     public function nextStep()
     {
-        if ($this->step !== 1) {
-            $this->validate();
-        }
+        // if ($this->step !== 1) {
+        //     $this->validate();
+        // }
         if ($this->step < $this->totalSteps) {
             $this->step++;
         }
