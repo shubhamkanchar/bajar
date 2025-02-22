@@ -2,6 +2,8 @@
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Otp;
+use App\Livewire\Business\Edit;
+use App\Livewire\Business\Profile;
 use App\Livewire\Onboarding as LivewireOnboarding;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +29,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/on-boarding', LivewireOnboarding::class);
 Route::get('/login', Login::class)->name('login');
 Route::get('/otp', Otp::class);
+Route::get('/business-profile', Profile::class);
+Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
 
 
