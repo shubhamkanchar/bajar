@@ -68,7 +68,7 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class=" btn btn-dark rounded-5 me-2" href="">Sign In</a>
+                                <a href="{{ route('login') }}" class=" btn btn-dark rounded-5 me-2" href="">Sign In</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn bg-secondary-subtle rounded-5" href="">Sign Up</a>

@@ -22,11 +22,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',Welcome::class);
-
-// Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::get('/on-boarding', LivewireOnboarding::class);
 Route::get('/login', Login::class)->name('login');
 Route::get('/otp', Otp::class);
