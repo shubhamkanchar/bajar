@@ -1,7 +1,7 @@
 <div class="card rounded-4 shadow">
 
     <div class="row p-4">
-        <div class="offset-lg-2 col-lg-4 col-md-6 col-sm-12 p-4">
+        <div class="offset-xl-2 offset-lg-1 col-xl-4 col-lg-6 col-md-6 col-sm-12 p-4">
             @if ($step === 1)
                 <div class="row">
                     <div class="col-6">
@@ -9,7 +9,11 @@
 
                     </div>
                     <div class="col-6 text-end">
-                        <img class="mb-5" src="{{ asset('assets/image/step_1.png') }}">
+                        @if ($userType == 'Individual')
+                            <img class="mb-5" src="{{ asset('assets/image/step_1.png') }}">
+                        @else
+                            <img class="mb-5" src="{{ asset('assets/image/business/step_1.png') }}">
+                        @endif
                     </div>
                 </div>
                 <h6 class="text-muted fst-italic mb-2">Welcome to Bajar Bhaw!</h6>
@@ -201,25 +205,36 @@
                     </button>
                 </div>
             @elseif($step == 2 && $userType === 'business')
+                <div class="row">
+                    <div class="col-6">
+                        <img class="mb-5" src="{{ asset('assets/logo/logo.png') }}">
+                    </div>
+                    <div class="col-6 text-end">
+                        <img class="mb-5" src="{{ asset('assets/image/business/step_2.png') }}">
+                    </div>
+                </div>
                 <h6 class="text-muted fst-italic mb-3">"Awesome! Share some quick info to get started."</h6>
                 <h5 class="fw-bold mb-4">Business Details</h5>
-
                 <div class="row mb-3">
                     <!-- Business Name -->
-                    <div class="col-12 col-md-6 mb-3 form-floating">
-                        <input type="text" id="business_name" class="form-control" wire:model="business_name"
-                            placeholder="Please enter your business name">
-                        <label for="business_name">Business Name *</label>
+                    <div class="col-12 col-md-6 mb-3 ">
+                        <div class="form-floating">
+                            <input type="text" id="business_name" class="form-control" wire:model="business_name"
+                                placeholder="Please enter your business name">
+                            <label for="business_name">Business Name *</label>
+                        </div>
                         @error('business_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- GST Number -->
-                    <div class="col-12 col-md-6 mb-3 form-floating">
-                        <input type="number" id="gst_number" class="form-control" wire:model="gst_number"
-                            placeholder="Please enter your GST number">
-                        <label for="gst_number">GST Number</label>
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="number" id="gst_number" class="form-control" wire:model="gst_number"
+                                placeholder="Please enter your GST number">
+                            <label for="gst_number">GST Number</label>
+                        </div>
                         @error('gst_number')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -228,20 +243,24 @@
 
                 <div class="row mb-5">
                     <!-- Phone Number -->
-                    <div class="col-12 col-md-6 mb-3 form-floating">
-                        <input type="text" id="phone" class="form-control" wire:model="phone"
-                            placeholder="Please enter your phone number">
-                        <label for="phone">Phone Number *</label>
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="text" id="phone" class="form-control" wire:model="phone"
+                                placeholder="Please enter your phone number">
+                            <label for="phone">Phone Number *</label>
+                        </div>
                         @error('phone')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- Email -->
-                    <div class="col-12 col-md-6 mb-3 form-floating">
-                        <input type="email" id="email" class="form-control" wire:model="email"
-                            placeholder="Please enter your email">
-                        <label for="email">Email ID *</label>
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="email" id="email" class="form-control" wire:model="email"
+                                placeholder="Please enter your email">
+                            <label for="email">Email ID *</label>
+                        </div>
                         @error('email')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -252,38 +271,44 @@
 
                 <div class="row">
                     <!-- Business Address -->
-                    <div class="col-12 mb-3 form-floating">
-                        <input type="text" id="business_address" class="form-control"
-                            wire:model="business_address" placeholder="Please enter your business address">
-                        <label for="business_address">Business Address</label>
+                    <div class="col-12 mb-3">
+                        <div class="form-floating">
+                            <input type="text" id="business_address" class="form-control"
+                                wire:model="business_address" placeholder="Please enter your business address">
+                            <label for="business_address">Business Address</label>
+                        </div>
                         @error('business_address')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- State Dropdown -->
-                    <div class="col-12 col-md-6 mb-3 form-floating">
-                        <select class="form-select" id="state" wire:model="state">
-                            <option value="">Select State</option>
-                            @foreach ($states as $stateOption)
-                                <option value="{{ $stateOption }}">{{ $stateOption }}</option>
-                            @endforeach
-                        </select>
-                        <label for="state">State</label>
+                    <div class="col-12 col-md-6 mb-3 ">
+                        <div class="form-floating">
+                            <select class="form-select" id="state" wire:model="state">
+                                <option value="">Select State</option>
+                                @foreach ($states as $stateOption)
+                                    <option value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                @endforeach
+                            </select>
+                            <label for="state">State</label>
+                        </div>
                         @error('state')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- City Dropdown -->
-                    <div class="col-12 col-md-6 mb-3 form-floating">
-                        <select class="form-select" id="city" wire:model="city">
-                            <option value="">Select City</option>
-                            @foreach ($cities as $cityOption)
-                                <option value="{{ $cityOption }}">{{ $cityOption }}</option>
-                            @endforeach
-                        </select>
-                        <label for="city">City</label>
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <select class="form-select" id="city" wire:model="city">
+                                <option value="">Select City</option>
+                                @foreach ($cities as $cityOption)
+                                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                @endforeach
+                            </select>
+                            <label for="city">City</label>
+                        </div>
                         @error('city')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -291,23 +316,211 @@
                 </div>
 
                 <!-- Google Map Link -->
-                <div class="mb-3 form-floating">
-                    <input type="text" id="google_map_link" class="form-control" wire:model="google_map_link"
-                        placeholder="Please enter your Google Map link">
-                    <label for="google_map_link">Google Map Link</label>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="text" id="google_map_link" class="form-control" wire:model="google_map_link"
+                            placeholder="Please enter your Google Map link">
+                        <label for="google_map_link">Google Map Link</label>
+                    </div>
                     @error('google_map_link')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <!-- Navigation Buttons -->
-                <div class="d-flex mt-4 mb-4">
-                    <button class="btn btn-secondary me-2" wire:click="prevStep">Back</button>
-                    <button class="btn btn-primary" wire:click="nextStep">Next</button>
+                <div class="d-flex mt-5">
+                    <button class="btn btn-defualt" wire:click="prevStep">
+                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="-1" y="1" width="47" height="47" rx="24"
+                                transform="matrix(-1 0 0 1 48 0)" fill="white" stroke="black" stroke-width="2" />
+                            <path
+                                d="M20.9123 25.0026L29.3342 16.5807C29.6206 16.2943 29.7591 15.9553 29.7495 15.5638C29.74 15.1723 29.592 14.8333 29.3055 14.5469C29.0191 14.2604 28.6801 14.1172 28.2886 14.1172C27.8971 14.1172 27.5581 14.2604 27.2717 14.5469L18.4774 23.3698C18.2482 23.599 18.0764 23.8568 17.9618 24.1432C17.8472 24.4297 17.7899 24.7161 17.7899 25.0026C17.7899 25.2891 17.8472 25.5755 17.9618 25.862C18.0764 26.1484 18.2482 26.4063 18.4774 26.6354L27.3003 35.4583C27.5868 35.7448 27.921 35.8832 28.3029 35.8737C28.6849 35.8642 29.0191 35.7161 29.3055 35.4297C29.592 35.1432 29.7352 34.8043 29.7352 34.4128C29.7352 34.0213 29.592 33.6823 29.3055 33.3958L20.9123 25.0026Z"
+                                fill="black" />
+                        </svg>
+
+                    </button>
+                    <button class="btn btn-dark btn-sm px-5 rounded-5" wire:click="nextStep"
+                        {{ $userType ? '' : 'disabled' }}>
+                        Next
+                    </button>
+                </div>
+            @elseif($step == 3 && $userType === 'business')
+                <div class="row">
+                    <div class="col-6">
+                        <img class="mb-5" src="{{ asset('assets/logo/logo.png') }}">
+                    </div>
+                    <div class="col-6 text-end">
+                        <img class="mb-5" src="{{ asset('assets/image/business/step_3.png') }}">
+                    </div>
+                </div>
+                <h6 class="text-muted fst-italic mb-3">"Awesome! Share some quick info to get started."</h6>
+                <h5 class="fw-bold mb-4">Business Details</h5>
+                <div class="row mb-3">
+                    <!-- Business Name -->
+                    <div class="col-12 col-md-6 mb-3 ">
+                        <div class="form-floating">
+                            <input type="text" id="business_name" class="form-control" wire:model="business_name"
+                                placeholder="Please enter your business name">
+                            <label for="business_name">Business Name *</label>
+                        </div>
+                        @error('business_name')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- GST Number -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="number" id="gst_number" class="form-control" wire:model="gst_number"
+                                placeholder="Please enter your GST number">
+                            <label for="gst_number">GST Number</label>
+                        </div>
+                        @error('gst_number')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <!-- Phone Number -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="text" id="phone" class="form-control" wire:model="phone"
+                                placeholder="Please enter your phone number">
+                            <label for="phone">Phone Number *</label>
+                        </div>
+                        @error('phone')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="email" id="email" class="form-control" wire:model="email"
+                                placeholder="Please enter your email">
+                            <label for="email">Email ID *</label>
+                        </div>
+                        @error('email')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-4">Business Address</h5>
+
+                <div class="row">
+                    <!-- Business Address -->
+                    <div class="col-12 mb-3">
+                        <div class="form-floating">
+                            <input type="text" id="business_address" class="form-control"
+                                wire:model="business_address" placeholder="Please enter your business address">
+                            <label for="business_address">Business Address</label>
+                        </div>
+                        @error('business_address')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- State Dropdown -->
+                    <div class="col-12 col-md-6 mb-3 ">
+                        <div class="form-floating">
+                            <select class="form-select" id="state" wire:model="state">
+                                <option value="">Select State</option>
+                                @foreach ($states as $stateOption)
+                                    <option value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                @endforeach
+                            </select>
+                            <label for="state">State</label>
+                        </div>
+                        @error('state')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- City Dropdown -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-floating">
+                            <select class="form-select" id="city" wire:model="city">
+                                <option value="">Select City</option>
+                                @foreach ($cities as $cityOption)
+                                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                @endforeach
+                            </select>
+                            <label for="city">City</label>
+                        </div>
+                        @error('city')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Google Map Link -->
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="text" id="google_map_link" class="form-control" wire:model="google_map_link"
+                            placeholder="Please enter your Google Map link">
+                        <label for="google_map_link">Google Map Link</label>
+                    </div>
+                    @error('google_map_link')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex mt-5">
+                    <button class="btn btn-defualt" wire:click="prevStep">
+                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="-1" y="1" width="47" height="47" rx="24"
+                                transform="matrix(-1 0 0 1 48 0)" fill="white" stroke="black" stroke-width="2" />
+                            <path
+                                d="M20.9123 25.0026L29.3342 16.5807C29.6206 16.2943 29.7591 15.9553 29.7495 15.5638C29.74 15.1723 29.592 14.8333 29.3055 14.5469C29.0191 14.2604 28.6801 14.1172 28.2886 14.1172C27.8971 14.1172 27.5581 14.2604 27.2717 14.5469L18.4774 23.3698C18.2482 23.599 18.0764 23.8568 17.9618 24.1432C17.8472 24.4297 17.7899 24.7161 17.7899 25.0026C17.7899 25.2891 17.8472 25.5755 17.9618 25.862C18.0764 26.1484 18.2482 26.4063 18.4774 26.6354L27.3003 35.4583C27.5868 35.7448 27.921 35.8832 28.3029 35.8737C28.6849 35.8642 29.0191 35.7161 29.3055 35.4297C29.592 35.1432 29.7352 34.8043 29.7352 34.4128C29.7352 34.0213 29.592 33.6823 29.3055 33.3958L20.9123 25.0026Z"
+                                fill="black" />
+                        </svg>
+
+                    </button>
+                    <button class="btn btn-dark btn-sm px-5 rounded-5" wire:click="nextStep"
+                        {{ $userType ? '' : 'disabled' }}>
+                        Next
+                    </button>
+                </div>
+            @elseif($step == 4 && $userType === 'business')
+                <div class="row">
+                    <div class="col-6">
+                        <img class="mb-5" src="{{ asset('assets/logo/logo.png') }}">
+                    </div>
+                    <div class="col-6 text-end">
+                        <img class="mb-5" src="{{ asset('assets/image/business/step_4.png') }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-md-4 offset-lg-3 col-lg-6 col-12 col-md-4 text-center">
+                        <img class="mb-5 w-100" src="{{ asset('assets/image/final.png') }}">
+                    </div>
+                </div>
+                <!-- Navigation Buttons -->
+                <div class="d-flex mt-5">
+                    <button class="btn btn-defualt" wire:click="prevStep">
+                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="-1" y="1" width="47" height="47" rx="24"
+                                transform="matrix(-1 0 0 1 48 0)" fill="white" stroke="black" stroke-width="2" />
+                            <path
+                                d="M20.9123 25.0026L29.3342 16.5807C29.6206 16.2943 29.7591 15.9553 29.7495 15.5638C29.74 15.1723 29.592 14.8333 29.3055 14.5469C29.0191 14.2604 28.6801 14.1172 28.2886 14.1172C27.8971 14.1172 27.5581 14.2604 27.2717 14.5469L18.4774 23.3698C18.2482 23.599 18.0764 23.8568 17.9618 24.1432C17.8472 24.4297 17.7899 24.7161 17.7899 25.0026C17.7899 25.2891 17.8472 25.5755 17.9618 25.862C18.0764 26.1484 18.2482 26.4063 18.4774 26.6354L27.3003 35.4583C27.5868 35.7448 27.921 35.8832 28.3029 35.8737C28.6849 35.8642 29.0191 35.7161 29.3055 35.4297C29.592 35.1432 29.7352 34.8043 29.7352 34.4128C29.7352 34.0213 29.592 33.6823 29.3055 33.3958L20.9123 25.0026Z"
+                                fill="black" />
+                        </svg>
+
+                    </button>
+                    <button class="btn btn-dark btn-sm px-5 rounded-5" wire:click="nextStep"
+                        {{ $userType ? '' : 'disabled' }}>
+                        Done
+                    </button>
                 </div>
             @endif
         </div>
-        <div class="col-lg-3 col-md-6 text-end d-none d-md-block">
+        <div class="col-xl-3 col-lg-5 col-md-6 text-end d-none d-md-block">
             <img src="{{ asset('assets/image/rectangle_3.png') }}" alt="Onboarding Image" class="img-fluid">
         </div>
     </div>

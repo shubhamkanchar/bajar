@@ -71,7 +71,7 @@
                                 <a href="{{ route('login') }}" class=" btn btn-dark rounded-5 me-2" href="">Sign In</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn bg-secondary-subtle rounded-5" href="">Sign Up</a>
+                                <a href="{{ route('signup') }}" class="btn bg-secondary-subtle rounded-5" href="">Sign Up</a>
                             </li>
                         @else
                             <li class="nav-item dropdown">

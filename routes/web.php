@@ -1,7 +1,9 @@
 <?php
 
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Otp;
+use App\Livewire\Auth\Signup;
 use App\Livewire\Business\Edit;
 use App\Livewire\Business\Profile;
 use App\Livewire\Home\Welcome;
@@ -21,14 +23,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',Welcome::class);
-Route::get('/on-boarding', LivewireOnboarding::class);
+Route::get('/', Welcome::class);
 Route::get('/login', Login::class)->name('login');
-Route::get('/otp', Otp::class);
-Route::get('/business-profile', Profile::class);
-Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
+Route::get('/signup', Signup::class)->name('signup');
 
-Route::get('/service-profile', ServiceProfile::class);
-Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
-
-
+Route::middleware('auth')->group(function () {
+    Route::get('/on-boarding', LivewireOnboarding::class)->name('onboarding');
+    Route::get('/business-profile', Profile::class);
+    Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
+    Route::get('/service-profile', ServiceProfile::class);
+    Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
+    Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
+});

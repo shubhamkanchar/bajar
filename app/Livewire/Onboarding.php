@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Onboarding extends Component
@@ -59,9 +60,9 @@ class Onboarding extends Component
 
     public function nextStep()
     {
-        // if ($this->step !== 1) {
-        //     $this->validate();
-        // }
+        if ($this->step !== 1) {
+            $this->validate();
+        }
         if ($this->step < $this->totalSteps) {
             $this->step++;
         }
@@ -76,6 +77,9 @@ class Onboarding extends Component
 
     public function render()
     {
+        $this->email = Auth::user()->email;
+        $this->phone = Auth::user()->phone;
+        
         $states = [
             'Andhra Pradesh',
             'Arunachal Pradesh',

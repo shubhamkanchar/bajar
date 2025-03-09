@@ -4,9 +4,10 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class Login extends Component
+class Signup extends Component
 {
     public  $email, $phone, $tab = 'email', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
@@ -105,9 +106,9 @@ class Login extends Component
     {
         $this->page = $value;
     }
-    
+
     public function render()
     {
-        return view('livewire.auth.login')->extends('layouts.auth-layout');
+        return view('livewire.auth.signup')->extends('layouts.auth-layout');
     }
 }
