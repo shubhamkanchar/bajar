@@ -18,12 +18,14 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('type')->nullable();
+            $table->string('offering')->nullable();
             $table->string('email_otp')->nullable();
             $table->string('phone_otp')->nullable();
             $table->string('gst')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->tinyInteger('onboard_completed')->default(0)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

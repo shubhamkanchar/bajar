@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <button class="btn btn-defualt" wire:click="pageChange('signup')">
+                <button class="btn btn-defualt" wire:click="pageChange('signin')">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
                             fill="white" fill-opacity="0.8" />
@@ -92,7 +92,7 @@
                                 </div>
                             </form>
 
-                            <form wire:submit.prevent="verifyOtp" class="@if ($page == 'signup') d-none @endif">
+                            <form wire:submit.prevent="verifyOtp" class="@if ($page == 'signin') d-none @endif">
                                 @csrf
                                 <div class="row mb-5">
                                     <div class="col-md-12">

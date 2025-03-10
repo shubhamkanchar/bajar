@@ -4,11 +4,12 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Login extends Component
 {
-    public  $email, $phone, $tab = 'email', $page = 'signup';
+    public  $email, $phone, $tab = 'email', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
 
     public function register()

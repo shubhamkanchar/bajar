@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\Address;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -18,11 +20,10 @@ class Onboarding extends Component
     public $state;
     public $city;
     public $email;
-
+    public $pin_code;
+    public $offering;
     // Step 2 fields for Business
-    public $business_name;
     public $gst_number;
-    public $business_address;
     public $google_map_link;
 
     // Define validation rules for step 2
@@ -30,12 +31,11 @@ class Onboarding extends Component
         'name' => 'nullable|string|max:255',
         'phone' => 'required|string|min:10|max:15',
         'email' => 'required|email',
-        'state' => 'nullable|string',
-        'city' => 'nullable|string',
-        'business_name' => 'required_if:userType,business|string|max:255',
-        'gst_number' => 'nullable|numeric|digits:15',
-        'business_address' => 'nullable|string|max:255',
-        'google_map_link' => 'nullable|url',
+        'state' => 'required|string',
+        'city' => 'required|string',
+        // 'gst_number' => 'nullable|numeric|digits:15',
+        // 'business_address' => 'nullable|string|max:255',
+        // 'google_map_link' => 'nullable|url',
     ];
 
     // Define custom messages for validation errors
@@ -45,10 +45,10 @@ class Onboarding extends Component
         'email.email' => 'Please enter a valid email address.',
         'state.required' => 'Please select a state.',
         'city.required' => 'Please select a city.',
-        'business_name.required_if' => 'Please enter your business name.',
-        'gst_number.numeric' => 'Please enter a valid GST number.',
-        'business_address.required_if' => 'Please enter your business address.',
-        'google_map_link.url' => 'Please enter a valid Google Map link.',
+        // 'business_name.required_if' => 'Please enter your business name.',
+        // 'gst_number.numeric' => 'Please enter a valid GST number.',
+        // 'business_address.required_if' => 'Please enter your business address.',
+        // 'google_map_link.url' => 'Please enter a valid Google Map link.',
     ];
 
 
@@ -66,6 +66,61 @@ class Onboarding extends Component
         if ($this->step < $this->totalSteps) {
             $this->step++;
         }
+
+        if($this->userType == 'individual' && $this->step == 3){
+            try{
+                $user = Auth::user();
+                $user->name = $this->name;
+                $user->phone = $this->phone;
+                $user->type = 'individual';
+                $user->save();
+                
+                $address = Address::firstOrNew(['user_id'=>$user->id]);
+                $address->city = $this->city;
+                $address->state = $this->state;
+                $address->save();
+            }catch(Exception $e){
+                
+            }
+        }
+
+        if($this->userType == 'business' && $this->step == 4){
+            try{
+                $user = Auth::user();
+                $user->name = $this->name;
+                $user->phone = $this->phone;
+                $user->type = 'business';
+                $user->offering = 'business';
+                $user->gst_number = $this->gst_number;
+                $user->save();
+                
+                $address = Address::firstOrNew(['user_id'=>$user->id]);
+                $address->address = $this->address;
+                $address->city = $this->city;
+                $address->state = $this->state;
+                $address->pin_code = $this->pin_code;
+                $address->map_link = $this->google_map_link;
+                $address->save();
+            }catch(Exception $e){
+                
+            }
+        }
+    }
+
+    public function finalize(){
+        $user = Auth::user();
+        $user->onboard_completed = 1;
+        $user->save();
+
+        if($user->type == 'individual'){
+            return redirect()->route('home');
+        }else if($user->type == 'business'){
+            return redirect()->route('business.profile');
+        }
+    }
+
+    public function setOffering($offering){
+        $this->offering = $offering;
     }
 
     public function prevStep()
@@ -79,6 +134,7 @@ class Onboarding extends Component
     {
         $this->email = Auth::user()->email;
         $this->phone = Auth::user()->phone;
+        $this->name = Auth::user()->name;
         
         $states = [
             'Andhra Pradesh',
@@ -90,7 +146,6 @@ class Onboarding extends Component
 
         $cities = ['Amaravati', 'pune', 'Panaji', 'Mumbai'];
 
-        return view('livewire.onboarding', compact('states', 'cities'))
-            ->extends('layouts.app');
+        return view('livewire.onboarding', compact('states', 'cities'))->extends('layouts.app');
     }
 }
