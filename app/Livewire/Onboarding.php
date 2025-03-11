@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Address;
+use App\Models\Category;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -22,6 +23,8 @@ class Onboarding extends Component
     public $email;
     public $pin_code;
     public $offering;
+
+    public $categoryIds = [];
     // Step 2 fields for Business
     public $gst_number;
     public $google_map_link;
@@ -90,7 +93,7 @@ class Onboarding extends Component
                 $user->name = $this->name;
                 $user->phone = $this->phone;
                 $user->type = 'business';
-                $user->offering = 'business';
+                $user->offering = $this->offering;
                 $user->gst_number = $this->gst_number;
                 $user->save();
                 
@@ -121,6 +124,7 @@ class Onboarding extends Component
 
     public function setOffering($offering){
         $this->offering = $offering;
+        $this->categoryIds = [];
     }
 
     public function prevStep()
@@ -128,6 +132,14 @@ class Onboarding extends Component
         if ($this->step > 1) {
             $this->step--;
         }
+    }
+
+    public function addCategory($id){
+        array_push($this->categoryIds,$id);
+    }
+
+    public function removeCategory($id){
+        array_diff($this->categoryIds,$id);
     }
 
     public function render()
@@ -145,7 +157,8 @@ class Onboarding extends Component
         ];
 
         $cities = ['Amaravati', 'pune', 'Panaji', 'Mumbai'];
-
-        return view('livewire.onboarding', compact('states', 'cities'))->extends('layouts.app');
+        $productCategories = Category::where('type','product')->get();
+        $serviceCategories = Category::where('type','service')->get();
+        return view('livewire.onboarding', compact('states', 'cities','productCategories','serviceCategories'))->extends('layouts.app');
     }
 }
