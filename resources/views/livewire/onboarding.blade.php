@@ -358,7 +358,7 @@
                 <h5 class="fw-bold mb-4">Business Offerings</h5>
                 <div class="row">
                     <div class="col-lg-6 col-md-12 mb-2" wire:click="setOffering('product')">
-                        <div class="row width-100 border border-2 rounded-2 p-4 align-items-center">
+                        <div class="row width-100 border border-2 rounded-2 p-3 me-1 align-items-center">
                             <span class="col-2">
                                 <svg width="22" height="18" viewBox="0 0 22 18" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -392,7 +392,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-12" wire:click="setOffering('material')">
-                        <div class="row width-100 border border-2 rounded-2 p-4 align-items-center">
+                        <div class="row width-100 border border-2 rounded-2 p-3 ms-1 align-items-center">
                             <span class="col-2">
                                 
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
