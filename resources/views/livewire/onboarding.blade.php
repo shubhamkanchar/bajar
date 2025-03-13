@@ -427,7 +427,7 @@
                     </div>
                     @if ($offering == 'service')
                         <div class="col-12">
-                            <h4 class="fw-bold mt-3">Service i provide (00/03)</h4>
+                            <h4 class="fw-bold mt-3">Service i provide ({{str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT)}}/03)</h4>
                             @foreach ($serviceCategories as $category)
                                 @if (in_array($category->id, $categoryIds))
                                     <span role="button" wire:click="removeCategory({{$category->id}})"
@@ -441,7 +441,7 @@
                     @endif
                     @if ($offering == 'product')
                         <div class="col-12">
-                            <h4 class="fw-bold mt-3">Categories i deal in (00/03)</h4>
+                            <h4 class="fw-bold mt-3">Categories i deal in ({{str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT)}}/03)</h4>
                             @foreach ($productCategories as $category)
                                 @if (in_array($category->id, $categoryIds))
                                     <span role="button" wire:click="removeCategory({{$category->id}})"
@@ -453,6 +453,24 @@
                             @endforeach
                         </div>
                     @endif
+                </div>
+                <!-- Navigation Buttons -->
+                <div class="d-flex mt-5">
+                    <button class="btn btn-defualt" wire:click="prevStep">
+                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="-1" y="1" width="47" height="47" rx="24"
+                                transform="matrix(-1 0 0 1 48 0)" fill="white" stroke="black" stroke-width="2" />
+                            <path
+                                d="M20.9123 25.0026L29.3342 16.5807C29.6206 16.2943 29.7591 15.9553 29.7495 15.5638C29.74 15.1723 29.592 14.8333 29.3055 14.5469C29.0191 14.2604 28.6801 14.1172 28.2886 14.1172C27.8971 14.1172 27.5581 14.2604 27.2717 14.5469L18.4774 23.3698C18.2482 23.599 18.0764 23.8568 17.9618 24.1432C17.8472 24.4297 17.7899 24.7161 17.7899 25.0026C17.7899 25.2891 17.8472 25.5755 17.9618 25.862C18.0764 26.1484 18.2482 26.4063 18.4774 26.6354L27.3003 35.4583C27.5868 35.7448 27.921 35.8832 28.3029 35.8737C28.6849 35.8642 29.0191 35.7161 29.3055 35.4297C29.592 35.1432 29.7352 34.8043 29.7352 34.4128C29.7352 34.0213 29.592 33.6823 29.3055 33.3958L20.9123 25.0026Z"
+                                fill="black" />
+                        </svg>
+
+                    </button>
+                    <button class="btn btn-dark btn-sm px-5 rounded-5" wire:click="nextStep"
+                        {{ $userType ? '' : 'disabled' }}>
+                        Next
+                    </button>
                 </div>
             @elseif($step == 4 && $userType === 'business')
                 <div class="row">

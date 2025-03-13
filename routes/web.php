@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LogoutController;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Otp;
@@ -10,7 +11,10 @@ use App\Livewire\Home\Welcome;
 use App\Livewire\Onboarding as LivewireOnboarding;
 use App\Livewire\Service\Edit as ServiceEdit;
 use App\Livewire\Service\Profile as ServiceProfile;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +38,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/service-profile', ServiceProfile::class);
     Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
+
+Route::get('/auth/redirect/google', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+// Route::get('/auth/callback/google', function () {
+//     $googleUser = Socialite::driver('google')->stateless()->user();
+
+//     // Check if user exists
+//     $user = User::where('email', $googleUser->getEmail())->first();
+
+//     if (!$user) {
+//         $user = User::create([
+//             'name' => $googleUser->getName(),
+//             'email' => $googleUser->getEmail(),
+//             'password' => bcrypt(str()->random(16)), // Random password
+//         ]);
+//     }
+
+//     Auth::login($user);
+
+//     return redirect('/dashboard'); // Redirect after login
+// });

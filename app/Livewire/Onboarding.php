@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Address;
+use App\Models\BusinessCategory;
 use App\Models\Category;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -70,59 +71,70 @@ class Onboarding extends Component
             $this->step++;
         }
 
-        if($this->userType == 'individual' && $this->step == 3){
-            try{
+        if ($this->userType == 'individual' && $this->step == 3) {
+            try {
                 $user = Auth::user();
                 $user->name = $this->name;
                 $user->phone = $this->phone;
                 $user->type = 'individual';
                 $user->save();
-                
-                $address = Address::firstOrNew(['user_id'=>$user->id]);
+
+                $address = Address::firstOrNew(['user_id' => $user->id]);
                 $address->city = $this->city;
                 $address->state = $this->state;
                 $address->save();
-            }catch(Exception $e){
-                
+            } catch (Exception $e) {
             }
         }
 
-        if($this->userType == 'business' && $this->step == 4){
-            try{
+        if ($this->userType == 'business' && $this->step == 4) {
+            try {
                 $user = Auth::user();
                 $user->name = $this->name;
                 $user->phone = $this->phone;
                 $user->type = 'business';
                 $user->offering = $this->offering;
-                $user->gst_number = $this->gst_number;
+                $user->gst = $this->gst_number;
                 $user->save();
-                
-                $address = Address::firstOrNew(['user_id'=>$user->id]);
+
+                $address = Address::firstOrNew(['user_id' => $user->id]);
                 $address->address = $this->address;
                 $address->city = $this->city;
                 $address->state = $this->state;
                 $address->pin_code = $this->pin_code;
                 $address->map_link = $this->google_map_link;
                 $address->save();
-            }catch(Exception $e){
+
+                foreach($this->categoryIds as $category){
+                    BusinessCategory::updateOrCreate([
+                        'user_id' => $user->id,
+                        'category_id' => $category
+                    ],[
+                        'user_id' => $user->id,
+                        'category_id' => $category
+                    ]);
+                }
+            } catch (Exception $e) {
                 
             }
         }
     }
 
-    public function finalize(){
+    public function finalize()
+    {
         $user = Auth::user();
         $user->onboard_completed = 1;
         $user->save();
 
-        if($user->type == 'individual'){
+        if ($user->type == 'individual') {
             return redirect()->route('home');
-        }else if($user->type == 'business'){
+        } else if ($user->type == 'business') {
             return redirect()->route('business.profile');
         }
     }
 
-    public function setOffering($offering){
+    public function setOffering($offering)
+    {
         $this->offering = $offering;
         $this->categoryIds = [];
     }
@@ -134,20 +146,27 @@ class Onboarding extends Component
         }
     }
 
-    public function addCategory($id){
-        array_push($this->categoryIds,$id);
+    public function addCategory($id)
+    {
+        array_push($this->categoryIds, $id);
     }
 
-    public function removeCategory($id){
-        array_diff($this->categoryIds,$id);
+    public function removeCategory($id)
+    {
+        array_diff($this->categoryIds, $id);
     }
 
     public function render()
     {
-        $this->email = Auth::user()->email;
-        $this->phone = Auth::user()->phone;
-        $this->name = Auth::user()->name;
-        
+        if (Auth::user()->email) {
+            $this->email = Auth::user()->email;
+        }
+        if (Auth::user()->phone) {
+            $this->phone = Auth::user()->phone;
+        }
+        if (Auth::user()->name) {
+            $this->name = Auth::user()->name;
+        }
         $states = [
             'Andhra Pradesh',
             'Arunachal Pradesh',
@@ -157,8 +176,8 @@ class Onboarding extends Component
         ];
 
         $cities = ['Amaravati', 'pune', 'Panaji', 'Mumbai'];
-        $productCategories = Category::where('type','product')->get();
-        $serviceCategories = Category::where('type','service')->get();
-        return view('livewire.onboarding', compact('states', 'cities','productCategories','serviceCategories'))->extends('layouts.app');
+        $productCategories = Category::where('type', 'product')->get();
+        $serviceCategories = Category::where('type', 'service')->get();
+        return view('livewire.onboarding', compact('states', 'cities', 'productCategories', 'serviceCategories'))->extends('layouts.app');
     }
 }

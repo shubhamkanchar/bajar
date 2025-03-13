@@ -4,7 +4,10 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 use Livewire\Component;
 
 class Login extends Component
@@ -42,7 +45,6 @@ class Login extends Component
             $user->save();
         }
         $this->page = 'otp';
-
     }
 
     public function verifyOtp()
@@ -63,14 +65,14 @@ class Login extends Component
             'six' => 'OTP is required',
         ]);
 
-        $otp = $this->one.$this->two.$this->three.$this->four.$this->five.$this->six;
+        $otp = $this->one . $this->two . $this->three . $this->four . $this->five . $this->six;
         $success = false;
         if ($this->tab == 'email') {
             $user = User::where([
                 'email' => $this->email,
                 'email_otp' => $otp
             ])->first();
-            if($user){
+            if ($user) {
                 $user->update([
                     'email_verified_at' => Carbon::now(),
                     'email_otp' => NULL
@@ -82,7 +84,7 @@ class Login extends Component
                 'phone' => $this->email,
                 'phone_otp' => $otp
             ])->first();
-            if($user){
+            if ($user) {
                 $user->update([
                     'phone_verified_at' => Carbon::now(),
                     'phone_otp' => NULL
@@ -91,7 +93,7 @@ class Login extends Component
             }
         }
 
-        if($success){
+        if ($success) {
             Auth::login($user);
             return redirect()->route('onboarding');
         }
@@ -106,9 +108,28 @@ class Login extends Component
     {
         $this->page = $value;
     }
-    
-    public function render()
+
+    public function render(Request $request)
     {
+        if ($request->state) {
+            try {
+                $googleUser = Socialite::driver('google')->stateless()->user();
+                $user = User::where('email', $googleUser->getEmail())->first();
+
+                if (!$user) {
+                    $user = User::create([
+                        'name' => $googleUser->getName(),
+                        'email' => $googleUser->getEmail(),
+                        'email_otp' => rand(000000, 999999)
+                    ]);
+                }
+                $this->email = $googleUser->getEmail();
+                $this->page = 'otp';
+            } catch (Exception $e) {
+                
+            }
+        }
+
         return view('livewire.auth.login')->extends('layouts.auth-layout');
     }
 }

@@ -16,161 +16,161 @@
             <div class="col-md-6">
                 <div class="card rounded-4 p-xl-5" style="opacity: 0.97">
                     <div class="card-body p-xl-5">
-                        
-                            <form wire:submit.prevent="register" class="@if ($page == 'otp') d-none @endif">
-                                @csrf
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <img src="{{ asset('assets/logo/logo.png') }}">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <h3>Sign Up</h3>
-                                    <p>Great to have you back!</p>
-                                </div>
-                                <div class="row text-center justify-content-center mb-5">
-                                    <div class="bg-white rounded-5 p-2" style="width: fit-content;">
-                                        <button wire:click="tabChange('email')" type="button"
-                                            class="btn rounded-5 email-toggle-btn @if ($tab == 'email') btn-dark @endif"
-                                            data-item="email">Email ID</button>
-                                        <button wire:click="tabChange('phone')" type="button"
-                                            class="btn rounded-5 email-toggle-btn @if ($tab == 'phone') btn-dark @endif"
-                                            data-item="phone">Phone</button>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <input type="hidden" wire:model="tab" value="email" id="tab">
-                                    <div class="col-md-12 @if ($tab == 'phone') d-none @endif"
-                                        id="emailDiv">
-                                        <div class="form-floating">
-                                            <input type="email" class="form-control rounded-4" id="emailInput"
-                                                placeholder="name@example.com" wire:model="email">
-                                            <label for="emailInput">Email address</label>
-                                        </div>
-                                        @error('email')
-                                            <span class="text-danger text-sm">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-12 @if ($tab == 'email') d-none @endif"
-                                        id="phoneDiv">
-                                        <div class="form-floating">
-                                            <input type="number" class="form-control rounded-4" id="phoneInput"
-                                                placeholder="" wire:model="phone">
-                                            <label for="phoneInput">Phone</label>
-                                        </div>
-                                        @error('phone')
-                                            <span class="text-danger text-sm">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="row mb-0">
-                                    <div class="col-md-12 ">
-                                        <button type="submit" class="btn btn-dark w-100">Proceed</button>
-                                    </div>
-                                </div>
-                                <div class="row mt-5 text-center">
-                                    <div class="col-md-12">
-                                        <p>or continue with</p>
-                                    </div>
-                                </div>
-                                <div class="row m-0 text-center">
-                                    <div class="col-md-12 fs-2">
-                                        <a class="me-2 text-danger"><i class="fa-brands fa-google"></i></a>
-                                        <a class="me-2 text-grey"><i class="fa-brands fa-apple"></i></a>
-                                        <a class="me-2 text-primary"><i class="fa-brands fa-facebook"></i></a>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 text-center">
-                                    <div class="col-md-12">
-                                        New to {{ env('APP_NAME') }}? <a href="{{ route('login') }}"
-                                            class="text-primary">Sign In</a>
-                                    </div>
-                                </div>
-                            </form>
 
-                            <form wire:submit.prevent="verifyOtp" class="@if ($page == 'signin') d-none @endif">
-                                @csrf
-                                <div class="row mb-5">
-                                    <div class="col-md-12">
-                                        <img src="{{ asset('assets/logo/logo.png') }}">
+                        <form wire:submit.prevent="register" class="@if ($page == 'otp') d-none @endif">
+                            @csrf
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <img src="{{ asset('assets/logo/logo.png') }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <h3>Sign In</h3>
+                                <p>Great to have you back!</p>
+                            </div>
+                            <div class="row text-center justify-content-center mb-5">
+                                <div class="bg-white rounded-5 p-2" style="width: fit-content;">
+                                    <button wire:click="tabChange('email')" type="button"
+                                        class="btn rounded-5 email-toggle-btn @if ($tab == 'email') btn-dark @endif"
+                                        data-item="email">Email ID</button>
+                                    <button wire:click="tabChange('phone')" type="button"
+                                        class="btn rounded-5 email-toggle-btn @if ($tab == 'phone') btn-dark @endif"
+                                        data-item="phone">Phone</button>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <input type="hidden" wire:model="tab" value="email" id="tab">
+                                <div class="col-md-12 @if ($tab == 'phone') d-none @endif" id="emailDiv">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control rounded-4" id="emailInput"
+                                            placeholder="name@example.com" wire:model="email">
+                                        <label for="emailInput">Email address</label>
                                     </div>
+                                    @error('email')
+                                        <span class="text-danger text-sm">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
-                                <div class="row">
-                                    <h3 class="fw-bold">OTP Verification</h3>
-                                    <p>Enter OTP shared on @if($tab == 'email') {{$email}} @else {{$phone}} @endif </p>
+                                <div class="col-md-12 @if ($tab == 'email') d-none @endif" id="phoneDiv">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control rounded-4" id="phoneInput"
+                                            placeholder="" wire:model="phone">
+                                        <label for="phoneInput">Phone</label>
+                                    </div>
+                                    @error('phone')
+                                        <span class="text-danger text-sm">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
-                                <div class="row mb-5">
-                                    <div class="col-md-12">
-                                        <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
-                                            <input wire:model="one" class="m-md-2 me-1 text-center form-control rounded"
-                                                type="password" id="first" maxlength="1" placeholder="-" />
-                                            <input wire:model="two" class="m-md-2 me-1 text-center form-control rounded"
-                                                type="password" id="second" maxlength="1" placeholder="-" />
-                                            <input wire:model="three"
-                                                class="m-md-2 me-1 text-center form-control rounded" type="password"
-                                                id="third" maxlength="1" placeholder="-" />
-                                            <input wire:model="four"
-                                                class="m-md-2 me-1 text-center form-control rounded" type="password"
-                                                id="fourth" maxlength="1" placeholder="-" />
-                                            <input wire:model="five"
-                                                class="m-md-2 me-1 text-center form-control rounded" type="password"
-                                                id="fifth" maxlength="1" placeholder="-" />
-                                            <input wire:model="six"
-                                                class="m-md-2 me-1 text-center form-control rounded" type="password"
-                                                id="sixth" maxlength="1" placeholder="-" />
-                                        </div>
+                            </div>
+                            <div class="row mb-0">
+                                <div class="col-md-12 ">
+                                    <button type="submit" class="btn btn-dark w-100">Proceed</button>
+                                </div>
+                            </div>
+                            <div class="row mt-5 text-center">
+                                <div class="col-md-12">
+                                    <p>or continue with</p>
+                                </div>
+                            </div>
+                            <div class="row m-0 text-center">
+                                <div class="col-md-12 fs-2">
+                                    <a href="{{ url('/auth/redirect/google') }}" class="me-2 text-danger"><i
+                                            class="fa-brands fa-google"></i></a>
+                                    <a class="me-2 text-grey"><i class="fa-brands fa-apple"></i></a>
+                                    <a class="me-2 text-primary"><i class="fa-brands fa-facebook"></i></a>
+                                </div>
+                            </div>
+                            <div class="row mt-3 text-center">
+                                <div class="col-md-12">
+                                    New to {{ env('APP_NAME') }}? <a href="{{ route('login') }}"
+                                        class="text-primary">Sign In</a>
+                                </div>
+                            </div>
+                        </form>
 
-                                        @error('one')
-                                            <span class="text-danger">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        @error('two')
-                                            <span class="text-danger">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        @error('three')
-                                            <span class="text-danger">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        @error('four')
-                                            <span class="text-danger">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        @error('five')
-                                            <span class="text-danger">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        @error('six')
-                                            <span class="text-danger">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-12 text-end mt-2">
-                                        Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
-                                    </div>
+                        <form wire:submit.prevent="verifyOtp" class="@if ($page == 'signin') d-none @endif">
+                            @csrf
+                            <div class="row mb-5">
+                                <div class="col-md-12">
+                                    <img src="{{ asset('assets/logo/logo.png') }}">
                                 </div>
-                                <div class="row mb-0">
-                                    <div class="col-md-12 ">
-                                        <button type="submit" class="btn btn-dark w-100">Sign In</button>
+                            </div>
+                            <div class="row">
+                                <h3 class="fw-bold">OTP Verification</h3>
+                                <p>Enter OTP shared on @if ($tab == 'email')
+                                        {{ $email }}
+                                    @else
+                                        {{ $phone }}
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-12">
+                                    <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                                        <input wire:model="one" class="m-md-2 me-1 text-center form-control rounded"
+                                            type="password" id="first" maxlength="1" placeholder="-" />
+                                        <input wire:model="two" class="m-md-2 me-1 text-center form-control rounded"
+                                            type="password" id="second" maxlength="1" placeholder="-" />
+                                        <input wire:model="three" class="m-md-2 me-1 text-center form-control rounded"
+                                            type="password" id="third" maxlength="1" placeholder="-" />
+                                        <input wire:model="four" class="m-md-2 me-1 text-center form-control rounded"
+                                            type="password" id="fourth" maxlength="1" placeholder="-" />
+                                        <input wire:model="five" class="m-md-2 me-1 text-center form-control rounded"
+                                            type="password" id="fifth" maxlength="1" placeholder="-" />
+                                        <input wire:model="six" class="m-md-2 me-1 text-center form-control rounded"
+                                            type="password" id="sixth" maxlength="1" placeholder="-" />
                                     </div>
+
+                                    @error('one')
+                                        <span class="text-danger">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    @error('two')
+                                        <span class="text-danger">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    @error('three')
+                                        <span class="text-danger">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    @error('four')
+                                        <span class="text-danger">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    @error('five')
+                                        <span class="text-danger">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    @error('six')
+                                        <span class="text-danger">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
-                                <div class="row mt-3 text-center">
-                                    <div class="col-md-12">
-                                        New to {{ env('APP_NAME') }}? <a class="text-primary">Sign In</a>
-                                    </div>
+                                <div class="col-md-12 text-end mt-2">
+                                    Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
                                 </div>
-                            </form>
-                            
+                            </div>
+                            <div class="row mb-0">
+                                <div class="col-md-12 ">
+                                    <button type="submit" class="btn btn-dark w-100">Sign In</button>
+                                </div>
+                            </div>
+                            <div class="row mt-3 text-center">
+                                <div class="col-md-12">
+                                    New to {{ env('APP_NAME') }}? <a href="{{ route('signup') }}"
+                                        class="text-primary">Sign Up</a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
