@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/on-boarding', LivewireOnboarding::class)->name('onboarding');
     Route::get('/business-profile', Profile::class)->name('business.profile');
     Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
-    Route::get('/service-profile', ServiceProfile::class);
+    Route::get('/service-profile', ServiceProfile::class)->name('service.profile');
     Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

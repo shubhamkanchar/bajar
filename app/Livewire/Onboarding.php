@@ -130,6 +130,8 @@ class Onboarding extends Component
             return redirect()->route('home');
         } else if ($user->type == 'business') {
             return redirect()->route('business.profile');
+        }else if($user->type == 'service'){
+            return redirect()->route('service.profile');
         }
     }
 
@@ -148,12 +150,20 @@ class Onboarding extends Component
 
     public function addCategory($id)
     {
-        array_push($this->categoryIds, $id);
+        if(count($this->categoryIds) < 3){
+            array_push($this->categoryIds, $id);
+        }else{
+            $this->dispatch('notify', [
+                'type' => 'error',
+                'message' => 'Max category selected'
+            ]);
+        }
     }
 
     public function removeCategory($id)
     {
-        array_diff($this->categoryIds, $id);
+        $arr =  array_diff($this->categoryIds, [$id]);
+        $this->categoryIds = $arr;
     }
 
     public function render()

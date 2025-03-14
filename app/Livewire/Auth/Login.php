@@ -94,7 +94,21 @@ class Login extends Component
         }
 
         if ($success) {
-            Auth::login($user);
+            $this->loginSucess($user);
+        }
+    }
+
+    public function loginSucess($user){
+        Auth::login($user);
+        if($user->onboard_completed){
+            if ($user->type == 'individual') {
+                return redirect()->route('home');
+            } else if ($user->type == 'business') {
+                return redirect()->route('business.profile');
+            }else if($user->type == 'service'){
+                return redirect()->route('service.profile');
+            }
+        }else{
             return redirect()->route('onboarding');
         }
     }
@@ -120,11 +134,11 @@ class Login extends Component
                     $user = User::create([
                         'name' => $googleUser->getName(),
                         'email' => $googleUser->getEmail(),
-                        'email_otp' => rand(000000, 999999)
+                        'email_verified_at' => Carbon::now(),
+                        'email_otp' => NULL
                     ]);
                 }
-                $this->email = $googleUser->getEmail();
-                $this->page = 'otp';
+                $this->loginSucess($user);
             } catch (Exception $e) {
                 
             }
