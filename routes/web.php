@@ -44,22 +44,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/auth/redirect/google', function () {
     return Socialite::driver('google')->redirect();
 });
-
-// Route::get('/auth/callback/google', function () {
-//     $googleUser = Socialite::driver('google')->stateless()->user();
-
-//     // Check if user exists
-//     $user = User::where('email', $googleUser->getEmail())->first();
-
-//     if (!$user) {
-//         $user = User::create([
-//             'name' => $googleUser->getName(),
-//             'email' => $googleUser->getEmail(),
-//             'password' => bcrypt(str()->random(16)), // Random password
-//         ]);
-//     }
-
-//     Auth::login($user);
-
-//     return redirect('/dashboard'); // Redirect after login
-// });

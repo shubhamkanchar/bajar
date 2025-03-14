@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Auth;
 
+use App\Mail\OtpMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 use Livewire\Component;
 
@@ -30,12 +32,15 @@ class Login extends Component
         ]);
 
         if ($this->tab == 'email') {
+            $otp = rand(000000, 999999);
             $user = User::firstOrNew([
                 'email' => $this->email
             ]);
             $user->email = $this->email;
-            $user->email_otp = rand(000000, 999999);
+            $user->email_otp = $otp;
             $user->save();
+
+            Mail::to($user->email)->send(new OtpMail($otp,$user));
         } else {
             $user = User::firstOrNew([
                 'phone' => $this->phone
