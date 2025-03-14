@@ -11,6 +11,8 @@ use App\Livewire\Home\Welcome;
 use App\Livewire\Onboarding as LivewireOnboarding;
 use App\Livewire\Service\Edit as ServiceEdit;
 use App\Livewire\Service\Profile as ServiceProfile;
+use App\Livewire\User\Edit as UserEdit;
+use App\Livewire\User\Profile as UserProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
     Route::get('/service-profile', ServiceProfile::class)->name('service.profile');
     Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
+    Route::get('/user-profile', UserProfile::class)->name('user.profile');
+    Route::get('/user-edit', UserEdit::class)->name('user.edit');
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });

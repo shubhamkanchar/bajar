@@ -194,8 +194,7 @@
                         </svg>
 
                     </button>
-                    <button class="btn btn-dark btn-sm px-5 py-3 rounded-5" wire:click="finalize"
-                        {{ $userType ? '' : 'disabled' }}>
+                    <button class="btn btn-dark btn-sm px-5 py-3 rounded-5" wire:click="finalize">
                         Done
                     </button>
                 </div>

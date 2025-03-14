@@ -7,6 +7,7 @@ use App\Models\BusinessCategory;
 use App\Models\Category;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class Onboarding extends Component
@@ -31,21 +32,32 @@ class Onboarding extends Component
     public $google_map_link;
 
     // Define validation rules for step 2
-    protected $rules = [
-        'name' => 'nullable|string|max:255',
-        'phone' => 'required|string|min:10|max:15',
-        'email' => 'required|email',
-        'state' => 'required|string',
-        'city' => 'required|string',
-        // 'gst_number' => 'nullable|numeric|digits:15',
-        // 'business_address' => 'nullable|string|max:255',
-        // 'google_map_link' => 'nullable|url',
-    ];
+    protected function rules()
+    {
+        return [
+            'name' => 'nullable|string|max:255',
+            'phone' => [
+                'required',
+                'string',
+                'min:10',
+                'max:15',
+                Rule::unique('users', 'phone')->ignore(auth()->id()),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore(auth()->id()),
+            ],
+            'state' => 'required|string',
+            'city' => 'required|string',
+        ];
+    }
 
     // Define custom messages for validation errors
     protected $messages = [
         'name.required_if' => 'Please enter your name.',
         'phone.required' => 'Please enter a valid phone number.',
+        'phone.unique' => 'Phone is already in use',
         'email.email' => 'Please enter a valid email address.',
         'state.required' => 'Please select a state.',
         'city.required' => 'Please select a city.',
@@ -67,6 +79,7 @@ class Onboarding extends Component
         if ($this->step !== 1) {
             $this->validate();
         }
+
         if ($this->step < $this->totalSteps) {
             $this->step++;
         }
@@ -84,6 +97,10 @@ class Onboarding extends Component
                 $address->state = $this->state;
                 $address->save();
             } catch (Exception $e) {
+                $this->dispatch('notify', [
+                    'type' => 'error',
+                    'message' => $e->getMessage()
+                ]);
             }
         }
 
@@ -105,17 +122,20 @@ class Onboarding extends Component
                 $address->map_link = $this->google_map_link;
                 $address->save();
 
-                foreach($this->categoryIds as $category){
+                foreach ($this->categoryIds as $category) {
                     BusinessCategory::updateOrCreate([
                         'user_id' => $user->id,
                         'category_id' => $category
-                    ],[
+                    ], [
                         'user_id' => $user->id,
                         'category_id' => $category
                     ]);
                 }
             } catch (Exception $e) {
-                
+                $this->dispatch('notify', [
+                    'type' => 'error',
+                    'message' => $e->getMessage()
+                ]);
             }
         }
     }
@@ -130,7 +150,7 @@ class Onboarding extends Component
             return redirect()->route('home');
         } else if ($user->type == 'business') {
             return redirect()->route('business.profile');
-        }else if($user->type == 'service'){
+        } else if ($user->type == 'service') {
             return redirect()->route('service.profile');
         }
     }
@@ -150,9 +170,9 @@ class Onboarding extends Component
 
     public function addCategory($id)
     {
-        if(count($this->categoryIds) < 3){
+        if (count($this->categoryIds) < 3) {
             array_push($this->categoryIds, $id);
-        }else{
+        } else {
             $this->dispatch('notify', [
                 'type' => 'error',
                 'message' => 'Max category selected'

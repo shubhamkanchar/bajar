@@ -107,7 +107,7 @@ class Login extends Component
         Auth::login($user);
         if($user->onboard_completed){
             if ($user->type == 'individual') {
-                return redirect()->route('home');
+                return redirect()->route('user.profile');
             } else if ($user->type == 'business') {
                 return redirect()->route('business.profile');
             }else if($user->type == 'service'){
