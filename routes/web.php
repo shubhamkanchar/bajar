@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LogoutController;
 use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\ProductReview;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Otp;
 use App\Livewire\Auth\Signup;
@@ -43,6 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-edit', UserEdit::class)->name('user.edit');
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/product/review', ProductReview::class)->name('product.review');
 });
 
 Route::get('/auth/redirect/google', function () {

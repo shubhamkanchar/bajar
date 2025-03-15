@@ -1,17 +1,62 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-4">
-                <img class="w-100" src="{{ asset('assets/bg/bg_profile.png') }}">
+            <div class="col-12 mt-4 position-relative">
+                @if ($bgImage)
+                    <img class="w-100 h-250" src="{{ $bgImage->temporaryUrl() }}">
+                @elseif(auth()->user()->bg_image)
+                    <img class="w-100 h-250" src="{{ asset('storage/' . auth()->user()->bg_image) }}">
+                @else
+                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                @endif
+                <input type="file" wire:model="bgImage" hidden id="bgImage">
+                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    wire:target="bgImage" for="bgImage">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
+                            fill="#EDEDED" />
+                        <path d="M21.75 28.4399H29.0026" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M20.78 11.7948C21.5557 10.8678 22.95 10.7319 23.8962 11.4917C23.9485 11.533 25.6295 12.8388 25.6295 12.8388C26.669 13.4672 26.992 14.8031 26.3494 15.8226C26.3153 15.8772 16.8119 27.7645 16.8119 27.7645C16.4958 28.1589 16.0158 28.3918 15.5029 28.3973L11.8635 28.443L11.0435 24.9723C10.9287 24.4843 11.0435 23.9718 11.3597 23.5773L20.78 11.7948Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M19.0234 14L24.4757 18.1871" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </label>
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2">
-                        <img class="w-100 ms-md-4" style="margin-top:-70px" src="{{ asset('assets/image/profile.png') }}">
+                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
+                        @if ($profileImage)
+                            <img class="w-100 ms-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
+                        @elseif(auth()->user()->profile_image)
+                            <img class="w-100 ms-md-4 h-100"
+                                src="{{ asset('storage/' . auth()->user()->profile_image) }}">
+                        @else
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                        @endif
+                        <input type="file" wire:model="profileImage" hidden id="profileImage">
+                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2"
+                            style="z-index: 1">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
+                                    fill="#EDEDED" />
+                                <path d="M21.75 28.4399H29.0026" stroke="black" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M20.78 11.7948C21.5557 10.8678 22.95 10.7319 23.8962 11.4917C23.9485 11.533 25.6295 12.8388 25.6295 12.8388C26.669 13.4672 26.992 14.8031 26.3494 15.8226C26.3153 15.8772 16.8119 27.7645 16.8119 27.7645C16.4958 28.1589 16.0158 28.3918 15.5029 28.3973L11.8635 28.443L11.0435 24.9723C10.9287 24.4843 11.0435 23.9718 11.3597 23.5773L20.78 11.7948Z"
+                                    stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M19.0234 14L24.4757 18.1871" stroke="black" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </label>
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">Elemento Enterprise</span>
+                            <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -28,16 +73,17 @@
                                 </svg>
                             </span>
                             <span>
-                                1st Floor, Sagar Heights, Nagar-Pune Road, Opposite McDonalds, Kedgaon-414005
+                                {{ auth()->user()->address->address }}, {{ auth()->user()->address->city }},
+                                {{ auth()->user()->address->state }}
                             </span>
                         </div>
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end order-1"
                             style="height:100%">
-                            <button class="btn btn-dark me-2">
-                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                            {{-- <button class="btn btn-dark me-2">
+                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
                                         stroke-linecap="round" stroke-linejoin="round" />
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -48,12 +94,12 @@
                                         stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 Edit Profile
-                            </button>
+                            </button> --}}
                             {{-- </div>
                         <div class="d-lg-flex float-md-end order-2"> --}}
                             <button class="btn btn-dark">
-                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
                                         stroke-linecap="round" stroke-linejoin="round" />
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -77,34 +123,42 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Product Name">
+                            <input type="text" class="form-control" placeholder="Product Name" wire:model="name">
                             <label for="name">Business Name</label>
                         </div>
+                        @error('name')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
+                            <input type="text" class="form-control" placeholder="Brand Name" wire:model="gst">
                             <label for="name">GST Number</label>
                         </div>
+                        @error('gst')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
+                            <input type="text" class="form-control" placeholder="Phone" wire:model="phone">
                             <label for="name">Phone Number</label>
                         </div>
+                        @error('phone')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <button class="btn bg-custom-secondary">Verified</button>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
+                            <input type="text" class="form-control" placeholder="Brand Name" wire:model="email">
                             <label for="name">Email</label>
                         </div>
+                        @error('email')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <button type="button" id="openSliderBtn" class="btn btn-dark">Verify</button>
@@ -116,50 +170,64 @@
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
+                            <input type="text" class="form-control" placeholder="Brand Name"
+                                wire:model="address">
                             <label for="name">Business Address</label>
                         </div>
+                        @error('address')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3 form-floating">
+                            <select class="form-select" id="state" wire:model="state">
+                                <option value="">Select State</option>
+                                @foreach ($stateOptions as $stateOption)
+                                    <option value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                @endforeach
                             </select>
-                            <label for="floatingSelect">City</label>
+                            <label for="state">State</label>
+                            @error('state')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
+                        @error('state')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+
+                    <!-- City Dropdown -->
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3 form-floating">
+                            <select class="form-select" id="city" wire:model="city" wire:click="setCity()">
+                                <option value="">Select City</option>
+                                @foreach ($cityOptions as $cityOption)
+                                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                @endforeach
                             </select>
-                            <label for="floatingSelect">State</label>
+                            <label for="city">City</label>
+                            @error('city')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
+                            <input type="text" class="form-control" placeholder="Map" wire:model="map">
                             <label for="name">Google Map Link</label>
                         </div>
+                        @error('map')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Business Offerings
                     </div>
-                    <div class="col-md-5">
-                        <div class="width-100 border border-2 rounded-2 p-4">
-                            <span class="me-2">
+                    <div class="col-lg-4 col-md-5 mb-2" >
+                        <button  type="button"  class="row width-100 border border-2 rounded-2 p-3 me-1 align-items-center w-100">
+                            <span class="col-2">
                                 <svg width="22" height="18" viewBox="0 0 22 18" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -167,70 +235,94 @@
                                         fill="black" />
                                 </svg>
                             </span>
-                            <span>
-                                <span>I sell,</span>
+                            <span class="col-8 text-start">
+                                <span>I sell,</span><br>
                                 <span class="fw-bold fs-6">Building Material</span>
                             </span>
-                            <span class="float-end">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_737_3347)">
-                                        <circle cx="12" cy="12" r="12" fill="black" />
-                                        <path
-                                            d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
-                                            fill="white" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_737_3347">
-                                            <rect width="24" height="24" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-
+                            <span class="float-end col-2">
+                                @if ($offering == 'product')
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_737_3347)">
+                                            <circle cx="12" cy="12" r="12" fill="black" />
+                                            <path
+                                                d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_737_3347">
+                                                <rect width="24" height="24" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                @endif
                             </span>
-                        </div>
+                        </button>
                     </div>
-                    <div class="col-md-5">
-                        <div class="width-100 border border-2 rounded-2 p-4">
-                            <span class="me-2">
+                    <div class="col-lg-4 col-md-5">
+                        <button type="button" class="row width-100 border border-2 rounded-2 p-3 ms-1 align-items-center w-100">
+                            <span class="col-2">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M6.8 8.95348L8.95 6.77848L7.55 5.35348L7.15 5.75348C6.96667 5.93682 6.7375 6.03265 6.4625 6.04098C6.1875 6.04932 5.95 5.95348 5.75 5.75348C5.55 5.55348 5.45 5.31598 5.45 5.04098C5.45 4.76598 5.55 4.52848 5.75 4.32848L6.125 3.95348L5 2.82848L2.825 5.00348L6.8 8.95348ZM15 17.1785L17.175 15.0035L16.05 13.8785L15.65 14.2535C15.45 14.4535 15.2167 14.5535 14.95 14.5535C14.6833 14.5535 14.45 14.4535 14.25 14.2535C14.05 14.0535 13.95 13.8201 13.95 13.5535C13.95 13.2868 14.05 13.0535 14.25 12.8535L14.625 12.4535L13.2 11.0535L11.05 13.2035L15 17.1785ZM2 19.0035C1.71667 19.0035 1.47917 18.9076 1.2875 18.716C1.09583 18.5243 1 18.2868 1 18.0035V15.1785C1 15.0451 1.025 14.916 1.075 14.791C1.125 14.666 1.2 14.5535 1.3 14.4535L5.375 10.3785L1.05 6.05348C0.766667 5.77015 0.625 5.42015 0.625 5.00348C0.625 4.58682 0.766667 4.23682 1.05 3.95348L3.95 1.05348C4.23333 0.770149 4.58333 0.632649 5 0.640982C5.41667 0.649315 5.76667 0.795149 6.05 1.07848L10.4 5.40348L14.175 1.60348C14.375 1.40348 14.6 1.25348 14.85 1.15348C15.1 1.05348 15.3583 1.00348 15.625 1.00348C15.8917 1.00348 16.15 1.05348 16.4 1.15348C16.65 1.25348 16.875 1.40348 17.075 1.60348L18.4 2.95348C18.6 3.15348 18.75 3.37848 18.85 3.62848C18.95 3.87848 19 4.13682 19 4.40348C19 4.67015 18.95 4.92432 18.85 5.16598C18.75 5.40765 18.6 5.62848 18.4 5.82848L14.625 9.62848L18.95 13.9535C19.2333 14.2368 19.375 14.5868 19.375 15.0035C19.375 15.4201 19.2333 15.7701 18.95 16.0535L16.05 18.9535C15.7667 19.2368 15.4167 19.3785 15 19.3785C14.5833 19.3785 14.2333 19.2368 13.95 18.9535L9.625 14.6285L5.55 18.7035C5.45 18.8035 5.3375 18.8785 5.2125 18.9285C5.0875 18.9785 4.95833 19.0035 4.825 19.0035H2ZM3 17.0035H4.4L14.2 7.22848L12.775 5.80348L3 15.6035V17.0035ZM13.5 6.52848L12.775 5.80348L14.2 7.22848L13.5 6.52848Z"
                                         fill="black" />
                                 </svg>
-
                             </span>
-                            <span>
-                                <span>I offer,</span>
+                            <span class="col-8 text-start">
+                                <span>I offer,</span><br>
                                 <span class="fw-bold fs-6">Services</span>
                             </span>
-                            <span class="float-end">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_737_3347)">
-                                        <circle cx="12" cy="12" r="12" fill="black" />
-                                        <path
-                                            d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
-                                            fill="white" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_737_3347">
-                                            <rect width="24" height="24" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-
+                            <span class="col-2">
+                                @if ($offering == 'service')
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_737_3347)">
+                                            <circle cx="12" cy="12" r="12" fill="black" />
+                                            <path
+                                                d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_737_3347">
+                                                <rect width="24" height="24" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                @endif
                             </span>
+                        </button>
+                    </div>
+                    @if ($offering == 'service')
+                        <div class="col-12">
+                            <h4 class="fw-bold mt-3">Service i provide
+                                ({{ str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT) }}/03)</h4>
+                            @foreach ($serviceCategories as $category)
+                                @if (in_array($category->id, $categoryIds))
+                                    <span role="button" wire:click="removeCategory({{ $category->id }})"
+                                        class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1 border-dark bg-secondary-subtle">{{ $category->title }}</span>
+                                @else
+                                    <span role="button" wire:click="addCategory({{ $category->id }})"
+                                        class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">{{ $category->title }}</span>
+                                @endif
+                            @endforeach
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <h4 class="fw-bold mt-3">Categories i deal in (00/03)</h4>
-                        <span class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">Tiles & Granites</span>
-                        <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Tiles & Granites</span>
-                        <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Tiles & Granites</span>
-                        <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Tiles & Granites</span>
-                    </div>
+                    @endif
+                    @if ($offering == 'product')
+                        <div class="col-12">
+                            <h4 class="fw-bold mt-3">Categories i deal in
+                                ({{ str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT) }}/03)</h4>
+                            @foreach ($productCategories as $category)
+                                @if (in_array($category->id, $categoryIds))
+                                    <span role="button" wire:click="removeCategory({{ $category->id }})"
+                                        class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1 border-dark bg-secondary-subtle">{{ $category->title }}</span>
+                                @else
+                                    <span role="button" wire:click="addCategory({{ $category->id }})"
+                                        class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">{{ $category->title }}</span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
@@ -252,15 +344,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Monday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -269,15 +359,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Tuesday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -286,15 +374,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Wednesday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -303,76 +389,146 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Thursday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" name="name" class="form-control" id="name"
-                                    placeholder="Brand Name">
+                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <label for="name">Open From</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Friday</div>
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <label for="name">Open From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <label for="name">Open From</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Saturday</div>
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <label for="name">Open From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <label for="name">Open From</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Sunday</div>
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <label for="name">Open From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="time" class="form-control" placeholder="Brand Name">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <hr>
-                <div class="col-md-12 mt-4">
-                    <button type="submit" class="btn btn-dark btn-lg">Logout</button>
+                <div class="col-md-12 mt-4 mb-5">
+                    <button type="button" class="btn btn-dark btn-lg" wire:click="update">Update</button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="slider-form">
+    <div class="slider-form {{ $sliderStatus }}">
         <div class="slider-content">
             <div class="row">
+                <div class="col-12 text-end">
+                    <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
+                        wire:click="closeVerifySlider">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                </div>
                 <div class="col-md-12 p-xl-5">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="row mb-5">
-                            <div class="col-md-12">
-                                <img src="{{ asset('assets/logo/logo.png') }}">
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <img src="{{ asset('assets/logo/logo.png') }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3 class="fw-bold">OTP Verification</h3>
+                        <p>Enter OTP shared on </p>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                                <input wire:model="one" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="first" maxlength="1" placeholder="-" />
+                                <input wire:model="two" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="second" maxlength="1" placeholder="-" />
+                                <input wire:model="three" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="third" maxlength="1" placeholder="-" />
+                                <input wire:model="four" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="fourth" maxlength="1" placeholder="-" />
+                                <input wire:model="five" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="fifth" maxlength="1" placeholder="-" />
+                                <input wire:model="six" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="sixth" maxlength="1" placeholder="-" />
                             </div>
-                        </div>
-                        <div class="row">
-                            <h3 class="fw-bold">OTP Verification</h3>
-                            <p>Enter OTP shared on </p>
-                        </div>
-                        <div class="row mb-5">
 
-                            <div class="col-md-12">
-                                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="password"
-                                        id="first" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="second" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="third" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="fourth" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="fifth" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="sixth" maxlength="1" placeholder="-" />
-                                </div>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 text-end mt-2">
-                                Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
-                            </div>
+                            @error('one')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('two')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('three')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('four')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('five')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('six')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
-                        <div class="row mb-0">
-                            <div class="col-md-12 ">
-                                <button type="submit" class="btn btn-dark w-100">Verify</button>
-                            </div>
+                        <div class="col-md-12 text-end mt-2">
+                            Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
                         </div>
-                    </form>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-md-12 ">
+                            <button type="button" class="btn btn-dark w-100" wire:click="verifyOtp">Verify</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
