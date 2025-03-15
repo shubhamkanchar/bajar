@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Service extends Model
 {
     use HasFactory;
 
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ServiceImage::class);
     }
 
     public function category()

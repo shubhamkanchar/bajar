@@ -16,6 +16,7 @@ class Profile extends Component
 
     public $isEdit = false;
     public $editProductId;
+    public $selectedCategory = 'all';
     
     #[
         Validate(
@@ -85,9 +86,28 @@ class Profile extends Component
     #[Computed]
     public function allProducts()
     {
-        return Product::with('images')->where('user_id', auth()->id())->get();
+        if($this->selectedCategory == 'all') {
+            return Product::with(['images', 'category'])->where('user_id', auth()->id())->get();
+        }
+        return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get();
     }
-    
+
+    #[Computed]
+    public function categories()
+    {
+        return Category::where('type', 'product')->get();
+    }
+
+    #[Computed]
+    public function businessCategories() {
+        $ids = Product::where('user_id', auth()->id())->pluck('category_id');
+        return Category::where('type', 'product')->whereIn('id', $ids)->get();
+    }
+
+    public function changeCategory($value) {
+        $this->selectedCategory = $value;
+    }
+
     public function resetProduct() {
         $this->reset([
             'isEdit',
@@ -102,12 +122,6 @@ class Profile extends Component
             'price',
             'quantity'
         ]);
-    }
-
-    #[Computed]
-    public function categories()
-    {
-        return Category::all();
     }
 
     public function saveProduct()
@@ -142,7 +156,7 @@ class Profile extends Component
         $product->product_tag_group_id = $this->product_tag_group_id;
         $product->price = $this->price;
         $product->quantity = $this->quantity;
-        $product->user_id = 1;
+        $product->user_id = auth()->id();
         $product->business_id = 1;
         $product->save();
 

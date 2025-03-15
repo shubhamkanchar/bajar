@@ -1,8 +1,8 @@
-<div class="slider-form">
+<div class="slider-form" wire:ignore.self>
     <div class="slider-content">
         <div class="row">
             <div class="col-md-8">
-                <p class="fw-bold fs-3">Add Product</p>
+                <p class="fw-bold fs-3">Add work portfolio</p>
             </div>
             <div class="col-md-4 text-md-end mb-2">
                 <span class="badge rounded-pill text-bg-light p-3 me-3">
@@ -28,113 +28,139 @@
 
         <form>
             <div class="row">
-                <div class="col-md-5 mb-3">
+                <div class="col-md-5 mb-3 position-relative">
+                    @if ($service_images['service_image1'])
+                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('service_image1')" wire:key="remove-button-1">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    @endif
                     <div class="dashed-border ratio ratio-1x1">
-                        <span class="text-center" style="top: 35%">
-                            <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                            <div>Add Product</div>
-                        </span>
+                        @if ($isEdit && gettype($service_images['service_image1']) == 'string')
+                            <img src="{{ asset('storage/' . $service_images['service_image1']) }}" class="img-fluid">
+                        @elseif ($service_images['service_image1'])
+                            <img src="{{$service_images['service_image1']->temporaryUrl()}}" class="img-fluid">
+                        @else
+                            <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="service_images.service_image1">
+                                <input type="file" wire:model.blur="service_images.service_image1" id="serviceImage1" hidden accept="image/*">
+                                <label for="serviceImage1">
+                                    <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
+                                </label>
+                            </span>
+                        @endif
+                
+                        <!-- Show loader during image upload -->
+                        <div wire:loading wire:target="service_images.service_image1" style="top: 35%;">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    @error('service_images.service_image1') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-7">
                     <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="dashed-border ratio ratio-1x1">
-                                <i
-                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
+                        @foreach([2, 3, 4, 5, 6] as $index)
+                            <div class="col-md-4 mb-3 position-relative">
+                                @if ($service_images['service_image' . $index])
+                                    <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('service_image{{ $index }}')" wire:key="remove-button-{{ $index }}" accept="image/*">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                @endif
+                                <div class="dashed-border ratio ratio-1x1">
+                                    @if ($isEdit && gettype($service_images['service_image'. $index]) == 'string')
+                                        <img src="{{ asset('storage/' . $service_images['service_image'. $index]) }}" class="img-fluid">
+                                    @elseif($service_images['service_image' . $index])
+                                        <img src="{{$service_images['service_image' . $index]->temporaryUrl()}}" class="img-fluid">
+                                    @else
+                                        <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="service_images.service_image{{$index}}">
+                                            <input type="file" wire:model.blur="service_images.service_image{{$index}}" id="serviceImage{{$index}}" hidden>
+                                            <label for="serviceImage{{$index}}">
+                                                <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
+                                            </label>
+                                        </span>
+                                    @endif
+                
+                                    <!-- Show loader during image upload -->
+                                    <div wire:loading wire:target="service_images.service_image{{$index}}" style="top: 35%">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('service_images.service_image' . $index) <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="dashed-border ratio ratio-1x1">
-                                <i
-                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="dashed-border ratio ratio-1x1">
-                                <i
-                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                            </div>
-                        </div>
-                        {{-- </div>
-                    <div class="row mt-4"> --}}
-                        <div class="col-md-4 mb-3">
-                            <div class="dashed-border ratio ratio-1x1">
-                                <i
-                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="dashed-border ratio ratio-1x1">
-                                <i
-                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-4">
-                            <div class="dashed-border ratio ratio-1x1">
-                                <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                            </div>
-                        </div> --}}
+                        @endforeach
                     </div>
                 </div>
+
                 <div class="col-12">
                     <div class="form-floating mb-2 mt-2">
                         <input type="text" name="work_brief" class="form-control" id="workBrief"
-                            placeholder="Work Brief">
+                            placeholder="Work Brief" wire:model="work_brief">
                         <label for="name">Work Brief</label>
+                        @error('category') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-2 mt-2">
                         <select class="form-select" id="serviceCategory"
-                            aria-label="Floating label select example">
+                            aria-label="Floating label select example" wire:model="category">
                             <option selected>Service Category</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            @foreach ($this->categories as $category)
+                                <option value="{{$category->id}}">{{$category->title}}</option>
+                            @endforeach
                         </select>
                         <label for="serviceCategory">Service Category</label>
+                        @error('category') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-2 mt-2">
                         <select class="form-select" id="serviceTag" name="service_tag"
-                            aria-label="Floating label select example">
+                            aria-label="Floating label select example" wire:model="service_tag_group_id">
                             <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            @foreach ($this->categories as $category)
+                                <option value="{{$category->id}}">{{$category->title}}</option>
+                            @endforeach
                         </select>
                         <label for="serviceTag">Service Tag</label>
+                        @error('service_tag_group_id') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="col-12">
-                    <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5"></textarea>
+                    <textarea class="form-control mt-3 mb-3" placeholder="Work Description" line="5" wire:model="description"></textarea>
+                    @error('description') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-12 mt-4">
                     <p>*Your work will be under review for the initial 24 hours before it’s live</p>
                     <div class="row">
                         <div class="col-md-5 mt-2 mb-2">
-                            <button type="submit" class="btn btn-dark w-100">Add Work</button>
+                            <button wire:click.prevent="saveService" class="btn btn-dark w-100">{{ $isEdit ? 'Edit work' : 'Add Work'}}</button>
                         </div>
                         <div class="col-md-5 mt-2 mb-2">
 
-                            <button type="submit" class="btn btn-default bg-custom-secondary">
-                                <svg class="me-2" width="19" height="20" viewBox="0 0 19 20"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M16.3238 7.46875C16.3238 7.46875 15.7808 14.2037 15.4658 17.0407C15.3158 18.3957 14.4788 19.1898 13.1078 19.2148C10.4988 19.2618 7.88681 19.2648 5.27881 19.2098C3.95981 19.1828 3.13681 18.3788 2.98981 17.0478C2.67281 14.1858 2.13281 7.46875 2.13281 7.46875"
-                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M17.708 4.24219H0.75" stroke="black" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path
-                                        d="M14.4386 4.239C13.6536 4.239 12.9776 3.684 12.8236 2.915L12.5806 1.699C12.4306 1.138 11.9226 0.75 11.3436 0.75H7.11063C6.53163 0.75 6.02363 1.138 5.87363 1.699L5.63063 2.915C5.47663 3.684 4.80063 4.239 4.01562 4.239"
-                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                                Delete
-                            </button>
+                            @if ($isEdit)    
+                                <button wire:click.prevent="deleteService" wire:loading.attr="disabled"  wire:confirm="Are you sure want to delete this service" class="btn btn-default bg-custom-secondary">
+                                    <svg class="me-2" width="19" height="20" viewBox="0 0 19 20"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M16.3238 7.46875C16.3238 7.46875 15.7808 14.2037 15.4658 17.0407C15.3158 18.3957 14.4788 19.1898 13.1078 19.2148C10.4988 19.2618 7.88681 19.2648 5.27881 19.2098C3.95981 19.1828 3.13681 18.3788 2.98981 17.0478C2.67281 14.1858 2.13281 7.46875 2.13281 7.46875"
+                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M17.708 4.24219H0.75" stroke="black" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M14.4386 4.239C13.6536 4.239 12.9776 3.684 12.8236 2.915L12.5806 1.699C12.4306 1.138 11.9226 0.75 11.3436 0.75H7.11063C6.53163 0.75 6.02363 1.138 5.87363 1.699L5.63063 2.915C5.47663 3.684 4.80063 4.239 4.01562 4.239"
+                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                    Delete
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>

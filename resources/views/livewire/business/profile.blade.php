@@ -112,11 +112,10 @@
             </div>
             <hr>
             <div class="col-md-9">
-                <span class="badge rounded-pill text-bg-dark fs-6 p-3 m-1">All</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Tiles & Granites</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Bricks</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Ply & Laminates</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Paints</span>
+                <span class="badge rounded-pill {{$selectedCategory == 'all' ? 'text-bg-dark' : 'text-bg-light'}} fs-6 p-3 m-1" wire:click="changeCategory('all')"  role="button" tabindex="0">All</span>
+                @foreach ($this->businessCategories as $cat)                    
+                    <span class="badge rounded-pill {{$selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light'}}  fs-6 p-3 m-1"  role="button" tabindex="0" wire:click="changeCategory({{$cat->id}})">{{$cat->title}}</span>
+                @endforeach
             </div>
             <div class="col-md-3">
                 <div class="d-flex float-md-end mt-3">
@@ -142,20 +141,21 @@
                 </div>
             </div>
             <div class="col-12 mt-3">
-                <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                        <a role="button" id="openSliderBtn">
-                            {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
-                            <div class="dashed-border ratio ratio-add-product">
-                                <span class="text-center p-4" style="top: 25%">
-                                    <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                    <div class="fs-4 fw-bold">Add Product</div>
-                                    <small>Adding more products improve your search rankings</small>
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                    @foreach ($this->allProducts as $product)    
+                @foreach ($this->allProducts as $product)
+                    <h6 class="fw-bold">{{$product->category->title}}</h6>
+                    <div class="row mb-2">
+                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                            <a role="button" id="openSliderBtn" x-on:click="$wire.set('category', {{$product->category->id}})">
+                                {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
+                                <div class="dashed-border ratio ratio-add-product">
+                                    <span class="text-center p-4" style="top: 25%">
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
+                                        <div class="fs-4 fw-bold">Add Product</div>
+                                        <small>Adding more products improve your search rankings</small>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
                         <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
                             <div class="border rounded position-relative">
                                 <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
@@ -184,8 +184,8 @@
                                 </a>
                             </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

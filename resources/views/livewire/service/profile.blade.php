@@ -1,50 +1,3 @@
-<style>
-    /* Initially set the slider to be hidden off-screen on the right */
-    .slider-form {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        /* Hide off-screen initially */
-        width: 100%;
-        height: 100%;
-        background-color: #f8f9fa;
-        transition: right 0.3s ease;
-        z-index: 1050;
-        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
-        overflow: scroll;
-    }
-
-    /* Show the slider when active (slide in from the right) */
-    .slider-form.open {
-        right: 0;
-    }
-
-    /* Form content styling */
-    .slider-content {
-        padding: 30px;
-    }
-
-    /* Adjust the width of the form based on screen size */
-    @media (max-width: 767px) {
-        .slider-form {
-            width: 100%;
-            /* Full width on small screens */
-        }
-    }
-
-    @media (min-width: 768px) {
-        .slider-form {
-            width: 75%;
-            /* 75% width on medium and larger screens */
-        }
-    }
-    .star-rating {
-        font-size: 24px;
-        cursor: pointer;
-        color: #ccc;
-    }
-    
-</style>
 <div>
     <div class="container">
         <div class="row">
@@ -170,11 +123,10 @@
             </div>
             <hr>
             <div class="col-md-9">
-                <span class="badge rounded-pill text-bg-dark fs-6 p-3 m-1">All</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Tiles & Granites</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Bricks</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Ply & Laminates</span>
-                <span class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Paints</span>
+                <span class="badge rounded-pill {{$selectedCategory == 'all' ? 'text-bg-dark' : 'text-bg-light'}} fs-6 p-3 m-1" wire:click="changeCategory('all')"  role="button" tabindex="0">All</span>
+                @foreach ($this->businessCategories as $cat)                    
+                    <span class="badge rounded-pill {{$selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light'}}  fs-6 p-3 m-1"  role="button" tabindex="0" wire:click="changeCategory({{$cat->id}})">{{$cat->title}}</span>
+                @endforeach
             </div>
             <div class="col-md-3">
                 <div class="d-flex float-md-end mt-3">
@@ -200,21 +152,51 @@
                 </div>
             </div>
             <div class="col-12 mt-3">
-                <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                        <a role="button" id="openSliderBtn">
-                            {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
-                            <div class="dashed-border ratio ratio-add-product">
-                                <span class="text-center p-4" style="padding-top: 30% !important;">
-                                    <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                    <div class="fs-5 fw-bold">Add Previous Work</div>
-                                    <small>Adding more products improve your search rankings</small>
-                                </span>
+                @foreach ($this->allServices as $service) 
+                    <h6 class="fw-bold">{{$service->category->title}}</h6>
+                    <div class="row mb-2">
+                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                            <a role="button" id="openSliderBtn" x-on:click="$wire.set('category', {{$service->category->id}})">
+                                {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
+                                <div class="dashed-border ratio ratio-add-product">
+                                    <span class="text-center p-4" style="padding-top: 30% !important;">
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
+                                        <div class="fs-5 fw-bold">Add Previous Work</div>
+                                        <small>Adding more products improve your search rankings</small>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>   
+                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                            <div class="border rounded position-relative">
+                                <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @foreach ($service->images as $key => $serviceImage)
+                                            <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                                <div class="ratio ratio ratio-16x9">
+                                    <div class="p-2 text-center fw-bold"> {{ $service->description }}</div>
+                                </div>
+                                
+                                <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                    <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService" data-id="{{ $service->id }}"></i>
+                                </a>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
     </div>
@@ -222,6 +204,55 @@
     @include('livewire.service.partial.review-slider')
 </div>
 
+@section('style')
+    <style>
+        /* Initially set the slider to be hidden off-screen on the right */
+        .slider-form {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            /* Hide off-screen initially */
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+            transition: right 0.3s ease;
+            z-index: 1050;
+            box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
+            overflow: scroll;
+        }
+
+        /* Show the slider when active (slide in from the right) */
+        .slider-form.open {
+            right: 0;
+        }
+
+        /* Form content styling */
+        .slider-content {
+            padding: 30px;
+        }
+
+        /* Adjust the width of the form based on screen size */
+        @media (max-width: 767px) {
+            .slider-form {
+                width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .slider-form {
+                width: 75%;
+                /* 75% width on medium and larger screens */
+            }
+        }
+        .star-rating {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        
+    </style>
+@endsection
 <script>
     // Toggle slider form on button click
     //product slider
@@ -235,6 +266,7 @@
 
     closeSliderBtn.addEventListener("click", function() {
         sliderForm.classList.remove("open");
+        @this.call('resetService')
     });
 
     //review slider
@@ -268,5 +300,42 @@
                 }
             });
         });
+    });
+
+    document.addEventListener('click', function(event) {
+        let target = event.target.closest('.editService'); 
+        if (target) {
+            event.stopPropagation();
+            let serviceId = target.getAttribute('data-id');
+            
+            @this.call('editService', serviceId).then(function() {
+                sliderForm.classList.toggle("open");
+            });
+        }
+    });
+
+
+    document.addEventListener('serviceUpdated', event => {
+        Toastify({
+            text: event.detail[0].message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+        }).showToast();
+
+        sliderForm.classList.remove("open");
+    });
+
+    document.addEventListener('serviceDeleted', event => {
+        Toastify({
+            text: event.detail[0].message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+        }).showToast();
+
+        sliderForm.classList.remove("open");
     });
 </script>
