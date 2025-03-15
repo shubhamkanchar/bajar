@@ -92,7 +92,7 @@
                     <!-- Phone Number -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <input type="number" id="phone" class="form-control" wire:model="phone"
+                            <input maxlength="10" type="number" id="phone" class="form-control" wire:model="phone"
                                 placeholder="Please enter your phone number">
                             <label for="phone">Phone Number*</label>
                             @error('phone')
@@ -239,7 +239,7 @@
                     <!-- Phone Number -->
                     <div class="col-12 col-md-6 mb-3">
                         <div class="form-floating">
-                            <input type="text" id="phone" class="form-control" wire:model="phone"
+                            <input maxlength="10" type="text" id="phone" class="form-control" wire:model="phone"
                                 placeholder="Please enter your phone number">
                             <label for="phone">Phone Number *</label>
                         </div>

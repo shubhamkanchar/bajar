@@ -44,12 +44,14 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4 position-relative">
-                @if(auth()->user()->bg_image)
-                    <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @if($bgImage)
+                <img class="w-100 h-250" src="{{$bgImage->temporaryUrl()}}" >
+                @elseif(auth()->user()->bg_image)
+                <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
                 @else
                     <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
-                <input type="file" wire:change="save" wire:model="bgImage" hidden id="bgImage"> 
+                <input type="file" wire:model="bgImage" hidden id="bgImage"> 
                 <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1" wire:target="bgImage" for="bgImage">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -68,8 +70,15 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
-                        <img class="w-100 ms-md-4" src="{{ asset('assets/image/profile.png') }}">
-                        <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                        @if($profileImage)
+                            <img class="w-100 ms-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
+                        @elseif(auth()->user()->profile_image)
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                        @else
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                        @endif
+                        <input type="file" wire:model="profileImage" hidden id="profileImage"> 
+                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2" style="z-index: 1">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
@@ -82,7 +91,7 @@
                                 <path d="M19.0234 14L24.4757 18.1871" stroke="black" stroke-width="1.5"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                        </a>
+                        </label>
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
@@ -96,7 +105,7 @@
                 </div>
             </div>
             <hr>
-            <form wire:submit.prevent="updateProfile">
+            <form>
                 <div class="alert bg-custom-secondary fw-bold" role="alert">
                     Personal Details
                 </div>
@@ -107,6 +116,9 @@
                                 id="name">
                             <label for="name">Name</label>
                         </div>
+                        @error('name')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                     </div>
@@ -116,6 +128,9 @@
                                 id="phone">
                             <label for="phone">Phone Number</label>
                         </div>
+                        @error('phone')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6">
@@ -133,6 +148,9 @@
                                 id="email">
                             <label for="email">Email</label>
                         </div>
+                        @error('Email')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         @if ($emailVerifiedAt)
@@ -150,11 +168,10 @@
                     <!-- State Dropdown -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <select class="form-select" id="state" wire:model="state" wire:click="setState">
+                            <select class="form-select" id="state" wire:model="state">
                                 <option value="">Select State</option>
                                 @foreach ($stateOptions as $stateOption)
-                                    <option @if ($stateOption == $state) selected @endif
-                                        value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                    <option value="{{ $stateOption }}">{{ $stateOption }}</option>
                                 @endforeach
                             </select>
                             <label for="state">State</label>
@@ -167,11 +184,10 @@
                     <!-- City Dropdown -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <select class="form-select" id="city" wire:model="city" wire:click="setCity">
+                            <select class="form-select" id="city" wire:model="city" wire:click="setCity()">
                                 <option value="">Select City</option>
                                 @foreach ($cityOptions as $cityOption)
-                                    <option @if ($cityOption == $city) selected @endif
-                                        value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
                                 @endforeach
                             </select>
                             <label for="city">City</label>
@@ -190,13 +206,13 @@
                             <span class="d-block text-primary fw-bold">Premium</span>
                             <span>Valid Till : 24 Oct 2025</span>
                         </div>
-                        <button type="submit" class="btn btn-dark mt-3 w-100">Switch to Business</button>
+                        <button type="button" class="btn btn-dark mt-3 w-100">Switch to Business</button>
                     </div>
                 </div>
 
                 <hr>
                 <div class="col-md-12 mt-4">
-                    <button type="submit" class="btn btn-dark btn-lg">Logout</button>
+                    <button type="button" wire:click="update"  class="btn btn-dark btn-lg">update</button>
                 </div>
             </form>
         </div>

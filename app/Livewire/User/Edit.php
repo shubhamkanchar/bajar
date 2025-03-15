@@ -4,6 +4,7 @@ namespace App\Livewire\User;
 
 use App\Helpers\GlobalHelper;
 use App\Mail\OtpMail;
+use App\Models\Address;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -21,25 +22,47 @@ class Edit extends Component
     public $name, $cityOptions = [], $stateOptions = [];
     public $one, $two, $three, $four, $five, $six;
     public $profileImage,$bgImage;
+    
+    public function mount()
+    {
+        if (Auth::user()->email) {
+            $this->email = Auth::user()->email;
+        }
+        if (Auth::user()->phone) {
+            $this->phone = Auth::user()->phone;
+        }
+        if (Auth::user()->name) {
+            $this->name = Auth::user()->name;
+        }
+        if (Auth::user()->address) {
+            $this->city = Auth::user()->address->city;
+        }
+        if (Auth::user()->address) {
+            $this->state = Auth::user()->address->state;
+        }
+        
+        $this->setState();
+        $this->setCity();
+    }
 
     protected function rules()
     {
         return [
             'name' => 'nullable|string|max:255',
             'phone' => [
-                'required',
                 'string',
                 'min:10',
                 'max:15',
                 Rule::unique('users', 'phone')->ignore(auth()->id()),
             ],
             'email' => [
-                'required',
                 'email',
                 Rule::unique('users', 'email')->ignore(auth()->id()),
             ],
-            'state' => 'required|string',
-            'city' => 'required|string',
+            'state' => 'string',
+            'city' => 'string',
+            'bgImage' => 'nullable|image|max:2048',
+            'profileImage' => 'nullable|image|max:2048',
         ];
     }
 
@@ -90,19 +113,45 @@ class Edit extends Component
         }
     }
 
-    public function save()
+    public function update()
     {
-        $this->validate([
-            'bgImage' => 'image|max:2048', // Validate the image (2MB max)
-        ]);
 
-        $imagePath = $this->bgImage->store('images', 'public'); 
+        $this->validate();
+
+        if(!empty($this->bgImage)){
+            $imagePath = $this->bgImage->store('images', 'public'); 
+        }
+
+        if(!empty($this->profileImage)){
+            $profilePath = $this->profileImage->store('images', 'public'); 
+        }
+
         $user = Auth::user();
-        $user->bg_image = $imagePath;
+        $user->name = $this->name;
+        if(isset($imagePath)){
+            $user->bg_image = $imagePath;
+        }
+        if(isset($profilePath)){
+            $user->profile_image = $profilePath;
+        }
+        if(Auth::user()->phone != $this->phone){
+            $user->phone = $this->phone;
+            $user->phone_verified_at = NULL;
+        }
+        if(Auth::user()->email != $this->email){
+            $user->email = $this->email;
+            $user->email_verified_at = NULL;
+        }
         $user->save();
+
+        $address = Address::firstOrNew(['user_id' => $user->id]);
+        $address->city = $this->city;
+        $address->state = $this->state;
+        $address->save();
+
         $this->dispatch('notify', [
             'type' => 'success',
-            'message' => 'Updated background image'
+            'message' => 'Profile Updated Successfully'
         ]);
     }
 
@@ -151,25 +200,8 @@ class Edit extends Component
 
     public function render()
     {
-        if (Auth::user()->email) {
-            $this->email = Auth::user()->email;
-        }
-        if (Auth::user()->phone) {
-            $this->phone = Auth::user()->phone;
-        }
-        if (Auth::user()->name) {
-            $this->name = Auth::user()->name;
-        }
-        if (Auth::user()->address) {
-            $this->city = Auth::user()->address->city;
-        }
-        if (Auth::user()->address) {
-            $this->state = Auth::user()->address->state;
-        }
         $this->emailVerifiedAt = Auth::user()->email_verified_at;
         $this->phoneVerifiedAt = Auth::user()->phone_verified_at;
-        $this->setState();
-        $this->setCity();
         return view('livewire.user.edit')->extends('layouts.profile-layout');
     }
 }

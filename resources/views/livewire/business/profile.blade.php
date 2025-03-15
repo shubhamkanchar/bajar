@@ -2,12 +2,20 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4">
-                <img class="w-100" src="{{ asset('assets/bg/bg_profile.png') }}">
+                @if(auth()->user()->bg_image)
+                    <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @else
+                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                @endif
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2">
-                        <img class="w-100 ms-md-4" style="margin-top:-70px" src="{{ asset('assets/image/profile.png') }}">
+                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
+                        @if(auth()->user()->profile_image)
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                        @else
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                        @endif
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">

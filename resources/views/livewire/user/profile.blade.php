@@ -49,12 +49,20 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4">
-                <img class="w-100" src="{{ asset('assets/bg/bg_profile.png') }}">
+                @if(auth()->user()->bg_image)
+                    <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @else
+                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                @endif
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2">
-                        <img class="w-100 ms-md-4" style="margin-top:-70px" src="{{ asset('assets/image/profile.png') }}">
+                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
+                        @if(auth()->user()->profile_image)
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                        @else
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                        @endif
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
@@ -100,18 +108,14 @@
                 <button class="badge rounded-pill text-bg-dark fs-6 p-3 m-1">Product Whishlist</button>
                 <button class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Service Whishlist</button>
             </div>
-            <div class="col-12 mt-3">
+            <div class="col-12 mt-3 mb-5">
                 <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                        <a role="button" id="openSliderBtn">
-                            <div class="dashed-border ratio ratio-add-product">
-                                <span class="text-center p-4" style="padding-top: 30% !important;">
-                                    <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                    <div class="fs-5 fw-bold">Add Previous Work</div>
-                                    <small>Adding more products improve your search rankings</small>
-                                </span>
-                            </div>
-                        </a>
+                    <div class=" col-12 text-center">
+                        <img src="{{ asset('assets/image/empty.png') }}">
+                    </div>
+                    <div class="text-center col-12">
+                        <i class="d-block">Your wishlist is looking a little lonely!</i>
+                        <i>Start exploring and add your favourites!</i>
                     </div>
                 </div>
 
