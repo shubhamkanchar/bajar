@@ -14,6 +14,9 @@ class Profile extends Component
 {
     use WithFileUploads;
 
+    public $isEdit = false;
+    public $editProductId;
+    
     #[
         Validate(
             rule: ['product_images.*' => 'required|image|max:1024'],
@@ -59,16 +62,65 @@ class Profile extends Component
         ];
     }
 
+    public function editProduct($id)
+    {
+        $product = Product::with('images')->findOrFail($id);
+        $this->editProductId = $id;
+        $this->product_name = $product->name;
+        $this->brand_name = $product->brand_name;
+        $this->description = $product->description;
+        $this->category = $product->category_id;
+        $this->showPrice = $product->show_price;
+        $this->product_tag_group_id = $product->product_tag_group_id;
+        $this->price = $product->price;
+        $this->quantity = $product->quantity;
+    
+        foreach ($product->images as $index => $image) {
+            $this->product_images['product_image' . ($index + 1)] = $image->path;
+        }
+
+        $this->isEdit = true;
+    }
+    
+    #[Computed]
+    public function allProducts()
+    {
+        return Product::with('images')->where('user_id', auth()->id())->get();
+    }
+    
+    #[Computed]
+    public function categories()
+    {
+        return Category::all();
+    }
+
     public function saveProduct()
     {
-        // Validate the data
-        $this->validate();
+        $rules = [
+            'product_name' => 'required',
+            'brand_name' => 'required',
+            'description' => 'required',
+            'category' => 'required',
+            'showPrice' => 'required',
+            'product_tag_group_id' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required',
+        ];
+    
+        // If creating a new product, ensure images are uploaded
+        if (!$this->isEdit) {
+            $rules['product_images.*'] = 'required|image|max:1024';
+        } else {
+            // If editing, allow either a file upload or an existing image string
+            $rules['product_images.*'] = 'required|max:2048';
+        }
+        $this->validate($rules);
 
-        // Create the product instance
-        $product = new Product();
+        $product = $this->isEdit ? Product::findOrFail($this->editProductId) : new Product();
+
         $product->name = $this->product_name;
         $product->brand_name = $this->brand_name;
-        $product->description = $this->description;  // Assuming this field exists in your form
+        $product->description = $this->description;
         $product->category_id = $this->category;
         $product->show_price = $this->showPrice;
         $product->product_tag_group_id = $this->product_tag_group_id;
@@ -76,38 +128,77 @@ class Profile extends Component
         $product->quantity = $this->quantity;
         $product->user_id = 1;
         $product->business_id = 1;
-        $product->save(); // Save product to database
+        $product->save();
 
-        // Store images
-        foreach ($this->product_images as $key => $image) {
-            if ($image) {
-                // Save the image in the 'public/products' folder
-                $path = $image->store('products', 'public');
+        if ($this->isEdit) {
+            $existingImages = $product->images()->orderBy('order')->get();
 
-                // Create a ProductImage record (if needed)
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'path' => $path
-                ]);
+            foreach ($existingImages as $index => $existingImage) {
+                $key = 'product_image' . ($index + 1);
+
+                if (!empty($this->product_images[$key])) {
+                    $image = $this->product_images[$key];
+
+                    // Get new image path if uploaded, otherwise keep old path
+                    $path = is_string($image) ? $image : $image->store('products', 'public');
+
+                    // Update only the path for existing images
+                    $existingImage->update(['path' => $path]);
+                }
+            }
+        } else {
+            // Ensure exactly 6 images are created in order for new product
+            foreach (range(1, 6) as $index) {
+                $key = 'product_image' . $index;
+
+                if (!empty($this->product_images[$key])) {
+                    $image = $this->product_images[$key];
+
+                    // Store the image
+                    $path = $image->store('products', 'public');
+
+                    // Create new image record with correct order
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'order' => $index,
+                        'path' => $path
+                    ]);
+                }
             }
         }
 
-        // Success message
-        session()->flash('message', 'Product added successfully!');
+        $this->dispatch('productUpdated', [
+            'type' => 'success',
+            'message' => $this->isEdit ? 'Producted updated successfully' : 'Product added successfully'
+        ]);
+
+        $this->reset([
+            'isEdit',
+            'editProductId',
+            'product_images',
+            'product_name',
+            'brand_name',
+            'description',
+            'category',
+            'showPrice',
+            'product_tag_group_id',
+            'price',
+            'quantity'
+        ]);
     }
+
+
     // Method to remove an image
     public function removeImage($image)
     {
         $this->product_images[$image] = null;
+        // dd($this->product_images);
     }
 
     public function render()
     {
         return view(
             'livewire.business.profile',
-            [
-                'categories' => Category::all()
-            ]
         )->extends('layouts.profile-layout');
     }
 }

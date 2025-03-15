@@ -147,8 +147,37 @@
                             </div>
                         </a>
                     </div>
+                    @foreach ($this->allProducts as $product)    
+                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                            <div class="border rounded position-relative">
+                                <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @foreach ($product->images as $key => $productImage)
+                                            <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                                <div class="ratio ratio ratio-16x9">
+                                    <div class="p-2 text-center fw-bold"> {{ $product->description }}</div>
+                                </div>
+                                
+                                <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                    <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct" data-id="{{ $product->id }}"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-
             </div>
         </div>
     </div>
@@ -189,11 +218,13 @@
                             </button>
                         @endif
                         <div class="dashed-border ratio ratio-1x1">
-                            @if ($product_images['product_image1'])
+                            @if ($isEdit && gettype($product_images['product_image1']) == 'string')
+                                <img src="{{ asset('storage/' . $product_images['product_image1']) }}" class="img-fluid">
+                            @elseif ($product_images['product_image1'])
                                 <img src="{{$product_images['product_image1']->temporaryUrl()}}" class="img-fluid">
                             @else
                                 <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image1">
-                                    <input type="file" wire:model.blur="product_images.product_image1" id="productImage1" hidden>
+                                    <input type="file" wire:model.blur="product_images.product_image1" id="productImage1" hidden accept="image/*">
                                     <label for="productImage1">
                                         <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
                                     </label>
@@ -217,12 +248,14 @@
                             @foreach([2, 3, 4, 5, 6] as $index)
                                 <div class="col-md-4 mb-3 position-relative">
                                     @if ($product_images['product_image' . $index])
-                                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image{{ $index }}')" wire:key="remove-button-{{ $index }}">
+                                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image{{ $index }}')" wire:key="remove-button-{{ $index }}" accept="image/*">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     @endif
                                     <div class="dashed-border ratio ratio-1x1">
-                                        @if ($product_images['product_image' . $index])
+                                        @if ($isEdit && gettype($product_images['product_image'. $index]) == 'string')
+                                            <img src="{{ asset('storage/' . $product_images['product_image'. $index]) }}" class="img-fluid">
+                                        @elseif($product_images['product_image' . $index])
                                             <img src="{{$product_images['product_image' . $index]->temporaryUrl()}}" class="img-fluid">
                                         @else
                                             <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image{{$index}}">
@@ -269,9 +302,7 @@
                                 aria-label="Floating label select example"
                                 wire:model="category">
                                 <option selected>Open this select menu</option>
-                                @foreach ($categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                @foreach ($this->categories as $category)    
                                     <option value="{{$category->id}}">{{ $category->title }}</option>
                                 @endforeach
                             </select>
@@ -285,9 +316,7 @@
                                 aria-label="Floating label select example"
                                 wire:model="product_tag_group_id">
                                 <option selected>Open this select menu</option>
-                                @foreach ($categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                @foreach ($this->categories as $category)    
                                     <option value="{{$category->id}}">{{ $category->title }}</option>
                                 @endforeach
                             </select>
@@ -306,7 +335,7 @@
                         <span class="m-2">Per</span>
                         <div class="form-floating mb-2 mt-2 w-100" wire:model="quantity">
                             <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
+                                aria-label="Floating label select example" wire:model="quantity">
                                 <option selected></option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
@@ -430,6 +459,31 @@
     });
 
     closeSliderBtn.addEventListener("click", function() {
+        sliderForm.classList.remove("open");
+    });
+
+    document.addEventListener('click', function(event) {
+        
+        let target = event.target.closest('.editProduct'); 
+        if (target) {
+            event.stopPropagation();
+            let productId = target.getAttribute('data-id');
+            
+            @this.call('editProduct', productId).then(function() {
+                sliderForm.classList.toggle("open");
+            });
+        }
+    });
+
+    document.addEventListener('productUpdated', event => {
+        Toastify({
+            text: event.detail[0].message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+        }).showToast();
+
         sliderForm.classList.remove("open");
     });
 </script>
