@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Auth;
 
+use App\Mail\OtpMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 use Livewire\Component;
 
@@ -30,12 +32,15 @@ class Login extends Component
         ]);
 
         if ($this->tab == 'email') {
+            $otp = rand(000000, 999999);
             $user = User::firstOrNew([
                 'email' => $this->email
             ]);
             $user->email = $this->email;
-            $user->email_otp = rand(000000, 999999);
+            $user->email_otp = $otp;
             $user->save();
+
+            Mail::to($user->email)->send(new OtpMail($otp,$user));
         } else {
             $user = User::firstOrNew([
                 'phone' => $this->phone
@@ -94,7 +99,21 @@ class Login extends Component
         }
 
         if ($success) {
-            Auth::login($user);
+            $this->loginSucess($user);
+        }
+    }
+
+    public function loginSucess($user){
+        Auth::login($user);
+        if($user->onboard_completed){
+            if ($user->type == 'individual') {
+                return redirect()->route('user.profile');
+            } else if ($user->type == 'business') {
+                return redirect()->route('business.profile');
+            }else if($user->type == 'service'){
+                return redirect()->route('service.profile');
+            }
+        }else{
             return redirect()->route('onboarding');
         }
     }
@@ -120,11 +139,11 @@ class Login extends Component
                     $user = User::create([
                         'name' => $googleUser->getName(),
                         'email' => $googleUser->getEmail(),
-                        'email_otp' => rand(000000, 999999)
+                        'email_verified_at' => Carbon::now(),
+                        'email_otp' => NULL
                     ]);
                 }
-                $this->email = $googleUser->getEmail();
-                $this->page = 'otp';
+                $this->loginSucess($user);
             } catch (Exception $e) {
                 
             }
