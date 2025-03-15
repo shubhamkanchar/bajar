@@ -132,6 +132,9 @@
                 display: block;
             }
         }
+        .h-250{
+            height: 250px !important;
+        }
     </style>
 </head>
 <body>

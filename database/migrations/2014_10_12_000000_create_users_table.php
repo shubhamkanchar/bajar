@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('offering')->nullable();
             $table->string('email_otp')->nullable();
             $table->string('phone_otp')->nullable();
+            $table->string('profile_image')->nullable();
+            $table->string('bg_image')->nullable();
             $table->string('gst')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();

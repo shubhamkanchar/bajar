@@ -42,6 +42,9 @@
         .ratio-add-product {
             --bs-aspect-ratio: 130%;
         }
+        .h-250{
+            height: 250px !important;
+        }
     </style>
 </head>
 

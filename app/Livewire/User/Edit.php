@@ -10,13 +10,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
+    use WithFileUploads;
+
     public $email, $model;
     public $phone, $state, $city, $sliderStatus, $emailVerifiedAt, $phoneVerifiedAt;
     public $name, $cityOptions = [], $stateOptions = [];
     public $one, $two, $three, $four, $five, $six;
+    public $profileImage,$bgImage;
 
     protected function rules()
     {
@@ -74,18 +78,32 @@ class Edit extends Component
             $user = Auth::user();
             $user->email_otp = $otp;
             $user->save();
-
             Mail::to($user->email)->send(new OtpMail($otp, $user));
         }
 
         if ($model == 'phone') {
-            // $otp = rand(000000, 999999);
-            // $user = Auth::user();
-            // $user->phone_otp = $otp;
-            // $user->save();
-
-            // $response = GlobalHelper::sendOtp($this->phone, $otp);
+            $otp = rand(000000, 999999);
+            $user = Auth::user();
+            $user->phone_otp = $otp;
+            $user->save();
+            GlobalHelper::sendOtp($this->phone, $otp);
         }
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'bgImage' => 'image|max:2048', // Validate the image (2MB max)
+        ]);
+
+        $imagePath = $this->bgImage->store('images', 'public'); 
+        $user = Auth::user();
+        $user->bg_image = $imagePath;
+        $user->save();
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Updated background image'
+        ]);
     }
 
     public function verifyOtp()

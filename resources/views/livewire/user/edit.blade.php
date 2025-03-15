@@ -43,13 +43,46 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-4">
-                <img class="w-100" src="{{ asset('assets/bg/bg_profile.png') }}">
+            <div class="col-12 mt-4 position-relative">
+                @if(auth()->user()->bg_image)
+                    <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @else
+                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                @endif
+                <input type="file" wire:change="save" wire:model="bgImage" hidden id="bgImage"> 
+                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1" wire:target="bgImage" for="bgImage">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
+                            fill="#EDEDED" />
+                        <path d="M21.75 28.4399H29.0026" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M20.78 11.7948C21.5557 10.8678 22.95 10.7319 23.8962 11.4917C23.9485 11.533 25.6295 12.8388 25.6295 12.8388C26.669 13.4672 26.992 14.8031 26.3494 15.8226C26.3153 15.8772 16.8119 27.7645 16.8119 27.7645C16.4958 28.1589 16.0158 28.3918 15.5029 28.3973L11.8635 28.443L11.0435 24.9723C10.9287 24.4843 11.0435 23.9718 11.3597 23.5773L20.78 11.7948Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M19.0234 14L24.4757 18.1871" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </label>
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2">
-                        <img class="w-100 ms-md-4" style="margin-top:-70px" src="{{ asset('assets/image/profile.png') }}">
+                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
+                        <img class="w-100 ms-md-4" src="{{ asset('assets/image/profile.png') }}">
+                        <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
+                                    fill="#EDEDED" />
+                                <path d="M21.75 28.4399H29.0026" stroke="black" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M20.78 11.7948C21.5557 10.8678 22.95 10.7319 23.8962 11.4917C23.9485 11.533 25.6295 12.8388 25.6295 12.8388C26.669 13.4672 26.992 14.8031 26.3494 15.8226C26.3153 15.8772 16.8119 27.7645 16.8119 27.7645C16.4958 28.1589 16.0158 28.3918 15.5029 28.3973L11.8635 28.443L11.0435 24.9723C10.9287 24.4843 11.0435 23.9718 11.3597 23.5773L20.78 11.7948Z"
+                                    stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M19.0234 14L24.4757 18.1871" stroke="black" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">

@@ -20,6 +20,11 @@
     @livewireStyles
     @stack('style')
     @yield('style')
+    <style>
+        .h-250{
+            height: 250px !important;
+        }
+    </style>
 </head>
 
 <body>

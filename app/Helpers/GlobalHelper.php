@@ -26,4 +26,8 @@ class GlobalHelper
 
         return $response->json();
     }
+
+    public static function generateOtp() {
+        return sprintf("%06d", rand(0, 999999));
+    }
 }

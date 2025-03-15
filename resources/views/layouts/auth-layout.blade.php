@@ -24,6 +24,9 @@
             padding-right: 33px;
             padding-left: 32px;
         }
+        .h-250{
+            height: 250px !important;
+        }
     </style>
 </head>
 <body>

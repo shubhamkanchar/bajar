@@ -11,9 +11,9 @@
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">Elemento Enterprise</span>
+                            <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
                             <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                                27ASDFS4809E1ZP</span>
+                            {{ auth()->user()->gst }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">

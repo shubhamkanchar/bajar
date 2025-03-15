@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Helpers\GlobalHelper;
 use App\Mail\OtpMail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 use Livewire\Component;
+use Symfony\Component\Finder\Glob;
 
 class Login extends Component
 {
@@ -32,7 +34,7 @@ class Login extends Component
         ]);
 
         if ($this->tab == 'email') {
-            $otp = rand(000000, 999999);
+            $otp = GlobalHelper::generateOtp();
             $user = User::firstOrNew([
                 'email' => $this->email
             ]);
@@ -42,12 +44,14 @@ class Login extends Component
 
             Mail::to($user->email)->send(new OtpMail($otp,$user));
         } else {
+            $otp = GlobalHelper::generateOtp();
             $user = User::firstOrNew([
                 'phone' => $this->phone
             ]);
             $user->phone = $this->phone;
-            $user->phone_otp = rand(000000, 999999);
+            $user->phone_otp = $otp;
             $user->save();
+            GlobalHelper::sendOtp($user->phone, $otp);
         }
         $this->page = 'otp';
     }
@@ -86,7 +90,7 @@ class Login extends Component
             }
         } else {
             $user = User::where([
-                'phone' => $this->email,
+                'phone' => $this->phone,
                 'phone_otp' => $otp
             ])->first();
             if ($user) {
