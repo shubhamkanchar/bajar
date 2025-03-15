@@ -88,6 +88,22 @@ class Profile extends Component
         return Product::with('images')->where('user_id', auth()->id())->get();
     }
     
+    public function resetProduct() {
+        $this->reset([
+            'isEdit',
+            'editProductId',
+            'product_images',
+            'product_name',
+            'brand_name',
+            'description',
+            'category',
+            'showPrice',
+            'product_tag_group_id',
+            'price',
+            'quantity'
+        ]);
+    }
+
     #[Computed]
     public function categories()
     {
@@ -187,6 +203,15 @@ class Profile extends Component
         ]);
     }
 
+    public function deleteProduct()
+    {
+        $product = $this->isEdit ? Product::findOrFail($this->editProductId) : new Product();
+        $product->delete();
+        $this->dispatch('productDeleted', [
+            'type' => 'success',
+            'message' => 'Product deleted '
+        ]);
+    }
 
     // Method to remove an image
     public function removeImage($image)
