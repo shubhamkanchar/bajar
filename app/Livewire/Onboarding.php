@@ -27,7 +27,8 @@ class Onboarding extends Component
     public $offering;
 
     public $categoryIds = [];
-    // Step 2 fields for Business
+    public $stateOptions = [];
+    public $cityOptions = [];
     public $gst_number;
     public $google_map_link;
 
@@ -61,9 +62,6 @@ class Onboarding extends Component
         'email.email' => 'Please enter a valid email address.',
         'state.required' => 'Please select a state.',
         'city.required' => 'Please select a city.',
-        // 'business_name.required_if' => 'Please enter your business name.',
-        // 'gst_number.numeric' => 'Please enter a valid GST number.',
-        // 'business_address.required_if' => 'Please enter your business address.',
         // 'google_map_link.url' => 'Please enter a valid Google Map link.',
     ];
 
@@ -186,8 +184,24 @@ class Onboarding extends Component
         $this->categoryIds = $arr;
     }
 
+    public function setState(){
+        foreach(config('state') as $key => $state){
+            array_push($this->stateOptions,$key);
+        }
+    }
+
+    public function setCity(){
+        if($this->state){
+            $this->cityOptions = config('state')[$this->state];
+        }else{
+            $this->cityOptions = [];
+        }
+    }
+
     public function render()
     {
+        $this->setState();
+        $this->setCity();
         if (Auth::user()->email) {
             $this->email = Auth::user()->email;
         }
@@ -197,17 +211,14 @@ class Onboarding extends Component
         if (Auth::user()->name) {
             $this->name = Auth::user()->name;
         }
-        $states = [
-            'Andhra Pradesh',
-            'Arunachal Pradesh',
-            'Assam',
-            'Goa',
-            'Maharashtra'
-        ];
+        
 
-        $cities = ['Amaravati', 'pune', 'Panaji', 'Mumbai'];
+        $cities = [];
+        foreach(config('state') as $key => $state){
+            array_push($cities,$key);
+        }
         $productCategories = Category::where('type', 'product')->get();
         $serviceCategories = Category::where('type', 'service')->get();
-        return view('livewire.onboarding', compact('states', 'cities', 'productCategories', 'serviceCategories'))->extends('layouts.app');
+        return view('livewire.onboarding', compact('productCategories', 'serviceCategories'))->extends('layouts.app');
     }
 }

@@ -84,9 +84,16 @@
                             <label for="phone">Phone Number</label>
                         </div>
                     </div>
+
                     <div class="col-md-6">
-                        <button class="btn bg-custom-secondary">Verified</button>
+                        @if ($phoneVerifiedAt)
+                            <button class="btn bg-custom-secondary">Verified</button>
+                        @else
+                            <button type="button" wire:click="openVerifySlider('phone')"
+                                class="btn btn-dark">Verify</button>
+                        @endif
                     </div>
+
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" wire:model="email" class="form-control" placeholder="Brand Name"
@@ -95,33 +102,49 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="button" id="openSliderBtn" class="btn btn-dark">Verify</button>
+                        @if ($emailVerifiedAt)
+                            <button class="btn bg-custom-secondary">Verified</button>
+                        @else
+                            <button type="button" wire:click="openVerifySlider('email')"
+                                class="btn btn-dark">Verify</button>
+                        @endif
                     </div>
                 </div>
                 <div class="row">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Address
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                    <!-- State Dropdown -->
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3 form-floating">
+                            <select class="form-select" id="state" wire:model="state" wire:click="setState">
+                                <option value="">Select State</option>
+                                @foreach ($stateOptions as $stateOption)
+                                    <option @if ($stateOption == $state) selected @endif
+                                        value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                @endforeach
                             </select>
-                            <label for="floatingSelect">City</label>
+                            <label for="state">State</label>
+                            @error('state')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+
+                    <!-- City Dropdown -->
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3 form-floating">
+                            <select class="form-select" id="city" wire:model="city" wire:click="setCity">
+                                <option value="">Select City</option>
+                                @foreach ($cityOptions as $cityOption)
+                                    <option @if ($cityOption == $city) selected @endif
+                                        value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                @endforeach
                             </select>
-                            <label for="floatingSelect">State</label>
+                            <label for="city">City</label>
+                            @error('city')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -145,55 +168,82 @@
             </form>
         </div>
     </div>
-    <div class="slider-form">
+    <div class="slider-form {{ $sliderStatus }}">
         <div class="slider-content">
             <div class="row">
+                <div class="col-12 text-end">
+                    <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
+                        wire:click="closeVerifySlider">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                </div>
                 <div class="col-md-12 p-xl-5">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="row mb-5">
-                            <div class="col-md-12">
-                                <img src="{{ asset('assets/logo/logo.png') }}">
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <img src="{{ asset('assets/logo/logo.png') }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3 class="fw-bold">OTP Verification</h3>
+                        <p>Enter OTP shared on </p>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                                <input wire:model="one" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="first" maxlength="1" placeholder="-" />
+                                <input wire:model="two" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="second" maxlength="1" placeholder="-" />
+                                <input wire:model="three" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="third" maxlength="1" placeholder="-" />
+                                <input wire:model="four" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="fourth" maxlength="1" placeholder="-" />
+                                <input wire:model="five" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="fifth" maxlength="1" placeholder="-" />
+                                <input wire:model="six" class="m-md-2 me-1 text-center form-control rounded"
+                                    type="password" id="sixth" maxlength="1" placeholder="-" />
                             </div>
-                        </div>
-                        <div class="row">
-                            <h3 class="fw-bold">OTP Verification</h3>
-                            <p>Enter OTP shared on </p>
-                        </div>
-                        <div class="row mb-5">
 
-                            <div class="col-md-12">
-                                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="password"
-                                        id="first" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="second" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="third" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="fourth" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="fifth" maxlength="1" placeholder="-" />
-                                    <input class="m-md-2 me-1 text-center form-control rounded" type="text"
-                                        id="sixth" maxlength="1" placeholder="-" />
-                                </div>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 text-end mt-2">
-                                Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
-                            </div>
+                            @error('one')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('two')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('three')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('four')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('five')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            @error('six')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
-                        <div class="row mb-0">
-                            <div class="col-md-12 ">
-                                <button type="submit" class="btn btn-dark w-100">Verify</button>
-                            </div>
+                        <div class="col-md-12 text-end mt-2">
+                            Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
                         </div>
-                    </form>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-md-12 ">
+                            <button type="button" class="btn btn-dark w-100" wire:click="verifyOtp">Verify</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -201,13 +251,13 @@
 </div>
 @push('scripts')
     <script>
-        const openSliderBtn = document.getElementById("openSliderBtn");
-        const sliderForm = document.querySelector(".slider-form");
-        // const closeSliderBtn = document.getElementById("closeSliderBtn");
+        // const openSliderBtn = document.getElementById("openSliderBtn");
+        // const sliderForm = document.querySelector(".slider-form");
+        // // const closeSliderBtn = document.getElementById("closeSliderBtn");
 
-        openSliderBtn.addEventListener("click", function() {
-            sliderForm.classList.toggle("open");
-        });
+        // openSliderBtn.addEventListener("click", function() {
+        //     sliderForm.classList.toggle("open");
+        // });
 
         // closeSliderBtn.addEventListener("click", function() {
         //     sliderForm.classList.remove("open");

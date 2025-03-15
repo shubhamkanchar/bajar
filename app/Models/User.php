@@ -52,6 +52,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function address(){
+        return $this->hasOne(Address::class,'user_id','id');
+    }
+
     protected static function boot()
     {
         parent::boot();

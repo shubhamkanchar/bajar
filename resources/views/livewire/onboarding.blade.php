@@ -119,10 +119,10 @@
                     <!-- State Dropdown -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <select class="form-select" id="state" wire:model="state">
+                            <select class="form-select" id="state" wire:model="state"  wire:click="setState">
                                 <option value="">Select State</option>
-                                @foreach ($states as $stateOption)
-                                    <option value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                @foreach ($stateOptions as $stateOption)
+                                    <option @if($stateOption==$state) selected @endif value="{{ $stateOption }}">{{ $stateOption }}</option>
                                 @endforeach
                             </select>
                             <label for="state">State</label>
@@ -135,10 +135,10 @@
                     <!-- City Dropdown -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <select class="form-select" id="city" wire:model="city">
+                            <select class="form-select" id="city" wire:model="city"  wire:click="setCity">
                                 <option value="">Select City</option>
-                                @foreach ($cities as $cityOption)
-                                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                @foreach ($cityOptions as $cityOption)
+                                    <option @if($cityOption==$city) selected @endif value="{{ $cityOption }}">{{ $cityOption }}</option>
                                 @endforeach
                             </select>
                             <label for="city">City</label>
@@ -279,10 +279,10 @@
                     <!-- State Dropdown -->
                     <div class="col-12 col-md-6 mb-3 ">
                         <div class="form-floating">
-                            <select class="form-select" id="state" wire:model="state">
+                            <select class="form-select" id="state" wire:model="state" wire:click="setState">
                                 <option value="">Select State</option>
-                                @foreach ($states as $stateOption)
-                                    <option value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                @foreach ($stateOptions as $stateOption)
+                                    <option @if($stateOption==$state) selected @endif value="{{ $stateOption }}">{{ $stateOption }}</option>
                                 @endforeach
                             </select>
                             <label for="state">State</label>
@@ -295,10 +295,10 @@
                     <!-- City Dropdown -->
                     <div class="col-12 col-md-6 mb-3">
                         <div class="form-floating">
-                            <select class="form-select" id="city" wire:model="city">
+                            <select class="form-select" id="city" wire:model="city" wire:click="setCity">
                                 <option value="">Select City</option>
-                                @foreach ($cities as $cityOption)
-                                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                @foreach ($cityOptions as $cityOption)
+                                    <option @if($cityOption==$city) selected @endif value="{{ $cityOption }}">{{ $cityOption }}</option>
                                 @endforeach
                             </select>
                             <label for="city">City</label>

@@ -177,7 +177,7 @@
         </div>
     </div>
 </div>
-@push('script')
+@push('scripts')
     <script type="module">
         function OTPInput() {
             const inputs = document.querySelectorAll('#otp > input');

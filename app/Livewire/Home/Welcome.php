@@ -26,7 +26,6 @@ class Welcome extends Component
 
     public function render()
     {
-        $route = $this->dashboardRedirect();
-        return view('livewire.home.welcome',compact('route'))->extends('layouts.home');;
+        return view('livewire.home.welcome')->extends('layouts.home');;
     }
 }

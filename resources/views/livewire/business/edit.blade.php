@@ -1,43 +1,3 @@
-<style>
-    /* Initially set the slider to be hidden off-screen on the right */
-    .slider-form {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        /* Hide off-screen initially */
-        width: 100%;
-        height: 100%;
-        background-color: #f8f9fa;
-        transition: right 0.3s ease;
-        z-index: 1050;
-        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Show the slider when active (slide in from the right) */
-    .slider-form.open {
-        right: 0;
-    }
-
-    /* Form content styling */
-    .slider-content {
-        padding: 30px;
-    }
-
-    /* Adjust the width of the form based on screen size */
-    @media (max-width: 767px) {
-        .slider-form {
-            width: 100%;
-            /* Full width on small screens */
-        }
-    }
-
-    @media (min-width: 768px) {
-        .slider-form {
-            width: 40%;
-            /* 75% width on medium and larger screens */
-        }
-    }
-</style>
 <div>
     <div class="container">
         <div class="row">
@@ -418,42 +378,85 @@
         </div>
     </div>
 </div>
-
-<script>
-    const openSliderBtn = document.getElementById("openSliderBtn");
-    const sliderForm = document.querySelector(".slider-form");
-    // const closeSliderBtn = document.getElementById("closeSliderBtn");
-
-    openSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.toggle("open");
-    });
-
-    // closeSliderBtn.addEventListener("click", function() {
-    //     sliderForm.classList.remove("open");
-    // });
-
-    function OTPInput() {
-        const inputs = document.querySelectorAll('#otp > input');
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].addEventListener('input', function() {
-                if (this.value.length > 1) {
-                    this.value = this.value[0]; //    
-                }
-                if (this.value !== '' && i < inputs.length - 1) {
-                    inputs[i + 1].focus(); //   
-                }
-            });
-
-            inputs[i].addEventListener('keydown', function(event) {
-                if (event.key === 'Backspace') {
-                    this.value = '';
-                    if (i > 0) {
-                        inputs[i - 1].focus();
-                    }
-                }
-            });
+@push('style')
+    <style>
+        /* Initially set the slider to be hidden off-screen on the right */
+        .slider-form {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            /* Hide off-screen initially */
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+            transition: right 0.3s ease;
+            z-index: 1050;
+            box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
         }
-    }
 
-    OTPInput();
-</script>
+        /* Show the slider when active (slide in from the right) */
+        .slider-form.open {
+            right: 0;
+        }
+
+        /* Form content styling */
+        .slider-content {
+            padding: 30px;
+        }
+
+        /* Adjust the width of the form based on screen size */
+        @media (max-width: 767px) {
+            .slider-form {
+                width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .slider-form {
+                width: 40%;
+                /* 75% width on medium and larger screens */
+            }
+        }
+    </style>
+@endpush
+@push('scripts')
+    <script>
+        const openSliderBtn = document.getElementById("openSliderBtn");
+        const sliderForm = document.querySelector(".slider-form");
+        // const closeSliderBtn = document.getElementById("closeSliderBtn");
+
+        openSliderBtn.addEventListener("click", function() {
+            sliderForm.classList.toggle("open");
+        });
+
+        // closeSliderBtn.addEventListener("click", function() {
+        //     sliderForm.classList.remove("open");
+        // });
+
+        function OTPInput() {
+            const inputs = document.querySelectorAll('#otp > input');
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener('input', function() {
+                    if (this.value.length > 1) {
+                        this.value = this.value[0]; //    
+                    }
+                    if (this.value !== '' && i < inputs.length - 1) {
+                        inputs[i + 1].focus(); //   
+                    }
+                });
+
+                inputs[i].addEventListener('keydown', function(event) {
+                    if (event.key === 'Backspace') {
+                        this.value = '';
+                        if (i > 0) {
+                            inputs[i - 1].focus();
+                        }
+                    }
+                });
+            }
+        }
+
+        OTPInput();
+    </script>
+@endpush

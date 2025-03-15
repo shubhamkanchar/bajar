@@ -35,6 +35,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @livewireScripts
     @stack('scripts')
+    @yield('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"
         integrity="sha512-79j1YQOJuI8mLseq9icSQKT6bLlLtWknKwj1OpJZMdPt2pFBry3vQTt+NZuJw7NSd1pHhZlu0s12Ngqfa371EA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
