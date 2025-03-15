@@ -59,7 +59,7 @@
         /* Sidebar */
         .sidebar {
             width: 250px;
-            height: 100vh;
+            height: 90vh;
             background-color: white;
             color: black;
             padding-top: 1rem;
@@ -69,6 +69,8 @@
             top: 60px;
             transition: all 0.3s ease-in-out;
             z-index: 1050;
+            overflow-x:unset;
+            overflow-y:scroll
         }
         .sidebar a {
             color: black;
@@ -97,7 +99,7 @@
         /* Main Content */
         .content {
             flex-grow: 1;
-            padding: 80px 20px 20px;
+            padding-top: 60px;
             margin-left: 250px;
             transition: margin-left 0.3s;
         }
@@ -112,7 +114,7 @@
             width: 100%;
             position: fixed;
             top: 60px;
-            z-index: 1001;
+            z-index: 3;
         }
         @media (max-width: 768px) {
             .sidebar {
@@ -140,27 +142,38 @@
 <body>
     <div id="app">
         <nav class="topbar border">
-            <div class="ps-md-5">
+            <div class="ps-md-5" onclick="toggleMobileSidebar()">
                 <img src="{{ asset('assets/logo/logo.png') }}">
-                {{-- <img src="https://via.placeholder.com/40" alt="Logo" class="brand-logo"> --}}
             </div>
             <div class="page-title">Admin Dashboard</div>
-            <div class="dropdown">
-                <img src="https://via.placeholder.com/40" class="profile-img dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown me-md-5">
+                @if(auth()->user()->profile_image)
+                    <img class="profile-img dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" src="{{ asset('storage/' . auth()->user()->profile_image) }}">
+                @else
+                    <img class="profile-img dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" src="{{ asset('assets/image/profile.png') }}">
+                @endif
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    <li><a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                     document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form></li>
                 </ul>
             </div>
         </nav>
 
-        <div class="mobile-toggle" onclick="toggleMobileSidebar()">
+        {{-- <div class="mobile-toggle" onclick="toggleMobileSidebar()">
             <i class="bi bi-list"></i> Menu
-        </div>
+        </div> --}}
 
-        <div id="sidebar" class="sidebar border">
+        <div id="sidebar" class="sidebar border pe-2 mb-5">
             <span class="close-btn" onclick="closeSidebar()">&times;</span>
             <div class="fs-6 ps-1 fw-bold">
                 <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,23 +181,23 @@
                 </svg>
                 Pending Approvals
             </div>
-            <a class="btn btn-dark text-white rounded-3" href="#"> Product Review</a>
+            <a class="btn btn-dark text-white rounded-3" href="{{route('product.review')}}"> Product Review</a>
             <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Service Review</a>
 
-            <div class="fs-5 fw-bold mt-5">Approved List</div>
+            <div class="fs-5 fw-bold mt-4">Approved List</div>
             <a class="btn btn-dark text-white rounded-3" href="#"> Approved Product</a>
             <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Approved Service</a>
 
-            <div class="fs-5 fw-bold mt-5">Users</div>
+            <div class="fs-5 fw-bold mt-4">Users</div>
             <a class="btn btn-dark text-white rounded-3" href="#">Product Sellers</a>
             <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Service Providers</a>
             <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Individuals</a>
 
-            <div class="fs-5 fw-bold mt-5">Content Management</div>
+            <div class="fs-5 fw-bold mt-4">Content Management</div>
             <a class="btn btn-dark text-white rounded-3" href="#">Blogs</a>
             <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Terms and policies</a>
 
-            <div class="fs-5 fw-bold mt-5">Settings</div>
+            <div class="fs-5 fw-bold mt-4">Settings</div>
             <a class="btn btn-dark text-white rounded-3" href="#">Settings</a>
         </div>
 
