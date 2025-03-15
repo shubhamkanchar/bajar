@@ -147,8 +147,37 @@
                             </div>
                         </a>
                     </div>
+                    @foreach ($this->allProducts as $product)    
+                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                            <div class="border rounded position-relative">
+                                <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @foreach ($product->images as $key => $productImage)
+                                            <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                                <div class="ratio ratio ratio-16x9">
+                                    <div class="p-2 text-center fw-bold"> {{ $product->description }}</div>
+                                </div>
+                                
+                                <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                    <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct" data-id="{{ $product->id }}"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-
             </div>
         </div>
     </div>
@@ -189,11 +218,13 @@
                             </button>
                         @endif
                         <div class="dashed-border ratio ratio-1x1">
-                            @if ($product_images['product_image1'])
+                            @if ($isEdit && gettype($product_images['product_image1']) == 'string')
+                                <img src="{{ asset('storage/' . $product_images['product_image1']) }}" class="img-fluid">
+                            @elseif ($product_images['product_image1'])
                                 <img src="{{$product_images['product_image1']->temporaryUrl()}}" class="img-fluid">
                             @else
                                 <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image1">
-                                    <input type="file" wire:model.blur="product_images.product_image1" id="productImage1" hidden>
+                                    <input type="file" wire:model.blur="product_images.product_image1" id="productImage1" hidden accept="image/*">
                                     <label for="productImage1">
                                         <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
                                     </label>
@@ -217,12 +248,14 @@
                             @foreach([2, 3, 4, 5, 6] as $index)
                                 <div class="col-md-4 mb-3 position-relative">
                                     @if ($product_images['product_image' . $index])
-                                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image{{ $index }}')" wire:key="remove-button-{{ $index }}">
+                                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image{{ $index }}')" wire:key="remove-button-{{ $index }}" accept="image/*">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     @endif
                                     <div class="dashed-border ratio ratio-1x1">
-                                        @if ($product_images['product_image' . $index])
+                                        @if ($isEdit && gettype($product_images['product_image'. $index]) == 'string')
+                                            <img src="{{ asset('storage/' . $product_images['product_image'. $index]) }}" class="img-fluid">
+                                        @elseif($product_images['product_image' . $index])
                                             <img src="{{$product_images['product_image' . $index]->temporaryUrl()}}" class="img-fluid">
                                         @else
                                             <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image{{$index}}">
@@ -269,9 +302,7 @@
                                 aria-label="Floating label select example"
                                 wire:model="category">
                                 <option selected>Open this select menu</option>
-                                @foreach ($categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                @foreach ($this->categories as $category)    
                                     <option value="{{$category->id}}">{{ $category->title }}</option>
                                 @endforeach
                             </select>
@@ -285,9 +316,7 @@
                                 aria-label="Floating label select example"
                                 wire:model="product_tag_group_id">
                                 <option selected>Open this select menu</option>
-                                @foreach ($categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                @foreach ($this->categories as $category)    
                                     <option value="{{$category->id}}">{{ $category->title }}</option>
                                 @endforeach
                             </select>
@@ -306,7 +335,7 @@
                         <span class="m-2">Per</span>
                         <div class="form-floating mb-2 mt-2 w-100" wire:model="quantity">
                             <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
+                                aria-label="Floating label select example" wire:model="quantity">
                                 <option selected></option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
@@ -347,26 +376,27 @@
                         <p>*Your product will be under review for the initial 24 hours before it’s live</p>
                         <div class="row">
                             <div class="col-md-5 mt-2 mb-2">
-                                <button class="btn btn-dark w-100" wire:click.prevent="saveProduct">Add Product</button>
+                                <button class="btn btn-dark w-100" wire:click.prevent="saveProduct">{{ $isEdit ? 'Update Product' : 'Add Product'}}</button>
                             </div>
                             <div class="col-md-5 mt-2 mb-2">
-
-                                <button type="submit" class="btn btn-default bg-custom-secondary">
-                                    <svg class="me-2" width="19" height="20" viewBox="0 0 19 20"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M16.3238 7.46875C16.3238 7.46875 15.7808 14.2037 15.4658 17.0407C15.3158 18.3957 14.4788 19.1898 13.1078 19.2148C10.4988 19.2618 7.88681 19.2648 5.27881 19.2098C3.95981 19.1828 3.13681 18.3788 2.98981 17.0478C2.67281 14.1858 2.13281 7.46875 2.13281 7.46875"
-                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M17.708 4.24219H0.75" stroke="black" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path
-                                            d="M14.4386 4.239C13.6536 4.239 12.9776 3.684 12.8236 2.915L12.5806 1.699C12.4306 1.138 11.9226 0.75 11.3436 0.75H7.11063C6.53163 0.75 6.02363 1.138 5.87363 1.699L5.63063 2.915C5.47663 3.684 4.80063 4.239 4.01562 4.239"
-                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                    Delete
-                                </button>
+                                @if ($isEdit)    
+                                    <button wire:click.prevent="deleteProduct" wire:loading.attr="disabled"  wire:confirm="Are you sure want to delete this product" class="btn btn-default bg-custom-secondary">
+                                        <svg class="me-2" width="19" height="20" viewBox="0 0 19 20"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M16.3238 7.46875C16.3238 7.46875 15.7808 14.2037 15.4658 17.0407C15.3158 18.3957 14.4788 19.1898 13.1078 19.2148C10.4988 19.2618 7.88681 19.2648 5.27881 19.2098C3.95981 19.1828 3.13681 18.3788 2.98981 17.0478C2.67281 14.1858 2.13281 7.46875 2.13281 7.46875"
+                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M17.708 4.24219H0.75" stroke="black" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path
+                                                d="M14.4386 4.239C13.6536 4.239 12.9776 3.684 12.8236 2.915L12.5806 1.699C12.4306 1.138 11.9226 0.75 11.3436 0.75H7.11063C6.53163 0.75 6.02363 1.138 5.87363 1.699L5.63063 2.915C5.47663 3.684 4.80063 4.239 4.01562 4.239"
+                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                        Delete
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -431,5 +461,43 @@
 
     closeSliderBtn.addEventListener("click", function() {
         sliderForm.classList.remove("open");
+        @this.call('resetProduct')
     });
+
+    document.addEventListener('click', function(event) {
+        let target = event.target.closest('.editProduct'); 
+        if (target) {
+            event.stopPropagation();
+            let productId = target.getAttribute('data-id');
+            
+            @this.call('editProduct', productId).then(function() {
+                sliderForm.classList.toggle("open");
+            });
+        }
+    });
+
+    document.addEventListener('productUpdated', event => {
+        Toastify({
+            text: event.detail[0].message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+        }).showToast();
+
+        sliderForm.classList.remove("open");
+    });
+
+    document.addEventListener('productDeleted', event => {
+        Toastify({
+            text: event.detail[0].message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+        }).showToast();
+
+        sliderForm.classList.remove("open");
+    });
+
 </script>
