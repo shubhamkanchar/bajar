@@ -1,44 +1,3 @@
-<style>
-    /* Initially set the slider to be hidden off-screen on the right */
-    .slider-form {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        /* Hide off-screen initially */
-        width: 100%;
-        height: 100%;
-        background-color: #f8f9fa;
-        transition: right 0.3s ease;
-        z-index: 1050;
-        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
-        overflow: scroll;
-    }
-
-    /* Show the slider when active (slide in from the right) */
-    .slider-form.open {
-        right: 0;
-    }
-
-    /* Form content styling */
-    .slider-content {
-        padding: 30px;
-    }
-
-    /* Adjust the width of the form based on screen size */
-    @media (max-width: 767px) {
-        .slider-form {
-            width: 100%;
-            /* Full width on small screens */
-        }
-    }
-
-    @media (min-width: 768px) {
-        .slider-form {
-            width: 75%;
-            /* 75% width on medium and larger screens */
-        }
-    }
-</style>
 <div>
     <div class="container">
         <div class="row">
@@ -193,7 +152,7 @@
             </div>
         </div>
     </div>
-    <div class="slider-form">
+    <div class="slider-form" wire:ignore.self>
         <div class="slider-content">
             <div class="row">
                 <div class="col-md-8">
@@ -222,102 +181,130 @@
             </div>
 
             <form>
-                <div class="row">
-                    <div class="col-md-5 mb-3">
+                <div class="row">            
+                    <div class="col-md-5 mb-3 position-relative">
+                        @if ($product_images['product_image1'])
+                            <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image1')" wire:key="remove-button-1">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        @endif
                         <div class="dashed-border ratio ratio-1x1">
-                            <span class="text-center" style="top: 35%">
-                                <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                <div>Add Product</div>
-                            </span>
+                            @if ($product_images['product_image1'])
+                                <img src="{{$product_images['product_image1']->temporaryUrl()}}" class="img-fluid">
+                            @else
+                                <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image1">
+                                    <input type="file" wire:model.blur="product_images.product_image1" id="productImage1" hidden>
+                                    <label for="productImage1">
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
+                                    </label>
+                                </span>
+                            @endif
+                    
+                            <!-- Show loader during image upload -->
+                            <div wire:loading wire:target="product_images.product_image1" style="top: 35%;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        @error('product_images.product_image1') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+                    
                     <div class="col-md-7">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <div class="dashed-border ratio ratio-1x1">
-                                    <i
-                                        class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
+                            @foreach([2, 3, 4, 5, 6] as $index)
+                                <div class="col-md-4 mb-3 position-relative">
+                                    @if ($product_images['product_image' . $index])
+                                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image{{ $index }}')" wire:key="remove-button-{{ $index }}">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    @endif
+                                    <div class="dashed-border ratio ratio-1x1">
+                                        @if ($product_images['product_image' . $index])
+                                            <img src="{{$product_images['product_image' . $index]->temporaryUrl()}}" class="img-fluid">
+                                        @else
+                                            <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image{{$index}}">
+                                                <input type="file" wire:model.blur="product_images.product_image{{$index}}" id="productImage{{$index}}" hidden>
+                                                <label for="productImage{{$index}}">
+                                                    <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
+                                                </label>
+                                            </span>
+                                        @endif
+                    
+                                        <!-- Show loader during image upload -->
+                                        <div wire:loading wire:target="product_images.product_image{{$index}}" style="top: 35%">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('product_images.product_image' . $index) <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="dashed-border ratio ratio-1x1">
-                                    <i
-                                        class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="dashed-border ratio ratio-1x1">
-                                    <i
-                                        class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                </div>
-                            </div>
-                            {{-- </div>
-                        <div class="row mt-4"> --}}
-                            <div class="col-md-4 mb-3">
-                                <div class="dashed-border ratio ratio-1x1">
-                                    <i
-                                        class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="dashed-border ratio ratio-1x1">
-                                    <i
-                                        class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                </div>
-                            </div>
-                            {{-- <div class="col-md-4">
-                                <div class="dashed-border ratio ratio-1x1">
-                                    <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                </div>
-                            </div> --}}
+                            @endforeach
                         </div>
-                    </div>
+                    </div>                    
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Product Name">
+                                placeholder="Product Name" wire:model="product_name">
                             <label for="name">Product Name</label>
+                            @error('product_name') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
-                            <label for="name">Brand Name</label>
+                                placeholder="Brand Name" wire:model="brand_name">
+                            <label for="name" >Brand Name</label>
+                            @error('brand_name') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
                             <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
+                                aria-label="Floating label select example"
+                                wire:model="category">
                                 <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                @foreach ($categories as $category)    
+                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                @endforeach
                             </select>
-                            <label for="floatingSelect">Works with selects</label>
+                            <label for="floatingSelect">Product Category</label>
+                            @error('category') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
                             <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
+                                aria-label="Floating label select example"
+                                wire:model="product_tag_group_id">
                                 <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                @foreach ($categories as $category)    
+                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                    <option value="{{$category->id}}">{{ $category->title }}</option>
+                                @endforeach
                             </select>
-                            <label for="floatingSelect">Works with selects</label>
+                            <label for="floatingSelect">Product Tag/Product Group</label>
+                            @error('product_tag_group_id') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-md-6 d-flex align-items-center justify-content-center">
                         <div class="form-floating mb-2 mt-2 w-100">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name">
-                            <label for="name">Brand Name</label>
+                            <input type="text" name="name" class="form-control" id="price"
+                                placeholder="Price" wire:model="price">
+                            <label for="name">Price</label>
+                            @error('price') <span class="text-danger">{{ $message }}</span> @enderror
+
                         </div>
                         <span class="m-2">Per</span>
-                        <div class="form-floating mb-2 mt-2 w-100">
+                        <div class="form-floating mb-2 mt-2 w-100" wire:model="quantity">
                             <select class="form-select" id="floatingSelect"
                                 aria-label="Floating label select example">
                                 <option selected></option>
@@ -326,24 +313,41 @@
                                 <option value="3">Three</option>
                             </select>
                             <label for="floatingSelect">Qty</label>
+                            @error('quantity') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="col-md-6 ">
+                    <div class="col-md-6"  x-data="{ showPrice: @entangle('showPrice') }">
                         <div class="mt-2 d-flex justify-content-between bg-white rounded-5 p-2 border">
-                            <button type="button" class="btn rounded-5 btn-dark email-toggle-btn pt-2 pb-2 w-100"
-                                data-item="email">Show Price</button>
-                            <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 w-100"
-                                data-item="phone">Hide Price</button>
+                            <button 
+                                type="button" 
+                                class="btn rounded-5 pt-2 pb-2 w-100"
+                                :class="{ 'btn-dark': showPrice, 'btn-light': !showPrice }" 
+                                data-item="email" 
+                                x-on:click="showPrice = true; $wire.set('showPrice', true)">
+                                Show Price
+                            </button>
+                            
+                            <!-- Hide Price Button -->
+                            <button 
+                                type="button" 
+                                class="btn rounded-5 pt-2 pb-2 w-100"
+                                :class="{ 'btn-dark': !showPrice, 'btn-light': showPrice }" 
+                                data-item="phone" 
+                                x-on:click="showPrice = false; $wire.set('showPrice', false)">
+                                Hide Price
+                            </button>
                         </div>
                     </div>
                     <div class="col-12">
-                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5"></textarea>
+                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5" wire:model="description"></textarea>
+                        @error('decription') <span class="text-danger">{{ $message }}</span> @enderror
+
                     </div>
                     <div class="col-md-12 mt-4">
                         <p>*Your product will be under review for the initial 24 hours before it’s live</p>
                         <div class="row">
                             <div class="col-md-5 mt-2 mb-2">
-                                <button type="submit" class="btn btn-dark w-100">Add Product</button>
+                                <button class="btn btn-dark w-100" wire:click.prevent="saveProduct">Add Product</button>
                             </div>
                             <div class="col-md-5 mt-2 mb-2">
 
@@ -367,12 +371,53 @@
                         </div>
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>
 </div>
+@section('style')
+<style>
+    /* Initially set the slider to be hidden off-screen on the right */
+    .slider-form {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        /* Hide off-screen initially */
+        width: 100%;
+        height: 100%;
+        background-color: #f8f9fa;
+        transition: right 0.3s ease;
+        z-index: 1050;
+        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
+        overflow: scroll;
+    }
+
+    /* Show the slider when active (slide in from the right) */
+    .slider-form.open {
+        right: 0;
+    }
+
+    /* Form content styling */
+    .slider-content {
+        padding: 30px;
+    }
+
+    /* Adjust the width of the form based on screen size */
+    @media (max-width: 767px) {
+        .slider-form {
+            width: 100%;
+            /* Full width on small screens */
+        }
+    }
+
+    @media (min-width: 768px) {
+        .slider-form {
+            width: 75%;
+            /* 75% width on medium and larger screens */
+        }
+    }
+</style>
+@endsection
 
 <script>
     // Toggle slider form on button click
