@@ -75,6 +75,7 @@ class Profile extends Component
     {
         $service = Service::findOrFail($this->editServiceId);
         $service->delete();
+        $this->resetService();
         $this->dispatch('serviceDeleted', [
             'type' => 'success',
             'message' => 'Sevice deleted! '

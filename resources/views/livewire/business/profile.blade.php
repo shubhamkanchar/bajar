@@ -140,16 +140,29 @@
                     </button>
                 </div>
             </div>
-            <div class="col-12 mt-3">
+            <div class="col-12 mt-3 product-list">
+                @if(count($this->allProducts) == 0)
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                        <a id="openSliderBtn">
+                            <div class="dashed-border ratio ratio-add-product">
+                                <span class="text-center p-4" style="top: 25%">
+                                    <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
+                                    <div class="fs-4 fw-bold">Add Product</div>
+                                    <small>Adding more products improve your search rankings</small>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                @endif
                 @foreach ($this->allProducts as $product)
                     <h6 class="fw-bold">{{$product->category->title}}</h6>
                     <div class="row mb-2">
                         <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                            <a role="button" id="openSliderBtn" x-on:click="$wire.set('category', {{$product->category->id}})">
+                            <a id="openSliderBtn" x-on:click="$wire.set('category', {{$product->category->id}})">
                                 {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
                                 <div class="dashed-border ratio ratio-add-product">
                                     <span class="text-center p-4" style="top: 25%">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
                                         <div class="fs-4 fw-bold">Add Product</div>
                                         <small>Adding more products improve your search rankings</small>
                                     </span>
@@ -459,12 +472,14 @@
 
 <script>
     // Toggle slider form on button click
-    const openSliderBtn = document.getElementById("openSliderBtn");
+    // const openSliderBtn = document.getElementById("openSliderBtn");
     const sliderForm = document.querySelector(".slider-form");
     const closeSliderBtn = document.getElementById("closeSliderBtn");
 
-    openSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.toggle("open");
+    document.querySelector(".product-list").addEventListener("click", function (event) {
+        if (event.target.classList.contains("openSlider")) {
+            sliderForm.classList.toggle("open");
+        }
     });
 
     closeSliderBtn.addEventListener("click", function() {

@@ -102,7 +102,7 @@
                         <input type="text" name="work_brief" class="form-control" id="workBrief"
                             placeholder="Work Brief" wire:model="work_brief">
                         <label for="name">Work Brief</label>
-                        @error('category') <span class="text-danger">{{ $message }}</span> @enderror
+                        @error('work_brief') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">

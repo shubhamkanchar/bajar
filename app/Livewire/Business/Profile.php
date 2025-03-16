@@ -221,6 +221,7 @@ class Profile extends Component
     {
         $product = $this->isEdit ? Product::findOrFail($this->editProductId) : new Product();
         $product->delete();
+        $this->resetProduct();
         $this->dispatch('productDeleted', [
             'type' => 'success',
             'message' => 'Product deleted '
