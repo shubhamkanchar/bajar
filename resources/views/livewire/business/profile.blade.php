@@ -2,8 +2,8 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4">
-                @if(auth()->user()->bg_image)
-                    <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @if($this->user->bg_image)
+                    <img class="w-100 h-250" src="{{ asset('storage/'.$this->user->bg_image) }}">
                 @else
                     <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
@@ -11,17 +11,17 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
-                        @if(auth()->user()->profile_image)
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                        @if($this->user->profile_image)
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
                         @else
                             <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
+                            <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
                             <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                            {{ auth()->user()->gst }}</span>
+                            {{ $this->user->gst }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -38,7 +38,8 @@
                                 </svg>
                             </span>
                             <span>
-                                1st Floor, Sagar Heights, Nagar-Pune Road, Opposite McDonalds, Kedgaon-414005
+                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                {{ $this->user->address->state }}
                             </span>
                         </div>
                     </div>
@@ -89,11 +90,11 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                9:00AM - 5:00PM
+                                {{$this->bussinessTime()}}
                             </span>
                         </div>
                         <div class="d-lg-flex float-md-end">
-                            <a href="{{ route('business.edit', ['uuid' => auth()->user()->uuid ]) }}" class="btn btn-dark">
+                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid ]) }}" class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"

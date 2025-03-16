@@ -31,17 +31,18 @@
                         if ($user->type == 'individual') {
                             $route = route('user.profile');
                         } elseif ($user->type == 'business') {
-                            if($user->offering == 'product'){
+                            if ($user->offering == 'product') {
                                 $route = route('business.profile');
-                            }else{
+                            } else {
                                 $route = route('service.profile');
                             }
-                        } 
+                        }
                     } else {
                         $route = route('onboarding');
                     }
                 @endphp
-                <a href="{{$route}}" role="button" class="position-absolute top-0 start-0 p-2 ps-4" style="z-index: 1">
+                <a href="{{ $route }}" role="button" class="position-absolute top-0 start-0 p-2 ps-4"
+                    style="z-index: 1">
                     <svg width="40" height="40" viewBox="0 0 50 50" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <rect x="-1" y="1" width="47" height="47" rx="24"
@@ -153,16 +154,16 @@
                             <label for="name">Business Name</label>
                         </div>
                         @error('name')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" class="form-control" placeholder="Brand Name" wire:model="gst">
+                            <input type="text" class="form-control" wire:model="gst">
                             <label for="name">GST Number</label>
                         </div>
                         @error('gst')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
@@ -171,32 +172,53 @@
                             <label for="name">Phone Number</label>
                         </div>
                         @error('phone')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         @if ($phoneVerifiedAt)
-                            <button class="btn bg-custom-secondary">Verified</button>
+                            <button class="btn bg-custom-secondary mt-2 fw-bold p-3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M4.79476 7.05613C4.79476 5.80713 5.80676 4.79513 7.05576 4.79413H8.08476C8.68176 4.79413 9.25376 4.55713 9.67776 4.13713L10.3968 3.41713C11.2778 2.53113 12.7098 2.52713 13.5958 3.40813L13.5968 3.40913L13.6058 3.41713L14.3258 4.13713C14.7498 4.55813 15.3218 4.79413 15.9188 4.79413H16.9468C18.1958 4.79413 19.2088 5.80613 19.2088 7.05613V8.08313C19.2088 8.68013 19.4448 9.25313 19.8658 9.67713L20.5858 10.3971C21.4718 11.2781 21.4768 12.7101 20.5958 13.5961L20.5948 13.5971L20.5858 13.6061L19.8658 14.3261C19.4448 14.7491 19.2088 15.3211 19.2088 15.9181V16.9471C19.2088 18.1961 18.1968 19.2081 16.9478 19.2081H16.9468H15.9168C15.3198 19.2081 14.7468 19.4451 14.3238 19.8661L13.6038 20.5851C12.7238 21.4711 11.2928 21.4761 10.4068 20.5971C10.4058 20.5961 10.4048 20.5951 10.4038 20.5941L10.3948 20.5851L9.67576 19.8661C9.25276 19.4451 8.67976 19.2091 8.08276 19.2081H7.05576C5.80676 19.2081 4.79476 18.1961 4.79476 16.9471V15.9161C4.79476 15.3191 4.55776 14.7471 4.13676 14.3241L3.41776 13.6041C2.53176 12.7241 2.52676 11.2931 3.40676 10.4071C3.40676 10.4061 3.40776 10.4051 3.40876 10.4041L3.41776 10.3951L4.13676 9.67513C4.55776 9.25113 4.79476 8.67913 4.79476 8.08113V7.05613"
+                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M8.4375 11.998L10.8115 14.371L15.5575 9.625" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Verified
+                            </button>
                         @else
                             <button type="button" wire:click="openVerifySlider('phone')"
-                                class="btn btn-dark">Verify</button>
+                                class="btn btn-dark mt-2 fw-bold py-3 px-4">Verify</button>
                         @endif
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" class="form-control" placeholder="Brand Name" wire:model="email">
+                            <input type="text" class="form-control" wire:model="email">
                             <label for="name">Email</label>
                         </div>
                         @error('email')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         @if ($emailVerifiedAt)
-                            <button class="btn bg-custom-secondary">Verified</button>
+                            <button class="btn bg-custom-secondary mt-2 fw-bold p-3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M4.79476 7.05613C4.79476 5.80713 5.80676 4.79513 7.05576 4.79413H8.08476C8.68176 4.79413 9.25376 4.55713 9.67776 4.13713L10.3968 3.41713C11.2778 2.53113 12.7098 2.52713 13.5958 3.40813L13.5968 3.40913L13.6058 3.41713L14.3258 4.13713C14.7498 4.55813 15.3218 4.79413 15.9188 4.79413H16.9468C18.1958 4.79413 19.2088 5.80613 19.2088 7.05613V8.08313C19.2088 8.68013 19.4448 9.25313 19.8658 9.67713L20.5858 10.3971C21.4718 11.2781 21.4768 12.7101 20.5958 13.5961L20.5948 13.5971L20.5858 13.6061L19.8658 14.3261C19.4448 14.7491 19.2088 15.3211 19.2088 15.9181V16.9471C19.2088 18.1961 18.1968 19.2081 16.9478 19.2081H16.9468H15.9168C15.3198 19.2081 14.7468 19.4451 14.3238 19.8661L13.6038 20.5851C12.7238 21.4711 11.2928 21.4761 10.4068 20.5971C10.4058 20.5961 10.4048 20.5951 10.4038 20.5941L10.3948 20.5851L9.67576 19.8661C9.25276 19.4451 8.67976 19.2091 8.08276 19.2081H7.05576C5.80676 19.2081 4.79476 18.1961 4.79476 16.9471V15.9161C4.79476 15.3191 4.55776 14.7471 4.13676 14.3241L3.41776 13.6041C2.53176 12.7241 2.52676 11.2931 3.40676 10.4071C3.40676 10.4061 3.40776 10.4051 3.40876 10.4041L3.41776 10.3951L4.13676 9.67513C4.55776 9.25113 4.79476 8.67913 4.79476 8.08113V7.05613"
+                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M8.4375 11.998L10.8115 14.371L15.5575 9.625" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Verified</button>
                         @else
                             <button type="button" wire:click="openVerifySlider('email')"
-                                class="btn btn-dark">Verify</button>
+                                class="btn btn-dark mt-2 fw-bold py-3 px-4">Verify</button>
                         @endif
                     </div>
                 </div>
@@ -206,12 +228,11 @@
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="text" class="form-control" placeholder="Brand Name"
-                                wire:model="address">
+                            <input type="text" class="form-control" wire:model="address">
                             <label for="name">Business Address</label>
                         </div>
                         @error('address')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-12 col-md-6">
@@ -228,7 +249,7 @@
                             @enderror
                         </div>
                         @error('state')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -253,7 +274,7 @@
                             <label for="name">Google Map Link</label>
                         </div>
                         @error('map')
-                            <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -261,8 +282,9 @@
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Business Offerings
                     </div>
-                    <div class="col-lg-4 col-md-5 mb-2" >
-                        <button  type="button"  class="row width-100 border border-2 rounded-2 p-3 me-1 align-items-center w-100">
+                    <div class="col-lg-4 col-md-5 mb-2">
+                        <button type="button"
+                            class="row width-100 border border-2 rounded-2 p-3 me-1 align-items-center w-100">
                             <span class="col-2">
                                 <svg width="22" height="18" viewBox="0 0 22 18" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -296,7 +318,8 @@
                         </button>
                     </div>
                     <div class="col-lg-4 col-md-5">
-                        <button type="button" class="row width-100 border border-2 rounded-2 p-3 ms-1 align-items-center w-100">
+                        <button type="button"
+                            class="row width-100 border border-2 rounded-2 p-3 ms-1 align-items-center w-100">
                             <span class="col-2">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -376,17 +399,36 @@
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Business Hours
                     </div>
-                    <div class="row">
+                    @foreach ($days as $day)
+                        <div class="row">
+                            <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">{{ $day }}</div>
+                            <div class="col-md-2">
+                                <div class="form-floating mb-2 mt-2">
+                                    <input type="time" class="form-control"
+                                        wire:model="storeHours.{{ $day }}.open">
+                                    <label for="name">Open From</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating mb-2 mt-2">
+                                    <input type="time" class="form-control"
+                                        wire:model="storeHours.{{ $day }}.close">
+                                    <label for="name">Open From</label>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    {{-- <div class="row">
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Monday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time[monday][open]">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time[monday][close]">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -395,13 +437,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Tuesday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.tuesday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.tuesday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -410,13 +452,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Wednesday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.wednesday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.wednesday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -425,13 +467,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Thursday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.thursday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.thursday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -440,13 +482,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Friday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.friday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.friday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -455,13 +497,13 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Saturday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.saturday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.saturday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
@@ -470,17 +512,17 @@
                         <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Sunday</div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.sunday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" placeholder="Brand Name">
+                                <input type="time" class="form-control" wire:model="time.sunday.start">
                                 <label for="name">Open From</label>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <hr>
                 <div class="col-md-12 mt-4 mb-5">

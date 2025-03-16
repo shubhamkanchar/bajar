@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Business;
 
+use App\Models\BusinessTime;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -17,6 +19,7 @@ class Profile extends Component
     public $isEdit = false;
     public $editProductId;
     public $selectedCategory = 'all';
+    public $user;
     
     #[
         Validate(
@@ -53,6 +56,9 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
     public $product_tag_group_id;
 
+    public function mount(){
+        $this->user = Auth::user();
+    }
 
     public function messages()
     {
@@ -63,6 +69,19 @@ class Profile extends Component
         ];
     }
 
+    #[Computed]
+    public function bussinessTime()
+    {
+        $time = BusinessTime::where([
+            'user_id' => Auth::user()->id,
+            'day' => date("l")
+        ])->first();
+        if($time && $time['open_time'] && $time['close_time']) {
+            return date("g:i A", strtotime($time['open_time'])).' - '.date("g:i A", strtotime($time['close_time']));
+        }
+        return 'Closed';
+    }
+    
     public function editProduct($id)
     {
         $product = Product::with('images')->findOrFail($id);
