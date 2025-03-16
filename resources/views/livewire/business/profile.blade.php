@@ -123,7 +123,7 @@
                 <div class="d-flex float-md-end mt-3">
                     <span class="text-end me-2">
                         <span class="d-block">Total work Added</span>
-                        <span class="d-block">00</span>
+                        <span class="d-block">{{count($this->allProducts)}}</span>
                     </span>
                     <button class="btn btn-default rounded-5 bg-custom-secondary">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

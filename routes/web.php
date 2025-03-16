@@ -3,6 +3,7 @@
 use App\Http\Controllers\LogoutController;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\ProductReview;
+use App\Livewire\Admin\ProductSeller;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Otp;
 use App\Livewire\Auth\Signup;
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/product/review', ProductReview::class)->name('product.review');
+    Route::get('/admin/product/seller', ProductSeller::class)->name('product.seller');
 });
 
 Route::get('/auth/redirect/google', function () {
