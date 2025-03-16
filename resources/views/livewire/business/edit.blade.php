@@ -25,6 +25,32 @@
                             stroke-linejoin="round" />
                     </svg>
                 </label>
+                @php
+                    $user = Auth::user();
+                    if ($user->onboard_completed) {
+                        if ($user->type == 'individual') {
+                            $route = route('user.profile');
+                        } elseif ($user->type == 'business') {
+                            if($user->offering == 'product'){
+                                $route = route('business.profile');
+                            }else{
+                                $route = route('service.profile');
+                            }
+                        } 
+                    } else {
+                        $route = route('onboarding');
+                    }
+                @endphp
+                <a href="{{$route}}" role="button" class="position-absolute top-0 start-0 p-2 ps-4" style="z-index: 1">
+                    <svg width="40" height="40" viewBox="0 0 50 50" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect x="-1" y="1" width="47" height="47" rx="24"
+                            transform="matrix(-1 0 0 1 48 0)" fill="white" stroke="black" stroke-width="2" />
+                        <path
+                            d="M20.9123 25.0026L29.3342 16.5807C29.6206 16.2943 29.7591 15.9553 29.7495 15.5638C29.74 15.1723 29.592 14.8333 29.3055 14.5469C29.0191 14.2604 28.6801 14.1172 28.2886 14.1172C27.8971 14.1172 27.5581 14.2604 27.2717 14.5469L18.4774 23.3698C18.2482 23.599 18.0764 23.8568 17.9618 24.1432C17.8472 24.4297 17.7899 24.7161 17.7899 25.0026C17.7899 25.2891 17.8472 25.5755 17.9618 25.862C18.0764 26.1484 18.2482 26.4063 18.4774 26.6354L27.3003 35.4583C27.5868 35.7448 27.921 35.8832 28.3029 35.8737C28.6849 35.8642 29.0191 35.7161 29.3055 35.4297C29.592 35.1432 29.7352 34.8043 29.7352 34.4128C29.7352 34.0213 29.592 33.6823 29.3055 33.3958L20.9123 25.0026Z"
+                            fill="black" />
+                    </svg>
+                </a>
             </div>
             <div class="col-12">
                 <div class="row">
@@ -149,7 +175,12 @@
                         @enderror
                     </div>
                     <div class="col-md-6">
-                        <button class="btn bg-custom-secondary">Verified</button>
+                        @if ($phoneVerifiedAt)
+                            <button class="btn bg-custom-secondary">Verified</button>
+                        @else
+                            <button type="button" wire:click="openVerifySlider('phone')"
+                                class="btn btn-dark">Verify</button>
+                        @endif
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
@@ -161,7 +192,12 @@
                         @enderror
                     </div>
                     <div class="col-md-6">
-                        <button type="button" id="openSliderBtn" class="btn btn-dark">Verify</button>
+                        @if ($emailVerifiedAt)
+                            <button class="btn bg-custom-secondary">Verified</button>
+                        @else
+                            <button type="button" wire:click="openVerifySlider('email')"
+                                class="btn btn-dark">Verify</button>
+                        @endif
                     </div>
                 </div>
                 <div class="row">
