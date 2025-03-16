@@ -137,6 +137,9 @@
         .h-250{
             height: 250px !important;
         }
+        .bg-custom-secondary {
+            background: #CCCCCC;
+        }
     </style>
 </head>
 <body>
@@ -181,8 +184,8 @@
                 </svg>
                 Pending Approvals
             </div>
-            <a class="btn btn-dark text-white rounded-3" href="{{route('product.review')}}"> Product Review</a>
-            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Service Review</a>
+            <a class="btn btn-dark text-white rounded-3" href="{{route('admin.dashboard', 'product-review')}}"> Product Review</a>
+            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="{{route('admin.dashboard', 'service-review')}}">Service Review</a>
 
             <div class="fs-5 fw-bold mt-4">Approved List</div>
             <a class="btn btn-dark text-white rounded-3" href="#"> Approved Product</a>

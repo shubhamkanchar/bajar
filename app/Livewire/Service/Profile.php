@@ -94,6 +94,16 @@ class Profile extends Component
     public function deleteService()
     {
         $service = Service::findOrFail($this->editServiceId);
+        $serviceImages = $service->images();
+        foreach($serviceImages as $image) {
+            $imagePath = public_path("storage/{$image->path}");
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        $serviceImages->delete();
         $service->delete();
         $this->resetService();
         $this->dispatch('serviceDeleted', [
@@ -174,12 +184,12 @@ class Profile extends Component
 
             foreach ($existingImages as $index => $existingImage) {
                 $key = 'service_image' . ($index + 1);
-
+                
                 if (!empty($this->service_images[$key])) {
                     $image = $this->service_images[$key];
 
                     // Get new image path if uploaded, otherwise keep old path
-                    $path = is_string($image) ? $image : $image->store('products', 'public');
+                    $path = is_string($image) ? $image : $image->store('service', 'public');
 
                     // Update only the path for existing images
                     $existingImage->update(['path' => $path]);

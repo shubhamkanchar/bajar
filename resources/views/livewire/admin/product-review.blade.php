@@ -30,4 +30,71 @@
             </div>
         </div>
     </div>
+    <div class="row justify-content-center product-list p-2">
+        @foreach ($this->products as $product)    
+            <div class="col-12">
+                <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
+                    <div class="col-12 col-md-2 border-end border-secondary">  
+                        <span> {{ $product->name}} </span>
+                        <span class="d-block fw-bold text-wrap"> {{ $product->description}} </span>
+                    </div>
+                    <div class="col-12 col-md-6 border-end border-secondary"> 
+                        <div class="d-flex">
+                            @foreach ($product->images as $image)
+                                <div class="ratio ratio-21x9 m-2">
+                                    <img src="{{ asset('storage/' . $image->path) }}" class="d-block w-100 rounded" alt="Service Image">
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 border-end border-secondary">  
+                        <span class="text-secondary">Product Category </span>
+                        <span class="d-flex fw-bold"> 
+                            <span>{{ $product->category->title}}</span> 
+                            <i class="ms-4 fs-5 fas fa-angle-down align-self-center" style="color: #CCCCCC"></i>
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-1 text-end">  
+                        <div class="d-flex">
+                            <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn" role="button" data-id="{{$product->id}}"></i>
+                            <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2" role="button"></i>
+                            <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-square-check m-1 fw-normal p-2" role="button"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    @include('livewire.admin.partial.product-slider')
+
 </div>
+
+@script
+    <script>
+        const sliderForm = document.querySelector(".slider-form");
+        const closeSliderBtn = document.getElementById("closeSliderBtn");
+
+        document.querySelector(".product-list").addEventListener("click", function (event) {
+            if (event.target.classList.contains("slider-btn")) {
+                let productId = event.target.getAttribute('data-id');
+                @this.call('setProduct', productId).then(function() {
+                    sliderForm.classList.toggle("open");
+                });
+            }
+        });
+
+        closeSliderBtn.addEventListener("click", function() {
+            sliderForm.classList.remove("open");
+        });
+
+        document.addEventListener('productStatusChanged', event => {
+            Toastify({
+                text: event.detail[0].message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+            }).showToast();
+        });
+    </script>
+@endscript

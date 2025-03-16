@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
     Route::get('/user-profile', UserProfile::class)->name('user.profile');
     Route::get('/user-edit', UserEdit::class)->name('user.edit');
-    Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
+    Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
 

@@ -184,13 +184,11 @@ class Profile extends Component
 
             foreach ($existingImages as $index => $existingImage) {
                 $key = 'product_image' . ($index + 1);
-
                 if (!empty($this->product_images[$key])) {
                     $image = $this->product_images[$key];
 
                     // Get new image path if uploaded, otherwise keep old path
                     $path = is_string($image) ? $image : $image->store('products', 'public');
-
                     // Update only the path for existing images
                     $existingImage->update(['path' => $path]);
                 }
@@ -205,7 +203,6 @@ class Profile extends Component
 
                     // Store the image
                     $path = $image->store('products', 'public');
-
                     // Create new image record with correct order
                     ProductImage::create([
                         'product_id' => $product->id,
@@ -239,6 +236,17 @@ class Profile extends Component
     public function deleteProduct()
     {
         $product = $this->isEdit ? Product::findOrFail($this->editProductId) : new Product();
+        $productImages = $product->images();
+        foreach($productImages as $image) {
+            $imagePath = public_path("storage/{$image->path}");
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        $productImages->delete();
+
         $product->delete();
         $this->resetProduct();
         $this->dispatch('productDeleted', [
