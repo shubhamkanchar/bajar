@@ -93,7 +93,7 @@
                                 {{$this->bussinessTime()}}
                             </span>
                         </div>
-                        <div class="d-lg-flex float-md-end">
+                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100" style="height:60%">
                             <a href="{{ route('business.edit', ['uuid' => $this->user->uuid ]) }}" class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -106,7 +106,8 @@
                                     <path d="M9.47656 4.75L15.156 9.11159" stroke="white" stroke-width="1.5"
                                         stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                Edit Profile</a>
+                                Edit Profile
+                            </a>
                         </div>
                     </div>
                 </div>
