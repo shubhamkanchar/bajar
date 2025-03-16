@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Service;
 
+use App\Models\BusinessTime;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\ServiceImage;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -17,6 +19,7 @@ class Profile extends Component
     public $isEdit = false;
     public $editServiceId;
     public $selectedCategory = 'all';
+    public $user;
     
     #[
         Validate(
@@ -46,6 +49,10 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
     public $service_tag_group_id;
 
+    public function mount(){
+        $this->user = Auth::user();
+    }
+
     #[Computed]
     public function allServices()
     {
@@ -53,6 +60,19 @@ class Profile extends Component
             return Service::with('images')->where('user_id', auth()->id())->get();
         }
         return Service::with('images')->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get();
+    }
+
+    #[Computed]
+    public function bussinessTime()
+    {
+        $time = BusinessTime::where([
+            'user_id' => Auth::user()->id,
+            'day' => date("l")
+        ])->first();
+        if($time && $time['open_time'] && $time['close_time']) {
+            return date("g:i A", strtotime($time['open_time'])).' - '.date("g:i A", strtotime($time['close_time']));
+        }
+        return 'Closed';
     }
     
     #[Computed]
@@ -91,6 +111,14 @@ class Profile extends Component
             'message' => 'Sevice deleted! '
         ]);
     }
+
+    public function limitText($text, $limit = 40) {
+        if (mb_strlen($text) > $limit) {
+            return mb_substr($text, 0, $limit) . '...';
+        }
+        return $text;
+    }
+
     public function resetService() {
         $this->reset([
             'work_brief',

@@ -19,9 +19,9 @@
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">Elemento Enterprise</span>
+                            <span class="fw-bold fs-4 m-2">{{$this->user->name}}</span>
                             <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                                27ASDFS4809E1ZP</span>
+                                {{$this->user->gst}}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -38,7 +38,8 @@
                                 </svg>
                             </span>
                             <span>
-                                1st Floor, Sagar Heights, Nagar-Pune Road, Opposite McDonalds, Kedgaon-414005
+                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                {{ $this->user->address->state }}
                             </span>
                         </div>
                     </div>
@@ -89,7 +90,7 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                9:00AM - 5:00PM
+                                {{$this->bussinessTime()}}
                             </span>
                         </div>
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end" style="height:60%">
@@ -132,7 +133,7 @@
                 <div class="d-flex float-md-end mt-3">
                     <span class="text-end me-2">
                         <span class="d-block">Total work Added</span>
-                        <span class="d-block">00</span>
+                        <span class="d-block">{{count($this->allServices) }}</span>
                     </span>
                     <button class="btn btn-default rounded-5 bg-custom-secondary">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -203,7 +204,7 @@
                                     </button>
                                 </div>
                                 <div class="ratio ratio ratio-16x9">
-                                    <div class="p-2 text-center fw-bold"> {{ $service->description }}</div>
+                                    <div class="p-2 fw-bold"> {{ $this->limitText($service->description) }}</div>
                                 </div>
                                 
                                 <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">

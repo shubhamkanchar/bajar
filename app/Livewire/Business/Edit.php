@@ -6,6 +6,7 @@ use App\Helpers\GlobalHelper;
 use App\Mail\OtpMail;
 use App\Models\Address;
 use App\Models\BusinessCategory;
+use App\Models\BusinessTime;
 use App\Models\Category;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,17 +20,27 @@ use Livewire\WithFileUploads;
 class Edit extends Component
 {
     use WithFileUploads;
-    
-    public $email, $model,$pin_code;
+
+    public $email, $model, $pin_code;
     public $phone, $state, $city, $sliderStatus, $emailVerifiedAt, $phoneVerifiedAt;
     public $name, $cityOptions = [], $stateOptions = [];
     public $one, $two, $three, $four, $five, $six;
-    public $profileImage,$bgImage,$address,$map,$gst,$offering,$user;
+    public $profileImage, $bgImage, $address, $map, $gst, $offering, $user;
     public $categoryIds = [];
-    
+    public $days = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    ];
+    public $storeHours = [];
+
     public function mount(Request $request)
     {
-        $this->user = User::where('uuid',$request->uuid)->first();
+        $this->user = User::where('uuid', $request->uuid)->first();
         if ($this->user->email) {
             $this->email = $this->user->email;
         }
@@ -57,9 +68,17 @@ class Edit extends Component
         if ($this->user->offering) {
             $this->offering = $this->user->offering;
         }
-        $this->categoryIds = BusinessCategory::where('user_id',$this->user->id)->pluck('category_id')->toArray();
+        $this->categoryIds = BusinessCategory::where('user_id', $this->user->id)->pluck('category_id')->toArray();
         $this->setState();
         $this->setCity();
+
+        $existingHours = BusinessTime::where('user_id', $this->user->id)->get();
+        foreach ($this->days as $day) {
+            $this->storeHours[$day] = [
+                'open' => optional($existingHours->where('day', $day)->first())->open_time ?? '',
+                'close' => optional($existingHours->where('day', $day)->first())->close_time ?? ''
+            ];
+        }
     }
 
     public function setOffering($offering)
@@ -121,7 +140,7 @@ class Edit extends Component
         $this->model = $model;
         if ($model == 'email') {
             $otp = rand(000000, 999999);
-            
+
             $this->user->email_otp = $otp;
             $this->user->save();
             Mail::to($this->user->email)->send(new OtpMail($otp, $this->user));
@@ -129,7 +148,7 @@ class Edit extends Component
 
         if ($model == 'phone') {
             $otp = rand(000000, 999999);
-            
+
             $this->user->phone_otp = $otp;
             $this->user->save();
             GlobalHelper::sendOtp($this->phone, $otp);
@@ -138,30 +157,29 @@ class Edit extends Component
 
     public function update()
     {
-
         $this->validate();
 
-        if(!empty($this->bgImage)){
-            $imagePath = $this->bgImage->store('images', 'public'); 
+        if (!empty($this->bgImage)) {
+            $imagePath = $this->bgImage->store('images', 'public');
         }
 
-        if(!empty($this->profileImage)){
-            $profilePath = $this->profileImage->store('images', 'public'); 
+        if (!empty($this->profileImage)) {
+            $profilePath = $this->profileImage->store('images', 'public');
         }
 
-        
+
         $this->user->name = $this->name;
-        if(isset($imagePath)){
+        if (isset($imagePath)) {
             $this->user->bg_image = $imagePath;
         }
-        if(isset($profilePath)){
+        if (isset($profilePath)) {
             $this->user->profile_image = $profilePath;
         }
-        if($this->user->phone != $this->phone){
+        if ($this->user->phone != $this->phone) {
             $this->user->phone = $this->phone;
             $this->user->phone_verified_at = NULL;
         }
-        if($this->user->email != $this->email){
+        if ($this->user->email != $this->email) {
             $this->user->email = $this->email;
             $this->user->email_verified_at = NULL;
         }
@@ -176,7 +194,7 @@ class Edit extends Component
         $address->map_link = $this->map;
         $address->save();
 
-        BusinessCategory::where('user_id' , $this->user->id)->delete();
+        BusinessCategory::where('user_id', $this->user->id)->delete();
         foreach ($this->categoryIds as $category) {
             BusinessCategory::updateOrCreate([
                 'user_id' => $this->user->id,
@@ -187,10 +205,24 @@ class Edit extends Component
             ]);
         }
 
+        foreach ($this->storeHours as $day => $times) {
+            BusinessTime::updateOrCreate(
+                ['day' => $day,'user_id'=>$this->user->id],
+                ['open_time' => $times['open'] ?? NULL, 'close_time' => $times['close'] ?? NULL]
+            );
+        }
+
         $this->dispatch('notify', [
             'type' => 'success',
             'message' => 'Profile Updated Successfully'
         ]);
+    }
+
+    public function limitText($text, $limit = 20) {
+        if (mb_strlen($text) > $limit) {
+            return mb_substr($text, 0, $limit) . '.';
+        }
+        return $text;
     }
 
     public function verifyOtp()
@@ -212,7 +244,7 @@ class Edit extends Component
         ]);
 
         $otp = $this->one . $this->two . $this->three . $this->four . $this->five . $this->six;
-        
+
         if ($this->model == 'email') {
             if ($this->user->email_otp == $otp) {
                 $this->user->update([
@@ -260,6 +292,6 @@ class Edit extends Component
         $serviceCategories = Category::where('type', 'service')->get();
         $this->emailVerifiedAt = $this->user->email_verified_at;
         $this->phoneVerifiedAt = $this->user->phone_verified_at;
-        return view('livewire.business.edit',compact('productCategories', 'serviceCategories'))->extends('layouts.profile-layout');
+        return view('livewire.business.edit', compact('productCategories', 'serviceCategories'))->extends('layouts.profile-layout');
     }
 }
