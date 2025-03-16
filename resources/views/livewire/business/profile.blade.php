@@ -93,7 +93,7 @@
                             </span>
                         </div>
                         <div class="d-lg-flex float-md-end">
-                            <a href="{{ route('business.edit', ['uuid' => '123']) }}" class="btn btn-dark">
+                            <a href="{{ route('business.edit', ['uuid' => auth()->user()->uuid ]) }}" class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"

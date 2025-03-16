@@ -92,10 +92,12 @@
                                         if ($user->type == 'individual') {
                                             $route = route('user.profile');
                                         } elseif ($user->type == 'business') {
-                                            $route = route('business.profile');
-                                        } elseif ($user->type == 'service') {
-                                            $route = route('service.profile');
-                                        }
+                                            if($user->offering == 'product'){
+                                                $route = route('business.profile');
+                                            }else{
+                                                $route = route('service.profile');
+                                            }
+                                        } 
                                     } else {
                                         $route = route('onboarding');
                                     }
