@@ -1,7 +1,7 @@
 <div>
 
-    @if ($tab == 'product-review')
-        <livewire:admin.product-review />
+    @if ($tab == 'product-review' || $tab == '')
+        <livewire:admin.product-review is_approved="{{0}}"/>
     @elseif($tab == 'service-review')
         <livewire:admin.service-review />
     @endif
