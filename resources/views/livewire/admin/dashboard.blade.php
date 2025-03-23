@@ -4,6 +4,8 @@
         <livewire:admin.product-review is_approved="{{0}}"/>
     @elseif($tab == 'service-review')
         <livewire:admin.service-review />
+    @elseif($tab == 'product-sellers')
+        <livewire:admin.product-seller />
     @endif
 </div>
 @section('style')

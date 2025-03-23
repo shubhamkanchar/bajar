@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css" integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
@@ -184,24 +185,24 @@
                 </svg>
                 Pending Approvals
             </div>
-            <a class="btn btn-dark text-white rounded-3" href="{{route('admin.dashboard', 'product-review')}}"> Product Review</a>
-            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="{{route('admin.dashboard', 'service-review')}}">Service Review</a>
+            <a class="btn @if(request()->is("*product-review*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="{{route('admin.dashboard', 'product-review')}}"> Product Review</a>
+            <a class="btn @if(request()->is("*service-review*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="{{route('admin.dashboard', 'service-review')}}">Service Review</a>
 
             <div class="fs-5 fw-bold mt-4">Approved List</div>
-            <a class="btn btn-dark text-white rounded-3" href="#"> Approved Product</a>
-            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Approved Service</a>
+            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#"> Approved Product</a>
+            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Approved Service</a>
 
             <div class="fs-5 fw-bold mt-4">Users</div>
-            <a class="btn btn-dark text-white rounded-3" href="#">Product Sellers</a>
-            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Service Providers</a>
-            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Individuals</a>
+            <a href="{{route('admin.dashboard', 'product-sellers')}}" class="btn @if(request()->is("*product-sellers*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Product Sellers</a>
+            <a href="{{route('admin.dashboard', 'service-sellers')}}" class="btn @if(request()->is("*service-sellers*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Service Providers</a>
+            <a href="{{route('admin.dashboard', 'individuals')}}" class="btn @if(request()->is("*individuals*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Individuals</a>
 
             <div class="fs-5 fw-bold mt-4">Content Management</div>
-            <a class="btn btn-dark text-white rounded-3" href="#">Blogs</a>
-            <a class="btn bg-secondary-subtle text-secondary rounded-3" href="#">Terms and policies</a>
+            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Blogs</a>
+            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Terms and policies</a>
 
             <div class="fs-5 fw-bold mt-4">Settings</div>
-            <a class="btn btn-dark text-white rounded-3" href="#">Settings</a>
+            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Settings</a>
         </div>
 
         <!-- Main Content -->
