@@ -11,11 +11,14 @@ use Livewire\Component;
 
 class ProductReview extends Component
 {
-    public $product = null;
+    public $selectedProduct;
     public $is_approved;
     public $orderBy = 'recent';
     public $start_date;
     public $end_date;
+    public $currentPage = 1;
+    public $perPage = 10;
+    public $totalPage = 1;
 
     #[Computed()]
     public function products()
@@ -41,15 +44,17 @@ class ProductReview extends Component
             }
         }
 
-        if ($this->is_approved == 1) {
-            $filteredProducts = $query->where('is_approved', $this->is_approved)->get();
-        } else {
-            $filteredProducts = $query->where(function ($q) {
-                $q->where('is_approved', null)
-                    ->orWhere('is_approved', 0);
-            })->get();
-        }
+        $query->whereNull('is_approved');
 
+        $totalRecord = $query->count();
+        $this->totalPage = ceil($totalRecord / $this->perPage);
+        
+        $startLimit = ($this->currentPage - 1) * $this->perPage;
+
+        $query->skip($startLimit)->take($this->perPage);
+
+        $filteredProducts = $query->get();
+ 
         if ($this->orderBy === 'seller') {
             $filteredProducts = $filteredProducts->groupBy('user.name');
         } else {
@@ -62,9 +67,9 @@ class ProductReview extends Component
     }
 
     #[Computed()]
-    public function count()
+    public function pendingApproval()
     {
-        return $this->products->count();
+        return Product::whereNull('is_approved')->count();
     }
 
     #[Computed]
@@ -73,34 +78,43 @@ class ProductReview extends Component
         return Category::where('type', 'product')->get();
     }
 
-    #[Renderless]
-    public function setOrderBy($orderBy)
+    public function setProduct($id)
     {
-        $this->orderBy = $orderBy;
+        $this->selectedProduct = Product::find($id)->load('images');
+        
     }
 
-    public function setProduct(Product $product)
-    {
-        $this->product = $product->load('images');
+    public function updatedOrderBy($value) {
+        if($value != 'date-range') {
+            $this->reset(['currentPage','perPage','totalPage', 'start_date', 'end_date']);
+        }
     }
 
-    public function approveProduct()
-    {
-        $this->product->is_approved = true;
-        $this->product->save();
-        $this->dispatch('productStatusChanged', [
-            'type' => 'success',
-            'message' => 'Product Approve '
-        ]);
+    public function updatedStartDate($value) {
+        $this->orderBy = 'date-range';
+        $this->reset(['currentPage','perPage','totalPage']);
     }
 
-    public function rejectProduct()
+    public function updatedEndDate($value) {
+        $this->orderBy = 'date-range';
+        $this->reset(['currentPage','perPage','totalPage']);
+    }
+
+    public function rejectProduct($id)
     {
-        $this->product->is_approved = false;
-        $this->product->save();
+        Product::where('id', $id)->update(['is_approved' => 0]);
         $this->dispatch('productStatusChanged', [
             'type' => 'success',
             'message' => 'Product rejected '
+        ]);
+    }
+
+    public function approveProduct($id)
+    {
+        Product::where('id', $id)->update(['is_approved' => 1]);
+        $this->dispatch('productStatusChanged', [
+            'type' => 'success',
+            'message' => 'Product Approved '
         ]);
     }
 

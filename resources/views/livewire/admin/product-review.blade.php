@@ -4,25 +4,25 @@
             <!-- Sorting Options -->
             <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
                 :class="orderBy === 'recent' ? 'border-dark bg-secondary-subtle' : ''"
-                x-on:click="orderBy = 'recent'; showDatePicker = false; $wire.set('orderBy', 'recent')">
+                x-on:click="if (orderBy !== 'recent') { orderBy = 'recent'; showDatePicker = false; $wire.set('orderBy', 'recent'); }">
                 Recent
             </span>
 
             <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
                 :class="orderBy === 'oldest' ? 'border-dark bg-secondary-subtle' : ''"
-                x-on:click="orderBy = 'oldest'; showDatePicker = false; $wire.set('orderBy', 'oldest')">
+                x-on:click="if (orderBy !== 'oldest') { orderBy = 'oldest'; showDatePicker = false; $wire.set('orderBy', 'oldest'); }">
                 Oldest
             </span>
 
             <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
                 :class="orderBy === 'seller' ? 'border-dark bg-secondary-subtle' : ''"
-                x-on:click="orderBy = 'seller'; showDatePicker = false; $wire.set('orderBy', 'seller')">
+                x-on:click="if (orderBy !== 'seller') { orderBy = 'seller'; showDatePicker = false; $wire.set('orderBy', 'seller'); }">
                 By Seller
             </span>
 
             <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
                 :class="orderBy === 'date-range' ? 'border-dark bg-secondary-subtle' : ''"
-                x-on:click="showDatePicker = true; orderBy = 'date-range'; $wire.setOrderBy('date-range')">
+                x-on:click="if (orderBy !== 'date-range') { showDatePicker = true; orderBy = 'date-range'; }">
                 Date Range
             </span>
             
@@ -44,7 +44,7 @@
             <div class="d-flex float-md-end mt-2">
                 <span class="text-end me-2">
                     <span class="d-block">Pending Approvals</span>
-                    <span class="d-block">{{ $this->count }}</span>
+                    <span class="d-block">{{ $this->pendingApproval }}</span>
                 </span>
                 <button class="btn btn-default rounded-5 bg-custom-secondary">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -64,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div wire:loading>
+    <div wire:loading.delay>
         <div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
             style="z-index: 1050;">
             <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
@@ -90,7 +90,7 @@
                                 @foreach ($product->images as $image)
                                     <div class="ratio ratio-21x9 m-2">
                                         <img src="{{ asset('storage/' . $image->path) }}" class="d-block w-100 rounded"
-                                            alt="Service Image">
+                                            alt="Service Image" loading="lazy">
                                     </div>
                                 @endforeach
                             </div>
@@ -107,9 +107,11 @@
                                 <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
                                     role="button" data-id="{{ $product->id }}"></i>
                                 <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
-                                    role="button"></i>
+                                    role="button"
+                                    onclick="confirmAction('reject', {{ $product->id }})"></i>
                                 <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-square-check m-1 fw-normal p-2"
-                                    role="button"></i>
+                                    role="button"
+                                    onclick="confirmAction('approve', {{ $product->id }})"></i>
                             </div>
                         </div>
                     </div>
@@ -117,10 +119,58 @@
             @endforeach
         @endforeach
     </div>
+
+    @if ($this->totalPage > 1)
+        <div class="d-flex justify-content-between align-items-center p-4" 
+            x-data="{ currentPage: @entangle('currentPage'), totalPage: @entangle('totalPage'), perPage: @entangle('perPage') }">
+            
+            <button class="btn border rounded border-2 px-3 py-2 d-flex align-items-center gap-2" 
+                    x-on:click="currentPage > 1 ? $wire.set('currentPage', currentPage - 1) : null" 
+                    :disabled="currentPage === 1">
+                <i class="fa fa-arrow-left"></i> <!-- Bootstrap Icon -->
+                <span>Previous</span>
+            </button>
+
+            <!-- Page Indicator -->
+            <span class="fw-bold text-secondary">
+                Page <span x-text="currentPage"></span> of <span x-text="totalPage"></span>
+            </span>
+
+            <!-- Next Button -->
+            <button class="btn border rounded border-2 px-3 py-2 d-flex align-items-center gap-2" 
+                    x-on:click="currentPage < totalPage ? $wire.set('currentPage', currentPage + 1) : null" 
+                    :disabled="currentPage === totalPage">
+                <span>Next</span>
+                <i class="fa fa-arrow-right"></i> <!-- Bootstrap Icon -->
+            </button>
+        </div>
+    @endif
+
+
     @include('livewire.admin.partial.product-slider')
-
 </div>
+<script>
+    function confirmAction(action, productId) {
+        
+        let actionText = action === 'reject' ? 'reject this product' : 'approve this product';
+        let confirmButtonText = action === 'reject' ? 'Yes, Reject' : 'Yes, Approve';
+        let iconType = action === 'reject' ? 'warning' : 'success';
 
+        Swal.fire({
+            title: `Are you sure?`,
+            text: `Do you really want to ${actionText}? This action cannot be undone.`,
+            icon: iconType,
+            showCancelButton: true,
+            confirmButtonColor: action === 'reject' ? '#d33' : '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: confirmButtonText
+        }).then((result) => {
+            if (result.isConfirmed) {
+                @this.call(action === 'reject' ? 'rejectProduct' : 'approveProduct', productId);
+            }
+        });
+    }
+</script>
 @script
     <script>
         const sliderForm = document.querySelector(".slider-form");
@@ -129,6 +179,7 @@
         document.querySelector(".product-list").addEventListener("click", function(event) {
             if (event.target.classList.contains("slider-btn")) {
                 let productId = event.target.getAttribute('data-id');
+                
                 @this.call('setProduct', productId).then(function() {
                     sliderForm.classList.toggle("open");
                 });
@@ -147,6 +198,7 @@
                 position: "right",
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
+            sliderForm.classList.remove("open");
         });
     </script>
 @endscript

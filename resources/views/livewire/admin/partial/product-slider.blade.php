@@ -10,18 +10,18 @@
                 </a>
             </div>
         </div>
-        @if ($product)
+        @if ($selectedProduct)
             <form>
                 <div class="row">
                     <div class="col-md-5 mb-3 position-relative">
                         <div class="dashed-border ratio ratio-1x1">
-                            <img src="{{ asset('storage/' . $product->images?->first()->path) }}" class="img-fluid">
+                            <img src="{{ asset('storage/' . $selectedProduct->images?->first()?->path) }}" class="img-fluid">
                         </div>
                     </div>
 
                     <div class="col-md-7">
                         <div class="row">
-                            @foreach ($product->images as $image)
+                            @foreach ($selectedProduct->images as $image)
                                 @if ($loop->index != 0)
                                     <div class="col-md-4 mb-3 position-relative">
                                         <div class="dashed-border ratio ratio-1x1">
@@ -35,14 +35,14 @@
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Product Name" value="{{ $product->name }}">
+                                placeholder="Product Name" value="{{ $selectedProduct->name }}">
                             <label for="name">Product Name</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name" value="{{ $product->brand_name }}">
+                                placeholder="Brand Name" value="{{ $selectedProduct->brand_name }}">
                             <label for="name">Brand Name</label>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="form-floating mb-2 mt-2">
                             <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
                                 @foreach ($this->categories as $category)
-                                    <option value="{{ $category->id }}" @selected($category->id == $product->category_id)>
+                                    <option value="{{ $category->id }}" @selected($category->id == $selectedProduct->category_id)>
                                         {{ $category->title }}</option>
                                 @endforeach
                             </select>
@@ -61,7 +61,7 @@
                         <div class="form-floating mb-2 mt-2">
                             <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
                                 @foreach ($this->categories as $category)
-                                    <option value="{{ $category->id }}" @selected($category->id == $product->product_tag_group_id)>
+                                    <option value="{{ $category->id }}" @selected($category->id == $selectedProduct->product_tag_group_id)>
                                         {{ $category->title }}</option>
                                 @endforeach
                             </select>
@@ -71,56 +71,53 @@
                     <div class="col-md-6 d-flex align-items-center justify-content-center">
                         <div class="form-floating mb-2 mt-2 w-100">
                             <input type="text" name="name" class="form-control" id="price" placeholder="Price"
-                                value="{{ $product->price }}">
+                                value="{{ $selectedProduct->price }}">
                             <label for="name">Price</label>
                         </div>
                         <span class="m-2">Per</span>
                         <div class="form-floating mb-2 mt-2 w-100">
                             <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                <option value="1" @selected($product->quantity == 1)>One</option>
-                                <option value="2" @selected($product->quantity == 2)>Two</option>
-                                <option value="3" @selected($product->quantity == 3)>Three</option>
+                                <option value="1" @selected($selectedProduct->quantity == 1)>One</option>
+                                <option value="2" @selected($selectedProduct->quantity == 2)>Two</option>
+                                <option value="3" @selected($selectedProduct->quantity == 3)>Three</option>
                             </select>
                             <label for="floatingSelect">Qty</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mt-2 d-flex justify-content-between bg-white rounded-5 p-2 border">
-                            <button type="button" class="btn rounded-5 pt-2 pb-2 w-100 {{ $product->show_price ? 'btn-dark': 'btn-light' }}">
+                            <button type="button" class="btn rounded-5 pt-2 pb-2 w-100 {{ $selectedProduct->show_price ? 'btn-dark': 'btn-light' }}">
                                 Show Price
                             </button>
 
                             <!-- Hide Price Button -->
-                            <button type="button" class="btn rounded-5 pt-2 pb-2 w-100 {{ !$product->show_price ? 'btn-dark': 'btn-light' }}">
+                            <button type="button" class="btn rounded-5 pt-2 pb-2 w-100 {{ !$selectedProduct->show_price ? 'btn-dark': 'btn-light' }}">
                                 Hide Price
                             </button>
                         </div>
                     </div>
                     <div class="col-12">
                         <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5">
-                            {{ $product->description}}
+                            {{ $selectedProduct->description}}
                         </textarea>
 
                     </div>
                     <div class="row">
-                        <div class="text-secondary-subtle">Added by <a>{{$product->user->name}}</a></div>
+                        <div class="text-secondary-subtle">Added by <a>{{$selectedProduct->user->name}}</a></div>
                     </div>
                     <div class="col-md-12 mt-4">
                         <div class="row">
-                            @if (is_null($product->is_approved))  
-                                @if ($product->is_approved !== 1)  
+                            @if (is_null($selectedProduct->is_approved))  
+                                @if ($selectedProduct->is_approved !== 1)  
                                     <div class="col-md-5 mt-2 mb-2">
-                                        <button class="btn btn-dark w-100"
-                                            wire:click.prevent="approveProduct" 
-                                            wire:loading.attr="disabled"
-                                            wire:confirm="Are you sure want to approve this product"
+                                        <button type="button" class="btn btn-dark w-100"
+                                            onclick="confirmAction('approve', {{ $selectedProduct->id }})"
                                             >Approve</button>
                                     </div>
                                 @endif
-                                @if ($product->is_approved !== 0)
+                                @if ($selectedProduct->is_approved !== 0)
                                     <div class="col-md-5 mt-2 mb-2">
-                                        <button wire:click.prevent="rejectProduct" wire:loading.attr="disabled"
-                                            wire:confirm="Are you sure want to reject this product"
+                                        <button type="button" onclick="confirmAction('reject', {{ $selectedProduct->id }})"
                                             class="btn btn-default bg-custom-secondary">
                                             <svg class="me-2" width="19" height="20" viewBox="0 0 19 20"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">

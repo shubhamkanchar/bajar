@@ -106,9 +106,9 @@ class Profile extends Component
     public function allProducts()
     {
         if($this->selectedCategory == 'all') {
-            return Product::with(['images', 'category'])->where('user_id', auth()->id())->get();
+            return Product::with(['images', 'category'])->where('user_id', auth()->id())->get()->groupBy('category.title');
         }
-        return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get();
+        return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
     }
 
     #[Computed]

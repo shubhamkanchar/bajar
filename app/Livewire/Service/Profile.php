@@ -56,10 +56,10 @@ class Profile extends Component
     #[Computed]
     public function allServices()
     {
-        if($this->selectedCategory == 'all') {
-            return Service::with('images')->where('user_id', auth()->id())->get();
+        if ($this->selectedCategory == 'all') {
+            return Service::with('images')->where('user_id', auth()->id())->get()->groupBy('category.title');
         }
-        return Service::with('images')->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get();
+        return Service::with('images')->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
     }
 
     #[Computed]
@@ -125,7 +125,9 @@ class Profile extends Component
             'service_tag_group_id',
             'service_images',
             'description',
-            'category'
+            'category',
+            'editServiceId',
+            'isEdit'
         ]);
     }
 
@@ -221,13 +223,8 @@ class Profile extends Component
             'message' => $this->isEdit ? 'Service updated successfully' : 'Service added successfully'
         ]);
 
-        $this->reset([
-            'work_brief',
-            'service_tag_group_id',
-            'service_images',
-            'description',
-            'category'
-        ]);
+        $this->resetService();
+
     }
 
     // Method to remove an image
