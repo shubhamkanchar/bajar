@@ -51,11 +51,6 @@ Route::middleware(['auth','admin'])->group(function () {
     Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/product/review', ProductReview::class)->name('product.review');
-    Route::get('/admin/product/seller', ProductSeller::class)->name('product.seller');
-});
-
 Route::get('/auth/redirect/google', function () {
     return Socialite::driver('google')->redirect();
 });

@@ -17,6 +17,11 @@ class ProductSeller extends Component
     public $sellers = [];
     public $orderBy;
 
+    public function mount(){
+        $this->setCity();
+        $this->setState();
+    }
+
     public function setOrderBy($orderBy)
     {
         $this->orderBy = $orderBy;
@@ -29,12 +34,28 @@ class ProductSeller extends Component
         }
     }
 
+    public function deleteProductSeller($uuid)
+    {
+        $data = User::where('uuid',$uuid)->first();
+        if($data){
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'User deleted successfully',
+            ]);
+        }else{
+            $this->dispatch('notify', [
+                'type' => 'error',
+                'message' => 'Something went wrong',
+            ]);
+        } 
+    }
+
     public function setCity()
     {
-        if ($this->state) {
+        if ($this->state && $this->state != 'Select State') {
             $this->cityOptions = config('state')[$this->state];
         } else {
-            $this->cityOptions = [];
+            $this->cityOptions = config('state')['Maharashtra'];
         }
     }
 
@@ -51,7 +72,7 @@ class ProductSeller extends Component
             });
         }else{
             $filteredSellers = $filteredSellers->groupBy(function ($product) {
-                return Carbon::parse($product->created_at)->format('d M Y');
+                return $product->address->city;
             });
         }
         return $filteredSellers;

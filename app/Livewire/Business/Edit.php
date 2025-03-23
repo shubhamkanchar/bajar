@@ -218,6 +218,37 @@ class Edit extends Component
         ]);
     }
 
+    public function setReviewer()
+    {
+        $this->user->is_reviewer = $this->user->is_reviewer ? 0 : 1;
+        $this->user->save();
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => $this->user->is_reviewer ? 'User set as reviewer successfully' : 'User unset as reviewer successfully'
+        ]);
+    }
+
+    public function deleteUser()
+    {
+        if($this->user){
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'User deleted successfully',
+            ]);
+            if($this->offering == 'product'){
+                return redirect()->route('admin.dashboard',['tab'=>'product-sellers']);
+            }else{
+                return redirect()->route('admin.dashboard',['tab'=>'service-providers']);
+            }
+        }else{
+            $this->dispatch('notify', [
+                'type' => 'error',
+                'message' => 'Something went wrong',
+            ]);
+        }
+        
+    }
+
     public function limitText($text, $limit = 20) {
         if (mb_strlen($text) > $limit) {
             return mb_substr($text, 0, $limit) . '.';

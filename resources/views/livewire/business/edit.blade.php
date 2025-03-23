@@ -4,8 +4,8 @@
             <div class="col-12 mt-4 position-relative">
                 @if ($bgImage)
                     <img class="w-100 h-250" src="{{ $bgImage->temporaryUrl() }}">
-                @elseif(auth()->user()->bg_image)
-                    <img class="w-100 h-250" src="{{ asset('storage/' . auth()->user()->bg_image) }}">
+                @elseif($this->user->bg_image)
+                    <img class="w-100 h-250" src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
                     <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
@@ -41,8 +41,8 @@
                         $route = route('onboarding');
                     }
 
-                    if(Auth::user()->is_admin){
-                        $route = route('admin.dashboard',['tab'=>'product-sellers']);
+                    if (Auth::user()->is_admin) {
+                        $route = route('admin.dashboard', ['tab' => 'product-sellers']);
                     }
                 @endphp
                 <a href="{{ $route }}" role="button" class="position-absolute top-0 start-0 p-2 ps-4"
@@ -62,9 +62,8 @@
                     <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
                         @if ($profileImage)
                             <img class="w-100 ms-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
-                        @elseif(auth()->user()->profile_image)
-                            <img class="w-100 ms-md-4 h-100"
-                                src="{{ asset('storage/' . auth()->user()->profile_image) }}">
+                        @elseif($this->user->profile_image)
+                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
                             <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
@@ -87,7 +86,7 @@
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
+                            <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -104,8 +103,8 @@
                                 </svg>
                             </span>
                             <span>
-                                {{ auth()->user()->address->address }}, {{ auth()->user()->address->city }},
-                                {{ auth()->user()->address->state }}
+                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                {{ $this->user->address->state }}
                             </span>
                         </div>
                     </div>
@@ -175,7 +174,7 @@
                     </div>
                     <div class="col-md-6">
                         @if ($phoneVerifiedAt)
-                            <button class="btn bg-custom-secondary mt-2 fw-bold p-3">
+                            <button type="button" class="btn bg-custom-secondary mt-2 fw-bold p-3">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -203,7 +202,7 @@
                     </div>
                     <div class="col-md-6">
                         @if ($emailVerifiedAt)
-                            <button class="btn bg-custom-secondary mt-2 fw-bold p-3">
+                            <button type="button" class="btn bg-custom-secondary mt-2 fw-bold p-3">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -242,9 +241,6 @@
                                 @endforeach
                             </select>
                             <label for="state">State</label>
-                            @error('state')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
                         </div>
                         @error('state')
                             <div class="text-danger">{{ $message }}</div>
@@ -385,13 +381,98 @@
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Subscription Details
                     </div>
+                    @if (Auth::user()->is_admin)
+                        <div class="col-12 mb-3">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="mb-3 form-floating">
+                                        <select class="form-select" id="plan" >
+                                            <option value="">Select Plan</option>
+                                            <option value=""></option>
+                                        </select>
+                                        <label for="plan">Plan</label>
+                                        @error('plan')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- City Dropdown -->
+                                <div class="col-md-2">
+                                    <div class="mb-3 form-floating">
+                                        <select class="form-select" id="frequency" wire:model="frequency">
+                                            <option value="">Time period</option>
+                                            <option value=""></option>
+                                        </select>
+                                        <label for="frequency">Time period</label>
+                                        @error('frequency')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-dark p-3">
+                                        Provide Subscription
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-md-3">
                         <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
                             <span class="d-block text-primary fw-bold">Premium</span>
                             <span>Valid Till : 24 Oct 2025</span>
                         </div>
-                        <button type="submit" class="btn btn-dark mt-3 w-100">View Plans</button>
                     </div>
+                    <div class="col-md-3">
+                        <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
+                            <span class="d-block text-primary fw-bold">Premium</span>
+                            <span>Valid Till : 24 Oct 2025</span>
+                        </div>
+                    </div>
+                    @if (Auth::user()->is_admin)
+                        <div class="col-md-3 border-start border-2" wire:click="setReviewer()">
+                            <button type="button"
+                                class="row width-100 border border-2 rounded-2 p-3 me-1 ms-1 align-items-center w-100">
+                                <span class="col-2">
+                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M8.7281 19.9137C8.83884 19.9715 8.96266 20.0009 9.08649 20C9.21032 19.999 9.33314 19.9686 9.44489 19.9097L13.0128 18.0025C14.0245 17.4631 14.8168 16.8601 15.435 16.1579C16.779 14.6282 17.5129 12.6758 17.4998 10.6626L17.4575 4.02198C17.4535 3.25711 16.9511 2.57461 16.2082 2.32652L9.57073 0.0995642C9.17106 -0.0357592 8.73313 -0.0328174 8.3405 0.106428L1.72824 2.41281C0.989299 2.67071 0.495998 3.35811 0.500024 4.12396L0.542307 10.7597C0.555395 12.7758 1.31448 14.7194 2.68062 16.2334C3.3048 16.9258 4.10415 17.52 5.12699 18.0505L8.7281 19.9137ZM7.78119 12.1106C7.93019 12.2538 8.12348 12.3244 8.31678 12.3225C8.51007 12.3215 8.70236 12.2489 8.84934 12.1038L12.7484 8.25981C13.0414 7.97053 13.0384 7.50572 12.7424 7.22037C12.4454 6.93501 11.9672 6.93697 11.6742 7.22625L8.3057 10.5466L6.92647 9.2208C6.62949 8.93545 6.15229 8.93839 5.85832 9.22767C5.56536 9.51694 5.56838 9.98175 5.86537 10.2671L7.78119 12.1106Z"
+                                            fill="black" />
+                                    </svg>
+
+                                </span>
+                                <span class="col-8 text-start">
+                                    <small>Mark this user,</small><br>
+                                    <span class="fw-bold fs-6">Expert Reviewer</span>
+                                </span>
+                                <span class="float-end col-2">
+                                    @if ($this->user->is_reviewer)
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_737_3347)">
+                                                <circle cx="12" cy="12" r="12" fill="black" />
+                                                <path
+                                                    d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
+                                                    fill="white" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_737_3347">
+                                                    <rect width="24" height="24" fill="white" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                    @endif
+                                </span>
+                            </button>
+                        </div>
+                    @endif
+                    @if (!Auth::user()->is_admin)
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark mt-3 w-100">View Plans</button>
+                        </div>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
@@ -418,9 +499,37 @@
                     @endforeach
                 </div>
                 <hr>
-                <div class="col-md-12 mt-4 mb-5">
-                    <button type="button" class="btn btn-dark btn-lg" wire:click="update">Update</button>
-                </div>
+                @if (!Auth::user()->is_admin)
+                    <div class="col-md-12 mt-4 mb-5">
+                        <button type="button" class="btn btn-dark btn-lg" wire:click="update">Update</button>
+                    </div>
+                @endif
+                @if (Auth::user()->is_admin)
+                    <div class="col-md-12 mt-4 mb-5">
+                        <button type="button" class="btn bg-secondary-subtle btn-lg" wire:click="deleteUser"
+                        wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19.3238 9.46875C19.3238 9.46875 18.7808 16.2037 18.4658 19.0407C18.3158 20.3957 17.4788 21.1898 16.1078 21.2148C13.4988 21.2618 10.8868 21.2648 8.27881 21.2098C6.95981 21.1828 6.13681 20.3788 5.98981 19.0478C5.67281 16.1858 5.13281 9.46875 5.13281 9.46875"
+                                    stroke="#EC1D25" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M20.708 6.24219H3.75" stroke="#EC1D25" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M17.4386 6.239C16.6536 6.239 15.9776 5.684 15.8236 4.915L15.5806 3.699C15.4306 3.138 14.9226 2.75 14.3436 2.75H10.1106C9.53163 2.75 9.02363 3.138 8.87363 3.699L8.63063 4.915C8.47663 5.684 7.80063 6.239 7.01562 6.239"
+                                    stroke="#EC1D25" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            Delete User
+                        </button>
+                        <button type="button" class="btn bg-secondary-subtle btn-lg" wire:click="update">
+                            <i class="bi bi-plus-square"></i>
+                            Add Work for this user
+                        </button>
+                        <button type="button" class="btn bg-secondary-subtle btn-lg" wire:click="update">View Public Profile</button>
+                    </div>
+                @endif
             </form>
         </div>
     </div>

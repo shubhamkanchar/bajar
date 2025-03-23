@@ -5,11 +5,17 @@
                 <button class="btn btn-light border rounded-5 bg-secondary-subtle">
                     <i class="bi bi-search"></i>
                 </button>
-                <select class="form-select w-auto rounded-5 bg-secondary-subtle" wire:click="setOrderBy('city')">
+                <select class="form-select w-auto rounded-5 bg-secondary-subtle" wire:click="setCity()">
                     <option selected>Select City</option>
+                    @foreach($this->cityOptions as $city)
+                        <option value="{{$city}}">{{$city}}</option>
+                    @endforeach
                 </select>
-                <select class="form-select w-auto rounded-5  bg-secondary-subtle">
+                <select class="form-select w-auto rounded-5  bg-secondary-subtle" wire:model="state">
                     <option selected>Select State</option>
+                    @foreach($this->stateOptions as $state)
+                        <option value="{{$state}}">{{$state}}</option>
+                    @endforeach
                 </select>
                 <select class="form-select w-auto rounded-5  bg-secondary-subtle">
                     <option selected>Product Category</option>
@@ -39,7 +45,6 @@
                         <path d="M9.29688 13.5938L11.6419 15.9488L13.9869 13.5938" stroke="black" stroke-width="1.5"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-
                 </button>
             </div>
         </div>
@@ -53,12 +58,14 @@
                 <div class="col-12">
                     <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
                         <div class="col-12 col-md-3 border-end border-secondary">
-                            <div class="d-flex">
-                                <div class="ratio ratio-1x1 w-25 m-2">
-                                    <img src="{{ asset('storage/' . $seller->profile_image) }}"
-                                        class="d-block w-100 rounded" alt="Service Image">
+                            <div class="row">
+                                <div class="col-3">
+                                    <span class="ratio ratio-1x1 w-100">
+                                        <img src="{{ asset('storage/' . $seller->profile_image) }}"
+                                            class="d-block w-100 rounded" alt="Service Image">
+                                    </span>
                                 </div>
-                                <div class="text-secondary">{{ $seller->name }}
+                                <div class="text-secondary col-9">{{ $seller->name }}
                                     <span class="d-block fw-bold">
                                         <span>Product Seller</span>
                                     </span>
@@ -90,11 +97,12 @@
                         </div>
                         <div class="col-12 col-md-1 text-end">
                             <div class="d-flex">
-                                <a href="{{ route('business.edit',['uuid'=> $seller->uuid ]) }}">
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn" role="button"></i>
+                                <a href="{{ route('business.edit', ['uuid' => $seller->uuid]) }}">
+                                    <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
+                                        role="button"></i>
                                 </a>
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
-                                    role="button"></i>
+                                <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2" role="button" wire:click="deleteProductSeller('{{$seller->uuid}}')"
+                                wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE"></i>
                             </div>
                         </div>
                     </div>
