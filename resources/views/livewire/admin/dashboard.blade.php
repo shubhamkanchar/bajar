@@ -1,13 +1,25 @@
 <div>
-
-    @if ($tab == 'product-review' || $tab == '')
-        <livewire:admin.product-review is_approved="{{0}}"/>
-    @elseif($tab == 'service-review')
-        <livewire:admin.service-review />
-    @elseif($tab == 'product-sellers')
-        <livewire:admin.product-seller />
-    @endif
+    @switch($tab)
+        @case('product-review')
+            <livewire:admin.product-review />
+            @break
+        @case('service-review')
+            <livewire:admin.service-review />
+            @break
+        @case('approved-product')
+            <livewire:admin.approved-product />
+            @break
+        @case('approved-service')
+            <livewire:admin.product-review />
+            @break
+        @case('product-sellers')
+            <livewire:admin.product-seller />
+            @break
+        @default
+            <livewire:admin.product-review" />
+    @endswitch
 </div>
+
 @section('style')
     <style>
         /* Initially set the slider to be hidden off-screen on the right */

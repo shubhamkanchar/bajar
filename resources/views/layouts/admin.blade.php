@@ -15,6 +15,8 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css" integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
@@ -181,28 +183,30 @@
             <span class="close-btn" onclick="closeSidebar()">&times;</span>
             <div class="fs-6 ps-1 fw-bold">
                 <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.9974 18.3307C5.3974 18.3307 1.66406 14.6057 1.66406 9.9974C1.66406 5.3974 5.3974 1.66406 9.9974 1.66406C14.6057 1.66406 18.3307 5.3974 18.3307 9.9974C18.3307 14.6057 14.6057 18.3307 9.9974 18.3307ZM12.6557 13.0891C12.7557 13.1474 12.8641 13.1807 12.9807 13.1807C13.1891 13.1807 13.3974 13.0724 13.5141 12.8724C13.6891 12.5807 13.5974 12.1974 13.2974 12.0141L10.3307 10.2474V6.3974C10.3307 6.0474 10.0474 5.7724 9.70573 5.7724C9.36406 5.7724 9.08073 6.0474 9.08073 6.3974V10.6057C9.08073 10.8224 9.1974 11.0224 9.38906 11.1391L12.6557 13.0891Z" fill="black"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.9974 18.3307C5.3974 18.3307 1.66406 14.6057 1.66406 9.9974C1.66406 5.3974 5.3974 1.66406 9.9974 1.66406C14.6057 1.66406 18.3307 5.3974 18.3307 9.9974C18.3307 14.6057 14.6057 18.3307 9.9974 18.3307ZM12.6557 13.0891C12.7557 13.1474 12.8641 13.1807 12.9807 13.1807C13.1891 13.1807 13.3974 13.0724 13.5141 12.8724C13.6891 12.5807 13.5974 12.1974 13.2974 12.0141L10.3307 10.2474V6.3974C10.3307 6.0474 10.0474 5.7724 9.70573 5.7724C9.36406 5.7724 9.08073 6.0474 9.08073 6.3974V10.6057C9.08073 10.8224 9.1974 11.0224 9.38906 11.1391L12.6557 13.0891Z" fill="black" />
                 </svg>
                 Pending Approvals
             </div>
-            <a class="btn @if(request()->is("*product-review*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="{{route('admin.dashboard', 'product-review')}}"> Product Review</a>
-            <a class="btn @if(request()->is("*service-review*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="{{route('admin.dashboard', 'service-review')}}">Service Review</a>
-
+            <a class="btn {{ request('tab') == 'product-review' || request('tab') == null ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{ route('admin.dashboard', 'product-review') }}">
+                Product Review
+            </a>
+            <a class="btn {{ request('tab') == 'service-review' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'service-review')}}">Service Review</a>
+       
             <div class="fs-5 fw-bold mt-4">Approved List</div>
-            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#"> Approved Product</a>
-            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Approved Service</a>
-
+            <a class="btn {{ request('tab') == 'approved-product' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'approved-product')}}"> Approved Product</a>
+            <a class="btn {{ request('tab') == 'approved-service' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'approved-service')}}">Approved Service</a>
+       
             <div class="fs-5 fw-bold mt-4">Users</div>
-            <a href="{{route('admin.dashboard', 'product-sellers')}}" class="btn @if(request()->is("*product-sellers*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Product Sellers</a>
-            <a href="{{route('admin.dashboard', 'service-sellers')}}" class="btn @if(request()->is("*service-sellers*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Service Providers</a>
-            <a href="{{route('admin.dashboard', 'individuals')}}" class="btn @if(request()->is("*individuals*")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Individuals</a>
-
+            <a class="btn {{ request('tab') == 'product-sellers' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'product-sellers')}}">Product Sellers</a>
+            <a class="btn {{ request('tab') == 'service-providers' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'service-providers')}}">Service Providers</a>
+            <a class="btn {{ request('tab') == 'individuals' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'individuals')}}">Individuals</a>
+       
             <div class="fs-5 fw-bold mt-4">Content Management</div>
-            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Blogs</a>
-            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Terms and policies</a>
-
+            <a class="btn {{ request('tab') == 'blogs' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'blogs')}}">Blogs</a>
+            <a class="btn {{ request('tab') == 'terms-policies' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'terms-policies')}}">Terms and policies</a>
+       
             <div class="fs-5 fw-bold mt-4">Settings</div>
-            <a class="btn @if(request()->is("product-review")) btn-dark text-white  @else bg-secondary-subtle text-secondary @endif rounded-3" href="#">Settings</a>
+            <a class="btn {{ request('tab') == 'settings' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'settings')}}">Settings</a>
         </div>
 
         <!-- Main Content -->

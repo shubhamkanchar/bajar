@@ -6,14 +6,18 @@ use App\Models\Category;
 use App\Models\Product;
 use Carbon\Carbon;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Renderless;
 use Livewire\Component;
 
-class ProductReview extends Component
+class ApprovedProduct extends Component
 {
+    public $search = '';
+    public $selectedCity;
+    public $selectedState;
+    public $selectedCategory;
+
     public $selectedProduct;
     public $is_approved;
-    public $orderBy = 'recent';
+    public $orderBy = 'seller';
     public $start_date;
     public $end_date;
     public $currentPage = 1;
@@ -25,26 +29,42 @@ class ProductReview extends Component
     {
         $query = Product::with(['images', 'user']);
 
-        if ($this->orderBy === 'recent') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($this->orderBy === 'oldest') {
-            $query->orderBy('created_at', 'asc');
-        } elseif ($this->orderBy === 'seller') {
-            $query->orderBy('user_id', 'asc');
-        } elseif ($this->orderBy === 'date-range') {
-            if (!empty($this->start_date) && !empty($this->end_date)) {
-                $query->whereBetween('created_at', [
-                    Carbon::parse($this->start_date)->startOfDay(),
-                    Carbon::parse($this->end_date)->endOfDay()
-                ]);
-            } elseif (!empty($this->start_date)) {
-                $query->whereDate('created_at', '>=', Carbon::parse($this->start_date)->startOfDay());
-            } elseif (!empty($this->end_date)) {
-                $query->whereDate('created_at', '<=', Carbon::parse($this->end_date)->endOfDay());
-            }
+        $query->orderBy('user_id', 'asc');
+
+        if(!empty($this->search)) {
+            $query->where(function($q) {
+                $q->whereAny(
+                    [
+                        'name',
+                        'brand_name',
+                        'description',
+                        'price'
+                    ],
+                    'LIKE',
+                    "%$this->search%"
+                );
+            });
         }
 
-        $query->whereNull('is_approved');
+        if (!empty($this->selectedState)) {
+            $query->whereHas('user.address', function ($q) {
+                $q->where('state', $this->selectedState);
+            });
+        }
+        
+        if (!empty($this->selectedCity)) {
+            $query->whereHas('user.address', function ($q) {
+                $q->where('city', $this->selectedCity);
+            });
+        }
+        
+        if (!empty($this->selectedCategory)) {
+            $query->whereHas('category', function ($q) {
+                $q->where('title', $this->selectedCategory);
+            });
+        }
+
+        $query->where('is_approved', 1);
 
         $totalRecord = $query->count();
         $this->totalPage = ceil($totalRecord / $this->perPage);
@@ -67,15 +87,32 @@ class ProductReview extends Component
     }
 
     #[Computed()]
-    public function pendingApproval()
+    public function totalProducts()
     {
-        return Product::whereNull('is_approved')->count();
+        return Product::where('is_approved', 1)->count();
     }
 
     #[Computed]
     public function categories()
     {
         return Category::where('type', 'product')->get();
+    }
+
+    #[Computed]
+    public function states() {
+        $allStates = [];
+        foreach(config('state') as $key => $state){
+            $allStates[] = $key;
+        }
+        return $allStates;
+    }
+
+    #[Computed]
+    public function cities(){
+        if($this->selectedState){
+           return config('state')[$this->selectedState];
+        } 
+        return [];
     }
 
     public function setProduct($id)
@@ -85,19 +122,14 @@ class ProductReview extends Component
     }
 
     public function updatedOrderBy($value) {
-        if($value != 'date-range') {
-            $this->reset(['currentPage','perPage','totalPage', 'start_date', 'end_date']);
+        $this->reset(['currentPage','perPage','totalPage', 'start_date', 'end_date']);
+    }
+
+
+    public function updatedSelectedState($value) {
+        if(empty($value)) {
+            $this->reset('selectedCity');
         }
-    }
-
-    public function updatedStartDate($value) {
-        $this->orderBy = 'date-range';
-        $this->reset(['currentPage','perPage','totalPage']);
-    }
-
-    public function updatedEndDate($value) {
-        $this->orderBy = 'date-range';
-        $this->reset(['currentPage','perPage','totalPage']);
     }
 
     public function rejectProduct($id)
@@ -117,9 +149,9 @@ class ProductReview extends Component
             'message' => 'Product Approved '
         ]);
     }
-
+    
     public function render()
     {
-        return view('livewire.admin.product-review')->extends('layouts.admin');
+        return view('livewire.admin.approved-product');
     }
 }

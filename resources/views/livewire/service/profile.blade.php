@@ -169,12 +169,11 @@
                         </div>
                     </div>
                 @endif
-                @foreach ($this->allServices as $service) 
-                    <h6 class="fw-bold">{{$service->category->title}}</h6>
+                @foreach ($this->allServices as $categoryName => $services) 
+                    <h6 class="fw-bold">{{$categoryName}}</h6> 
                     <div class="row mb-2">
                         <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                            <a id="openSliderBtn" x-on:click="$wire.set('category', {{$service->category->id}})">
-                                {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
+                            <a id="openSliderBtn">
                                 <div class="dashed-border ratio ratio-add-product">
                                     <span class="text-center p-4" style="padding-top: 30% !important;">
                                         <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
@@ -184,34 +183,36 @@
                                 </div>
                             </a>
                         </div>   
-                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                            <div class="border rounded position-relative">
-                                <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-inner">
-                                        @foreach ($service->images as $key => $serviceImage)
-                                            <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
-                                                <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
-                                            </div>
-                                        @endforeach
+                        @foreach ($services as $service)
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                                <div class="border rounded position-relative">
+                                    <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @foreach ($service->images as $key => $serviceImage)
+                                                <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                    <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
                                     </div>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
+                                    <div class="ratio ratio ratio-16x9">
+                                        <div class="p-2 fw-bold"> {{ $this->limitText($service->description) }}</div>
+                                    </div>
+                                    
+                                    <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                        <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService" data-id="{{ $service->id }}"></i>
+                                    </a>
                                 </div>
-                                <div class="ratio ratio ratio-16x9">
-                                    <div class="p-2 fw-bold"> {{ $this->limitText($service->description) }}</div>
-                                </div>
-                                
-                                <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                    <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService" data-id="{{ $service->id }}"></i>
-                                </a>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 @endforeach
             </div>
@@ -299,6 +300,7 @@
 
     closeReviewSliderBtn.addEventListener("click", function() {
         reviewSliderForm.classList.remove("open");
+        @this.call('resetService');
     });
 
     const stars = document.querySelectorAll('.star-rating i');
