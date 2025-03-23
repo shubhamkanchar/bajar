@@ -122,8 +122,8 @@
             </div>
         </div>
     </div>
-    @include('livewire.service.partial.service-slider')
-    @include('livewire.service.partial.review-slider')
+    {{-- @include('livewire.service.partial.service-slider') --}}
+    {{-- @include('livewire.service.partial.review-slider') --}}
 </div>
 
 <script>

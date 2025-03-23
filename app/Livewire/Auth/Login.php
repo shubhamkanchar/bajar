@@ -35,25 +35,35 @@ class Login extends Component
 
         if ($this->tab == 'email') {
             $otp = GlobalHelper::generateOtp();
-            $user = User::firstOrNew([
+            $user = User::where([
                 'email' => $this->email
-            ]);
-            $user->email = $this->email;
-            $user->email_otp = $otp;
-            $user->save();
-
-            Mail::to($user->email)->send(new OtpMail($otp,$user));
+            ])->first();
+            if ($user) {
+                $user->email = $this->email;
+                $user->email_otp = $otp;
+                $user->save();
+                Mail::to($user->email)->send(new OtpMail($otp, $user));
+            }
         } else {
             $otp = GlobalHelper::generateOtp();
-            $user = User::firstOrNew([
+            $user = User::where([
                 'phone' => $this->phone
-            ]);
-            $user->phone = $this->phone;
-            $user->phone_otp = $otp;
-            $user->save();
-            GlobalHelper::sendOtp($user->phone, $otp);
+            ])->first();
+            if ($user) {
+                $user->phone = $this->phone;
+                $user->phone_otp = $otp;
+                $user->save();
+                GlobalHelper::sendOtp($user->phone, $otp);
+            }
         }
-        $this->page = 'otp';
+        if ($user) {
+            $this->page = 'otp';
+        }else{
+            $this->dispatch('notify', [
+                'type' => 'error',
+                'message' => 'User not found. Please signup'
+            ]);
+        }
     }
 
     public function verifyOtp()
@@ -107,17 +117,18 @@ class Login extends Component
         }
     }
 
-    public function loginSucess($user){
+    public function loginSucess($user)
+    {
         Auth::login($user);
-        if($user->onboard_completed){
+        if ($user->onboard_completed) {
             if ($user->type == 'individual') {
                 return redirect()->route('user.profile');
             } else if ($user->type == 'business') {
                 return redirect()->route('business.profile');
-            }else if($user->type == 'service'){
+            } else if ($user->type == 'service') {
                 return redirect()->route('service.profile');
             }
-        }else{
+        } else {
             return redirect()->route('onboarding');
         }
     }
@@ -149,7 +160,6 @@ class Login extends Component
                 }
                 $this->loginSucess($user);
             } catch (Exception $e) {
-                
             }
         }
 

@@ -36,7 +36,7 @@ class Onboarding extends Component
     protected function rules()
     {
         return [
-            'name' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
             'phone' => [
                 'required',
                 'string',

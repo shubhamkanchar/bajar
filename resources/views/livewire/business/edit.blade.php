@@ -40,6 +40,10 @@
                     } else {
                         $route = route('onboarding');
                     }
+
+                    if(Auth::user()->is_admin){
+                        $route = route('admin.dashboard',['tab'=>'product-sellers']);
+                    }
                 @endphp
                 <a href="{{ $route }}" role="button" class="position-absolute top-0 start-0 p-2 ps-4"
                     style="z-index: 1">
@@ -108,34 +112,28 @@
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end order-1"
                             style="height:100%">
-                            {{-- <button class="btn btn-dark me-2">
-                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M11.3125 2.45291C12.1205 1.48728 13.5729 1.34568 14.5586 2.13722C14.6131 2.18016 16.364 3.5404 16.364 3.5404C17.4469 4.19499 17.7833 5.58657 17.114 6.64853C17.0784 6.7054 7.17911 19.088 7.17911 19.088C6.84977 19.4989 6.34983 19.7414 5.81553 19.7472L2.02451 19.7948L1.17034 16.1795C1.05069 15.6711 1.17034 15.1373 1.49969 14.7264L11.3125 2.45291Z"
+                            <button class="btn btn-dark me-2">
+
+                                <svg width="25" height="26" viewBox="0 0 25 26" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.4922 9.01524L10.5302 15.0408L3.74941 10.7997C2.77786 10.1918 2.97996 8.71608 4.07888 8.39471L20.1784 3.67997C21.1846 3.38503 22.1172 4.32587 21.8183 5.33541L17.0553 21.4237C16.729 22.5242 15.2617 22.7208 14.6596 21.7451L10.5271 15.0419"
                                         stroke="white" stroke-width="1.5" stroke-linecap="round"
                                         stroke-linejoin="round" />
-                                    <path d="M9.47656 4.75L15.156 9.11159" stroke="white" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                Edit Profile
-                            </button> --}}
-                            {{-- </div>
-                        <div class="d-lg-flex float-md-end order-2"> --}}
+
+                                Get Direction
+                            </button>
                             <button class="btn btn-dark">
-                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
+
+                                <svg width="25" height="26" viewBox="0 0 25 26" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M11.3125 2.45291C12.1205 1.48728 13.5729 1.34568 14.5586 2.13722C14.6131 2.18016 16.364 3.5404 16.364 3.5404C17.4469 4.19499 17.7833 5.58657 17.114 6.64853C17.0784 6.7054 7.17911 19.088 7.17911 19.088C6.84977 19.4989 6.34983 19.7414 5.81553 19.7472L2.02451 19.7948L1.17034 16.1795C1.05069 15.6711 1.17034 15.1373 1.49969 14.7264L11.3125 2.45291Z"
+                                        d="M12.0096 13.4895C16.1649 17.6436 17.1076 12.8377 19.7533 15.4816C22.3039 18.0315 23.7699 18.5424 20.5383 21.7731C20.1335 22.0985 17.5616 26.0122 8.52302 16.9762C-0.516644 7.93906 3.39488 5.36453 3.72028 4.95984C6.95976 1.72015 7.46184 3.19467 10.0125 5.74461C12.6582 8.38958 7.85433 9.33533 12.0096 13.4895Z"
                                         stroke="white" stroke-width="1.5" stroke-linecap="round"
                                         stroke-linejoin="round" />
-                                    <path d="M9.47656 4.75L15.156 9.11159" stroke="white" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
+
                                 Call
                             </button>
                         </div>
@@ -418,111 +416,6 @@
                             </div>
                         </div>
                     @endforeach
-                    {{-- <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Monday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time[monday][open]">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time[monday][close]">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Tuesday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.tuesday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.tuesday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Wednesday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.wednesday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.wednesday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Thursday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.thursday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.thursday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Friday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.friday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.friday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Saturday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.saturday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.saturday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 d-flex align-items-center ms-3 fw-bold">Sunday</div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.sunday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating mb-2 mt-2">
-                                <input type="time" class="form-control" wire:model="time.sunday.start">
-                                <label for="name">Open From</label>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
                 <hr>
                 <div class="col-md-12 mt-4 mb-5">
@@ -656,18 +549,6 @@
 @endpush
 @push('scripts')
     <script>
-        const openSliderBtn = document.getElementById("openSliderBtn");
-        const sliderForm = document.querySelector(".slider-form");
-        // const closeSliderBtn = document.getElementById("closeSliderBtn");
-
-        openSliderBtn.addEventListener("click", function() {
-            sliderForm.classList.toggle("open");
-        });
-
-        // closeSliderBtn.addEventListener("click", function() {
-        //     sliderForm.classList.remove("open");
-        // });
-
         function OTPInput() {
             const inputs = document.querySelectorAll('#otp > input');
             for (let i = 0; i < inputs.length; i++) {
