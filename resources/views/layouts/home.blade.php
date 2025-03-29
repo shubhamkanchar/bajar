@@ -132,7 +132,7 @@
                 <div class="row text-center text-md-start">
                     <!-- Column 1 -->
                     <div class="col-md-3 mb-3">
-                        <img src="http://bajar.test/assets/logo/logo.png">
+                        <img src="{{ asset('assets/logo/logo.png') }}">
                         <h5 class="mt-2">{{ env('APP_NAME') }}</h5>
                         <p>Find the Best Construction Materials and Trusted Professionals Locally</p>
                         <span>
