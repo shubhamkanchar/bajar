@@ -16,8 +16,17 @@ use Symfony\Component\Finder\Glob;
 
 class Login extends Component
 {
-    public  $email, $phone, $tab = 'email', $page = 'signin';
+    public  $email, $phone, $tab = 'phone', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
+
+    public $seconds;
+
+    public function tick()
+    {
+        if ($this->seconds > 0) {
+            $this->seconds--;
+        }
+    }
 
     public function register()
     {
@@ -58,10 +67,29 @@ class Login extends Component
         }
         if ($user) {
             $this->page = 'otp';
+            $this->seconds = 5;
         }else{
             $this->dispatch('notify', [
                 'type' => 'error',
                 'message' => 'User not found. Please signup'
+            ]);
+        }
+    }
+
+    public function resendOtp(){
+        $otp = GlobalHelper::generateOtp();
+        $user = User::where([
+            'phone' => $this->phone
+        ])->first();
+        if ($user) {
+            $user->phone = $this->phone;
+            $user->phone_otp = $otp;
+            $user->save();
+            GlobalHelper::sendOtp($user->phone, $otp);
+            $this->seconds = 5;
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'OTP send successfully'
             ]);
         }
     }
@@ -109,6 +137,11 @@ class Login extends Component
                     'phone_otp' => NULL
                 ]);
                 $success = true;
+            }else{
+                $this->dispatch('notify', [
+                    'type' => 'error',
+                    'message' => 'Inavlid OTP. Please retry again!'
+                ]);
             }
         }
 

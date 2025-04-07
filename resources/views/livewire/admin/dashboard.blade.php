@@ -13,7 +13,16 @@
             <livewire:admin.product-review />
             @break
         @case('product-sellers')
-            <livewire:admin.product-seller />
+            <livewire:admin.product-seller type="product"/>
+            @break
+        @case('service-providers')
+            <livewire:admin.product-seller type="service"/>
+            @break
+        @case('individuals')
+            <livewire:admin.product-seller type="individual"/>
+            @break
+        @case('blogs')
+            <livewire:admin.blogs/>
             @break
         @default
             <livewire:admin.product-review" />

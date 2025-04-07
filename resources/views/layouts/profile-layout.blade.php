@@ -44,6 +44,9 @@
         .h-250{
             height: 250px !important;
         }
+        .logo-img{
+            width: 35px;
+        }
     </style>
     @stack('style')
     @yield('style')
@@ -55,7 +58,7 @@
             style="background-color: rgba(255, 255, 255, 0.5) !important; ">
             <div class="container">
                 <a class="navbar-brand opacity-100" href="{{ url('/') }}">
-                    <img src="{{ asset('assets/logo/logo.png') }}">
+                    <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

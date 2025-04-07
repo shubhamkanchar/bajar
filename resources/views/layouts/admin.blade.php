@@ -143,13 +143,30 @@
         .bg-custom-secondary {
             background: #CCCCCC;
         }
+        .logo-img{
+            width: 35px;
+        }
+        .dashed-border {
+            border: 3px dashed #858585;
+            border-radius: 10px;
+        }
+
+        .ratio-add-product {
+            --bs-aspect-ratio: 130%;
+        }
+        .h-250{
+            height: 250px !important;
+        }
+        .logo-img{
+            width: 35px;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <nav class="topbar border">
             <div class="ps-md-5" onclick="toggleMobileSidebar()">
-                <img src="{{ asset('assets/logo/logo.png') }}">
+                <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
             </div>
             <div class="page-title">Admin Dashboard</div>
             <div class="dropdown me-md-5">

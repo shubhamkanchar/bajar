@@ -1,4 +1,3 @@
-
 <div>
     <div class="container">
         <div class="row">
@@ -9,10 +8,12 @@
                 <div class="d-flex justify-content-center mb-4">
                     <div class="mt-2 d-flex justify-content-between bg-white rounded-5 p-2 border"
                         style="width:fit-content">
-                        <button type="button" class="btn rounded-5 btn-dark email-toggle-btn ps-4 pe-4 pt-2 pb-2"
-                            data-item="email">Material</button>
-                        <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
-                            data-item="phone">Services</button>
+                        <button type="button"
+                            class="btn rounded-5 @if ($section == 'product') btn-dark @endif email-toggle-btn ps-4 pe-4 pt-2 pb-2"
+                            data-item="email" wire:click="setSection('product')">Material</button>
+                        <button type="button"
+                            class="btn rounded-5 @if ($section == 'service') btn-dark @endif  email-toggle-btn pt-2 pb-2 ps-4 pe-4"
+                            data-item="phone" wire:click="setSection('service')">Services</button>
                     </div>
                 </div>
                 <div class="d-md-flex justify-content-center mb-3">
@@ -36,111 +37,43 @@
             </div>
 
             {{-- Top Material Categories --}}
-            <div class="col-md-12 text-center">
-                <div class="text-warning mt-5 fw-bold fs-5">Material</div>
-                <div class="h3 fw-bold mt-2">Top Material Categories</div>
+            <div class="col-md-12 text-center" wire:show="section == 'product'" x-transition.duration.500ms>
+                {{-- <div class="text-warning mt-5 fw-bold fs-5">Material</div> --}}
+                <div class="h3 fw-bold mt-5">Top Material Categories</div>
                 <span>Your one-stop destination for premium building materials <br> from trusted sellers in your
                     area.</span>
                 <div class="row mt-5 text-md-start justify-content-center">
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Cement & steel</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Bricks</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Tiles & Granites</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Electrical Materials</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Plumbing Materials</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Ply & Laminates</p>
-                    </div>
-                    {{-- </div>
-                <div class="row text-md-start"> --}}
-                    <div class="col-md-3 col-lg-2 ">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Cement & steel</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Bricks</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Tiles & Granites</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Electrical Materials</p>
-                    </div>
+                    @foreach ($data as $item)
+                        <div class="col-md-3 col-lg-2 col-3">
+                            <img class="w-100 category-image"
+                                src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
+                            <p>{{ $item->title }}</p>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 
             {{-- Top Service Providers --}}
-            <div class="col-md-12 text-center">
-                <div class="text-warning mt-5 fw-bold fs-5">Services</div>
-                <div class="h3 fw-bold mt-2">Top Service Providers</div>
+            <div class="col-md-12 text-center" wire:show="section == 'service'" x-transition.duration.500ms>
+                {{-- <div class="text-warning mt-5 fw-bold fs-5">Services</div> --}}
+                <div class="h3 fw-bold mt-5">Top Service Providers</div>
                 <span>Discover skilled experts and reliable services to make <br> your construction projects
                     hassle-free</span>
                 <div class="row mt-5 text-md-start justify-content-center">
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Cement & steel</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Bricks</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Tiles & Granites</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Electrical Materials</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Plumbing Materials</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Ply & Laminates</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2 ">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Cement & steel</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Bricks</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Tiles & Granites</p>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        <p>Electrical Materials</p>
-                    </div>
+                    @foreach ($data as $item)
+                        <div class="col-md-3 col-lg-2 col-3">
+                            <img class="w-100 category-image"
+                                src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
+                            <p>{{ $item->title }}</p>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 
             {{-- Blogs --}}
             <div class="col-md-12 text-center justify-content-center">
-                <div class="text-warning mt-5 fw-bold fs-5">Blogs</div>
-                <div class="h3 fw-bold mt-2">Ideas that shape the future</div>
+                {{-- <div class="text-warning mt-5 fw-bold fs-5">Blogs</div> --}}
+                <div class="h3 fw-bold mt-5">Ideas that shape the future</div>
                 <div>Stay ahead with expert advice, innovative ideas, and <br> the latest updates from the world of
                     construction</div>
                 <button class="btn btn-dark rounded-5 m-4">Read more</button>
@@ -174,49 +107,70 @@
 
             {{-- Blogs --}}
             <div class="col-md-12 text-center justify-content-center">
-                <div class="text-warning mt-5 fw-bold fs-5">Brands</div>
-                <div class="h3 fw-bold mt-2">Trusted by professionals</div>
+                {{-- <div class="text-warning mt-5 fw-bold fs-5">Brands</div> --}}
+                <div class="h3 fw-bold mt-5">Trusted by professionals</div>
 
-                
+
             </div>
-            <div class="splide">
-                <div class="splide__track">
-                    <ul class="splide__list">
-                        <li class=" splide__slide p-2">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        </li>
-                        <li class=" splide__slide p-2">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        </li>
-                        <li class=" splide__slide p-2">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        </li>
-                        <li class=" splide__slide p-2">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        </li>
-                        <li class=" splide__slide p-2">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        </li>
-                        <li class=" splide__slide p-2">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                        </li>
-                    </ul>
+            <div wire:ignore>
+                <div class="splide">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
+                            </li>
+                            <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
+                            </li>
+                            <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
+                            </li>
+                            <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
+                            </li>
+                            <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
+                            </li>
+                            <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
 </div>
-@push('scripts')
-<script>
-    const splide = new Splide('.splide', {
-        type: 'loop',
-        drag: 'free',
-        focus: 'center',
-        perPage: 4,
-        autoScroll: {
-            speed: 1,
-        },
-    }).mount( window.splide.Extensions );
-</script>
+@push('style')
+    <style>
+        .form-control:focus {
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+            border-color: rgb(134, 182.5, 254);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(255, 255, 255);
+        }
+
+        .category-image {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 5px
+        }
+
+        @media (min-width: 768px) {
+            .category-image {
+                aspect-ratio: 16/9;
+                object-fit: cover;
+                border-radius: 5px
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .category-image {
+                aspect-ratio: 16/9;
+                object-fit: cover;
+                border-radius: 10px
+            }
+        }
+    </style>
 @endpush

@@ -17,12 +17,14 @@
                         <option value="{{$state}}">{{$state}}</option>
                     @endforeach
                 </select>
+                @if($type != 'individual')
                 <select class="form-select w-auto rounded-5  bg-secondary-subtle">
                     <option selected>Product Category</option>
                 </select>
                 <select class="form-select w-auto rounded-5  bg-secondary-subtle">
                     <option selected>By Subscription</option>
                 </select>
+                @endif
                 <button class="btn btn-light border rounded-5  bg-secondary-subtle">Expert Reviewer</button>
             </div>
         </div>
@@ -67,7 +69,13 @@
                                 </div>
                                 <div class="text-secondary col-9">{{ $seller->name }}
                                     <span class="d-block fw-bold">
+                                        @if($type == 'product')
                                         <span>Product Seller</span>
+                                        @elseif($type == 'service')
+                                        <span>Service Provider</span>
+                                        @else
+                                            <span>Individual</span>
+                                        @endif
                                     </span>
                                 </div>
                             </div>

@@ -24,6 +24,9 @@
         .h-250{
             height: 250px !important;
         }
+        .logo-img{
+            width: 35px;
+        }
     </style>
 </head>
 

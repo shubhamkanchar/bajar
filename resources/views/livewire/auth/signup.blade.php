@@ -13,26 +13,25 @@
 
                 </button>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 mb-4">
                 <div class="card rounded-4 p-xl-5" style="opacity: 0.97">
                     <div class="card-body p-xl-5">
-                        
                             <form wire:submit.prevent="register" class="@if ($page == 'otp') d-none @endif">
                                 @csrf
-                                <div class="row mb-3">
+                                <div class="row mb-4">
                                     <div class="col-md-12">
-                                        <img src="{{ asset('assets/logo/logo.png') }}">
+                                        <img class=" logo-img" src="{{ asset('assets/logo/logo.png') }}">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <h3>Sign Up</h3>
-                                    <p>Great to have you back!</p>
+                                    <p>Join the club of smart business owners!</p>
                                 </div>
                                 <div class="row text-center justify-content-center mb-5">
                                     <div class="bg-white rounded-5 p-2" style="width: fit-content;">
-                                        <button wire:click="tabChange('email')" type="button"
+                                        {{-- <button wire:click="tabChange('email')" type="button"
                                             class="btn rounded-5 email-toggle-btn @if ($tab == 'email') btn-dark @endif"
-                                            data-item="email">Email ID</button>
+                                            data-item="email">Email ID</button> --}}
                                         <button wire:click="tabChange('phone')" type="button"
                                             class="btn rounded-5 email-toggle-btn @if ($tab == 'phone') btn-dark @endif"
                                             data-item="phone">Phone</button>
@@ -72,7 +71,12 @@
                                         <button type="submit" class="btn btn-dark w-100">Proceed</button>
                                     </div>
                                 </div>
-                                <div class="row mt-5 text-center">
+                                <div class="row">
+                                    <div class="col-md-12 my-3">
+                                        <p>By signing up you agree to our <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a></p>
+                                    </div>
+                                </div>
+                                {{-- <div class="row mt-5 text-center">
                                     <div class="col-md-12">
                                         <p>or continue with</p>
                                     </div>
@@ -83,10 +87,10 @@
                                         <a class="me-2 text-grey"><i class="fa-brands fa-apple"></i></a>
                                         <a class="me-2 text-primary"><i class="fa-brands fa-facebook"></i></a>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row mt-3 text-center">
                                     <div class="col-md-12">
-                                        New to {{ env('APP_NAME') }}? <a href="{{ route('login') }}"
+                                        Already {{ env('APP_NAME') }} user ? <a href="{{ route('login') }}"
                                             class="text-primary">Sign In</a>
                                     </div>
                                 </div>
@@ -96,7 +100,7 @@
                                 @csrf
                                 <div class="row mb-5">
                                     <div class="col-md-12">
-                                        <img src="{{ asset('assets/logo/logo.png') }}">
+                                        <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -156,12 +160,16 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-12 text-end mt-2">
-                                        Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
+                                        @if($seconds > 0)
+                                            Resend OTP in <span class="text-dark fw-bold" wire:poll.1s="tick">{{ $seconds }} Sec</span>
+                                        @else
+                                            <button class="btn btn-dark" type="button" wire:click="resendOtp()">Resend OTP</button>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-0">
                                     <div class="col-md-12 ">
-                                        <button type="submit" class="btn btn-dark w-100">Sign In</button>
+                                        <button type="submit" class="btn btn-dark w-100">Sign Up</button>
                                     </div>
                                 </div>
                                 <div class="row mt-3 text-center">

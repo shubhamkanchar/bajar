@@ -16,10 +16,12 @@ class ProductSeller extends Component
     public $cityOptions = [];
     public $sellers = [];
     public $orderBy;
+    public string $type;
 
-    public function mount(){
+    public function mount(string $type){
         $this->setCity();
         $this->setState();
+        $this->type = $type;
     }
 
     public function setOrderBy($orderBy)
@@ -61,7 +63,11 @@ class ProductSeller extends Component
 
     #[Computed()]
     public function productSellers(){
-        $filteredSellers = User::where('offering','product')->get();
+        if($this->type == 'individual'){
+            $filteredSellers = User::where('type','individual')->get();
+        }else{
+            $filteredSellers = User::where('offering',$this->type)->get();
+        }
         if ($this->orderBy === 'state') {
             $filteredSellers = $filteredSellers->groupBy(function ($product) {
                 return $product->address->state;

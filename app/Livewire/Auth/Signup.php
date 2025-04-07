@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Helpers\GlobalHelper;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -9,8 +10,17 @@ use Livewire\Component;
 
 class Signup extends Component
 {
-    public  $email, $phone, $tab = 'email', $page = 'signup';
+    public  $email, $phone, $tab = 'phone', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
+
+    public $seconds;
+
+    public function tick()
+    {
+        if ($this->seconds > 0) {
+            $this->seconds--;
+        }
+    }
 
     public function register()
     {
@@ -42,7 +52,25 @@ class Signup extends Component
             $user->save();
         }
         $this->page = 'otp';
+        $this->seconds = 5;
+    }
 
+    public function resendOtp(){
+        $otp = GlobalHelper::generateOtp();
+        $user = User::where([
+            'phone' => $this->phone
+        ])->first();
+        if ($user) {
+            $user->phone = $this->phone;
+            $user->phone_otp = $otp;
+            $user->save();
+            GlobalHelper::sendOtp($user->phone, $otp);
+            $this->seconds = 5;
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'OTP send successfully'
+            ]);
+        }
     }
 
     public function verifyOtp()
@@ -79,7 +107,7 @@ class Signup extends Component
             }
         } else {
             $user = User::where([
-                'phone' => $this->email,
+                'phone' => $this->phone,
                 'phone_otp' => $otp
             ])->first();
             if($user){
@@ -88,6 +116,11 @@ class Signup extends Component
                     'phone_otp' => NULL
                 ]);
                 $success = true;
+            }else{
+                $this->dispatch('notify', [
+                    'type' => 'error',
+                    'message' => 'Inavlid OTP. Please retry again!'
+                ]);
             }
         }
 

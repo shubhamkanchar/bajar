@@ -372,7 +372,7 @@
                         @csrf
                         <div class="row mb-5">
                             <div class="col-md-12">
-                                <img src="{{ asset('assets/logo/logo.png') }}">
+                                <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
                             </div>
                         </div>
                         <div class="row">

@@ -45,6 +45,9 @@
         .h-250{
             height: 250px !important;
         }
+        .logo-img{
+            width: 35px;
+        }
     </style>
 </head>
 
@@ -54,7 +57,7 @@
             style="background-color: rgba(255, 255, 255, 0.5) !important; ">
             <div class="container">
                 <a class="navbar-brand opacity-100" href="{{ url('/') }}">
-                    <img src="{{ asset('assets/logo/logo.png') }}">
+                    <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -132,7 +135,7 @@
                 <div class="row text-center text-md-start">
                     <!-- Column 1 -->
                     <div class="col-md-3 mb-3">
-                        <img src="{{ asset('assets/logo/logo.png') }}">
+                        <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
                         <h5 class="mt-2">{{ env('APP_NAME') }}</h5>
                         <p>Find the Best Construction Materials and Trusted Professionals Locally</p>
                         <span>
@@ -265,6 +268,16 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
         });
+        
+        const splide = new Splide('.splide', {
+            type: 'loop',
+            drag: 'free',
+            focus: 'center',
+            perPage: 3,
+            autoScroll: {
+                speed: 0.7,
+            },
+        }).mount(window.splide.Extensions);
     </script>
 </body>
 

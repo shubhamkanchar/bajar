@@ -27,11 +27,14 @@
         .h-250{
             height: 250px !important;
         }
+        .logo-img{
+            width: 35px;
+        }
     </style>
 </head>
 <body>
     <div id="app">
-        <main class="py-md-4 m-md-5 rounded-4" style="background-image: url({{asset('assets/bg/bg1.jpeg')}});background-repeat: no-repeat; background-size: cover;">
+        <main class="py-md-4 m-md-5 rounded-4" style="background-image: url({{asset('assets/bg/bg1.jpeg')}});background-repeat: no-repeat; background-size: cover;min-height:99vh;">
             @yield('content')
         </main>
     </div>
