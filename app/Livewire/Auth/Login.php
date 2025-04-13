@@ -18,7 +18,7 @@ class Login extends Component
 {
     public  $email, $phone, $tab = 'phone', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
-
+    public $remember = true;
     public $seconds;
 
     public function tick()
@@ -152,14 +152,19 @@ class Login extends Component
 
     public function loginSucess($user)
     {
-        Auth::login($user);
-        if ($user->onboard_completed) {
+        Auth::login($user,$this->remember);
+        session()->regenerate();
+        if($user->role == 'superadmin' || $user->role == 'admin'){
+            return redirect()->route('admin.dashboard');
+        }else if ($user->onboard_completed) {
             if ($user->type == 'individual') {
                 return redirect()->route('user.profile');
             } else if ($user->type == 'business') {
-                return redirect()->route('business.profile');
-            } else if ($user->type == 'service') {
-                return redirect()->route('service.profile');
+                if($user->offering == 'product'){
+                    return redirect()->route('business.profile');
+                }else{
+                    return redirect()->route('service.profile');
+                }
             }
         } else {
             return redirect()->route('onboarding');
@@ -178,24 +183,6 @@ class Login extends Component
 
     public function render(Request $request)
     {
-        if ($request->state) {
-            try {
-                $googleUser = Socialite::driver('google')->stateless()->user();
-                $user = User::where('email', $googleUser->getEmail())->first();
-
-                if (!$user) {
-                    $user = User::create([
-                        'name' => $googleUser->getName(),
-                        'email' => $googleUser->getEmail(),
-                        'email_verified_at' => Carbon::now(),
-                        'email_otp' => NULL
-                    ]);
-                }
-                $this->loginSucess($user);
-            } catch (Exception $e) {
-            }
-        }
-
         return view('livewire.auth.login')->extends('layouts.auth-layout');
     }
 }

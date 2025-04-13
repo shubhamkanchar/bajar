@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('service_tag_group_id');
+            $table->boolean('is_approved')->nullable();
             $table->text('description');
             $table->text('work_brief');
             $table->timestamps();

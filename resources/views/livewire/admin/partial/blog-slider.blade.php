@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <textarea class="form-control mt-3 mb-3" placeholder="Blog Description" line="10" wire:model="description"></textarea>
+                <textarea class="form-control mt-3 mb-3" placeholder="Blog Description" rows="10" wire:model="description"></textarea>
                 @error('description')
                 {{$message}}
                 @enderror

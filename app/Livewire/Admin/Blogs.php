@@ -164,7 +164,12 @@ class Blogs extends Component
 
     public function textWrap($text)
     {
-        return Str::limit($text, 90, '...');
+        return Str::limit($text, 80, '...');
+    }
+
+    public function titleWrap($text)
+    {
+        return Str::limit($text, 30, '...');
     }
 
     public function deleteProductSeller($uuid)

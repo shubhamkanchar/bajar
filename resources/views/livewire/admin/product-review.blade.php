@@ -1,5 +1,5 @@
 <div>
-    <div class="row border-bottom">
+    {{-- <div class="row border-bottom">
         <div x-data="{ orderBy: 'recent', showDatePicker: false }" class="col-md-9 mt-2 pb-2">
             <!-- Sorting Options -->
             <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
@@ -63,7 +63,79 @@
                 </button>
             </div>
         </div>
+    </div> --}}
+    <div class="row border-bottom align-items-center">
+        <!-- Left Section: Sorting Options -->
+        <div x-data="{ orderBy: 'recent', showDatePicker: false }" class="col-12 col-md-9">
+            <!-- Sorting Options -->
+            <div class="d-flex flex-wrap gap-2 p-2">
+                <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2"
+                    :class="orderBy === 'recent' ? 'border-dark bg-secondary-subtle' : ''"
+                    x-on:click="if (orderBy !== 'recent') { orderBy = 'recent'; showDatePicker = false; $wire.set('orderBy', 'recent'); }">
+                    Recent
+                </span>
+    
+                <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2"
+                    :class="orderBy === 'oldest' ? 'border-dark bg-secondary-subtle' : ''"
+                    x-on:click="if (orderBy !== 'oldest') { orderBy = 'oldest'; showDatePicker = false; $wire.set('orderBy', 'oldest'); }">
+                    Oldest
+                </span>
+    
+                <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2"
+                    :class="orderBy === 'seller' ? 'border-dark bg-secondary-subtle' : ''"
+                    x-on:click="if (orderBy !== 'seller') { orderBy = 'seller'; showDatePicker = false; $wire.set('orderBy', 'seller'); }">
+                    By Seller
+                </span>
+    
+                <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2"
+                    :class="orderBy === 'date-range' ? 'border-dark bg-secondary-subtle' : ''"
+                    x-on:click="if (orderBy !== 'date-range') { showDatePicker = true; orderBy = 'date-range'; }">
+                    Date Range
+                </span>
+            </div>
+    
+            <!-- Date Range Picker -->
+            <div x-show="showDatePicker" class="mt-3">
+                <div class="row g-2">
+                    <div class="col-12 col-md-6 px-3">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" wire:model.live="start_date" class="form-control mt-1"
+                            placeholder="Select Start Range">
+                    </div>
+                    <div class="col-12 col-md-6 px-3">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate" wire:model.live="end_date" class="form-control mt-1"
+                            placeholder="Select End Range">
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Right Section: Pending Approvals -->
+        <div class="col-12 col-md-3 mt-3 mt-md-2">
+            <div class="d-flex justify-content-start justify-content-md-end align-items-center px-3">
+                <div class="me-2 text-start text-md-end">
+                    <div class="fw-bold">Pending Approvals</div>
+                    <div>{{ $this->pendingApproval }}</div>
+                </div>
+                <button class="btn btn-default rounded-5 bg-custom-secondary">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M14.7369 2.75784H8.08489C6.00489 2.74984 4.30089 4.40684 4.25089 6.48684V17.2238C4.20589 19.3258 5.87389 21.0658 7.97489 21.1108C8.01189 21.1108 8.04889 21.1118 8.08489 21.1108H16.0729C18.1629 21.0368 19.8149 19.3148 19.8029 17.2238V8.03384L14.7369 2.75784Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M14.4766 2.75V5.659C14.4766 7.079 15.6256 8.23 17.0456 8.234H19.7996" stroke="black"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M11.6406 15.9472V9.90625" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M9.29688 13.5938L11.6419 15.9488L13.9869 13.5938" stroke="black" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
+    
     <div wire:loading.delay>
         <div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
             style="z-index: 1050;">
@@ -145,8 +217,6 @@
             </button>
         </div>
     @endif
-
-
     @include('livewire.admin.partial.product-slider')
 </div>
 <script>

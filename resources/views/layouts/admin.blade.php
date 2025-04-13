@@ -164,38 +164,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="topbar border">
-            <div class="ps-md-5" onclick="toggleMobileSidebar()">
-                <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
-            </div>
-            <div class="page-title">Admin Dashboard</div>
-            <div class="dropdown me-md-5">
-                @if(auth()->user()->profile_image)
-                    <img class="profile-img dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" src="{{ asset('storage/' . auth()->user()->profile_image) }}">
-                @else
-                    <img class="profile-img dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" src="{{ asset('assets/image/profile.png') }}">
-                @endif
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form></li>
-                </ul>
-            </div>
-        </nav>
-
-        {{-- <div class="mobile-toggle" onclick="toggleMobileSidebar()">
-            <i class="bi bi-list"></i> Menu
-        </div> --}}
-
+        @include('layouts.partials.navbar')
         <div id="sidebar" class="sidebar border pe-2 mb-5">
             <span class="close-btn" onclick="closeSidebar()">&times;</span>
             <div class="fs-6 ps-1 fw-bold">
@@ -220,13 +189,11 @@
        
             <div class="fs-5 fw-bold mt-4">Content Management</div>
             <a class="btn {{ request('tab') == 'blogs' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'blogs')}}">Blogs</a>
-            <a class="btn {{ request('tab') == 'terms-policies' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'terms-policies')}}">Terms and policies</a>
+            <a class="btn {{ request('tab') == 'tc' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'tc')}}">Terms and policies</a>
        
             <div class="fs-5 fw-bold mt-4">Settings</div>
-            <a class="btn {{ request('tab') == 'settings' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'settings')}}">Settings</a>
+            <a class="btn {{ request('tab') == 'setting' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'setting')}}">Settings</a>
         </div>
-
-        <!-- Main Content -->
         <div class="content">
             @yield('content')
         </div>

@@ -19,17 +19,17 @@ class ProductImageFactory extends Factory
     public function definition()
     {
         // Generate a random placeholder image from Lorem Picsum
-        $imageUrl = 'https://picsum.photos/640/480';
+        $imageUrl = 'http://picsum.photos/640/480';
 
         // Create a unique filename
         $filename = 'product_' . Str::random(10) . '.jpg';
 
         // Download and store the image
-        $imageContents = Http::get($imageUrl)->body();
+        $imageContents = Http::withoutVerifying()->get($imageUrl)->body();
         Storage::disk('public')->put('products/' . $filename, $imageContents);
 
         return [
-            'product_id' => rand(1, 100), // This will be set dynamically
+            'product_id' => rand(1, 10), // This will be set dynamically
             'order' => rand(1, 6),
             'path' => 'products/' . $filename, // Store the correct image path
         ];

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_tag_group_id');
             $table->unsignedBigInteger('business_id');
             $table->unsignedBigInteger('user_id');
+            $table->boolean('is_approved')->nullable();
             $table->timestamps();
         });
     }

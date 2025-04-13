@@ -10,7 +10,7 @@
             <livewire:admin.approved-product />
             @break
         @case('approved-service')
-            <livewire:admin.product-review />
+            <livewire:admin.approved-service />
             @break
         @case('product-sellers')
             <livewire:admin.product-seller type="product"/>
@@ -24,8 +24,14 @@
         @case('blogs')
             <livewire:admin.blogs/>
             @break
+        @case('tc')
+            <livewire:admin.tc/>
+            @break
+        @case('setting')
+            <livewire:admin.setting/>
+            @break
         @default
-            <livewire:admin.product-review" />
+            <livewire:admin.product-review />
     @endswitch
 </div>
 

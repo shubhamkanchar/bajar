@@ -22,7 +22,10 @@
             </div>
 
             <!-- Sorting Options -->
-            
+            <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
+                :class="orderBy === 'seller' ? 'border-dark bg-secondary-subtle' : ''">
+                By Provider
+            </span>
 
             <template x-if="selectedState">
                 <span role="button"
@@ -89,7 +92,7 @@
             <template x-if="selectedCategory">
                 <span role="button"
                     class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1 border-dark bg-secondary-subtle">
-                    <span x-text="$refs.categoryText ? $refs.categoryText.innerText : selectedCategory['title']"></span>
+                    <span x-text="$refs.categoryText ? $refs.categoryText.innerText : selectedCategory"></span>
                     <span role="button" class="ms-2 text-white"
                         x-on:click="selectedCategory = ''; $wire.set('selectedCategory', '')">❌</span>
                 </span>
@@ -108,7 +111,7 @@
                         x-on:click.away="showCategory = false">
                         @foreach ($this->categories as $category)
                             <div role="button" class="px-2 py-1 dropdown-item"
-                                wire:click="$set('selectedCategory', {title:'{{ $category->title }}',id:'{{ $category->id }}'})"
+                                wire:click="$set('selectedCategory', '{{ $category->title }}')"
                                 x-on:click="showCategory = false">
                                 {{ $category->title }}
                             </div>
@@ -116,10 +119,6 @@
                     </div>
                 </div>
             </template>
-
-            <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1 {{$expert == 1 ? 'border-dark bg-secondary-subtle' : ''}}" wire:click="setExpert()">
-                Expert Reviewer
-            </span>
         </div>
 
         <!-- Pending Approvals & Download Button -->
@@ -127,7 +126,7 @@
             <div class="d-flex float-md-end mt-2">
                 <span class="text-end me-2">
                     <span class="d-block">Total Products</span>
-                    <span class="d-block"></span>
+                    <span class="d-block">{{ $this->totalProducts }}</span>
                 </span>
                 <button class="btn btn-default rounded-5 bg-custom-secondary">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -154,66 +153,41 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center product-list p-2">
-        @foreach ($this->productSellers as $key => $data)
+    <div class="row justify-content-center product-list px-2">
+        @foreach ($this->products as $key => $data)
             <div class="fw-bold text-secondary">
                 {{ $key }}
             </div>
-            @foreach ($data as $seller)
+            @foreach ($data as $product)
                 <div class="col-12">
                     <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
-                        <div class="col-12 col-md-3 border-end border-secondary">
-                            <div class="row">
-                                <div class="col-3">
-                                    <span class="ratio ratio-1x1 w-100">
-                                        <img src="{{ asset('storage/' . $seller->profile_image) }}"
-                                            class="d-block w-100 rounded" alt="Service Image">
-                                    </span>
-                                </div>
-                                <div class="text-secondary col-9">{{ $seller->name }}
-                                    <span class="d-block fw-bold">
-                                        @if($type == 'product')
-                                        <span>Product Seller</span>
-                                        @elseif($type == 'service')
-                                        <span>Service Provider</span>
-                                        @else
-                                            <span>Individual</span>
-                                        @endif
-                                    </span>
-                                </div>
+                        <div class="col-12 col-md-2 border-end border-secondary">
+                            <span class="text-secondary"> {{ $product->name }} </span>
+                            <span class="d-block fs-5 fw-bold text-wrap"> {{ $product->description }} </span>
+                        </div>
+                        <div class="col-12 col-md-6 border-end border-secondary">
+                            <div class="d-flex">
+                                @foreach ($product->images as $image)
+                                    <div class="ratio ratio-21x9 m-2">
+                                        <img src="{{ asset('storage/' . $image->path) }}"
+                                            class="d-block w-100 rounded" alt="Service Image" loading="lazy">
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                        <div class="col-12 col-md-3 border-end border-secondary">
-                            <span class="fw-bold "> {{ $seller->phone }} </span>
-                            <span class="d-block fw-bold text-wrap"> {{ $seller->email }} </span>
-                        </div>
-
                         <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary">Total Products</span>
+                            <span class="text-secondary">Product Category </span>
                             <span class="d-flex fw-bold">
-                                <span>{{ sprintf('%02d', $seller->product->count()) }}</span>
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-1 border-end border-secondary">
-                            <span class="text-secondary">Categories</span>
-                            <span class="d-flex fw-bold">
-                                <span>{{ sprintf('%02d', $seller->category->count()) }}</span>
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary">Standard</span>
-                            <span class="d-flex fw-bold">
-                                <span>{{ $seller->created_at }}</span>
+                                <span>{{ $product->category->title }}</span>
+                                <i class="ms-4 fs-5 fas fa-angle-down align-self-center" style="color: #CCCCCC"></i>
                             </span>
                         </div>
                         <div class="col-12 col-md-1 text-end">
                             <div class="d-flex">
-                                <a href="{{ route('business.edit', ['uuid' => $seller->uuid]) }}">
-                                    <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
-                                        role="button"></i>
-                                </a>
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2" role="button" wire:click="deleteProductSeller('{{$seller->uuid}}')"
-                                wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE"></i>
+                                <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
+                                    role="button" data-id="{{ $product->id }}"></i>
+                                <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
+                                    role="button" onclick="confirmAction('reject', {{ $product->id }})"></i>
                             </div>
                         </div>
                     </div>
@@ -221,4 +195,95 @@
             @endforeach
         @endforeach
     </div>
+
+    @if ($this->totalPage > 1)
+        <div class="d-flex justify-content-between align-items-center p-4" x-data="{ currentPage: @entangle('currentPage'), totalPage: @entangle('totalPage'), perPage: @entangle('perPage') }">
+
+            <button class="btn border rounded border-2 px-3 py-2 d-flex align-items-center gap-2"
+                x-on:click="currentPage > 1 ? $wire.set('currentPage', currentPage - 1) : null"
+                :disabled="currentPage === 1">
+                <i class="fa fa-arrow-left"></i> <!-- Bootstrap Icon -->
+                <span>Previous</span>
+            </button>
+
+            <!-- Page Indicator -->
+            <span class="fw-bold text-secondary">
+                Page <span x-text="currentPage"></span> of <span x-text="totalPage"></span>
+            </span>
+
+            <!-- Next Button -->
+            <button class="btn border rounded border-2 px-3 py-2 d-flex align-items-center gap-2"
+                x-on:click="currentPage < totalPage ? $wire.set('currentPage', currentPage + 1) : null"
+                :disabled="currentPage === totalPage">
+                <span>Next</span>
+                <i class="fa fa-arrow-right"></i> <!-- Bootstrap Icon -->
+            </button>
+        </div>
+    @endif
+    @include('livewire.admin.partial.service-slider')
 </div>
+@push('style')
+    <style>
+        .dropdown-item {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #E8E8E8;
+        }
+    </style>
+@endpush
+<script>
+    function confirmAction(action, productId) {
+
+        let actionText = action === 'reject' ? 'reject this product' : 'approve this product';
+        let confirmButtonText = action === 'reject' ? 'Yes, Reject' : 'Yes, Approve';
+        let iconType = action === 'reject' ? 'warning' : 'success';
+
+        Swal.fire({
+            title: `Are you sure?`,
+            text: `Do you really want to ${actionText}? This action cannot be undone.`,
+            icon: iconType,
+            showCancelButton: true,
+            confirmButtonColor: action === 'reject' ? '#d33' : '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: confirmButtonText
+        }).then((result) => {
+            if (result.isConfirmed) {
+                @this.call(action === 'reject' ? 'rejectProduct' : 'approveProduct', productId);
+            }
+        });
+    }
+</script>
+@script
+    <script>
+        const sliderForm = document.querySelector(".slider-form");
+        const closeSliderBtn = document.getElementById("closeSliderBtn");
+
+        document.querySelector(".product-list").addEventListener("click", function(event) {
+            if (event.target.classList.contains("slider-btn")) {
+                let productId = event.target.getAttribute('data-id');
+
+                @this.call('setProduct', productId).then(function() {
+                    sliderForm.classList.toggle("open");
+                });
+            }
+        });
+
+        closeSliderBtn.addEventListener("click", function() {
+            sliderForm.classList.remove("open");
+        });
+
+        document.addEventListener('productStatusChanged', event => {
+            Toastify({
+                text: event.detail[0].message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+            }).showToast();
+            sliderForm.classList.remove("open");
+        });
+    </script>
+@endscript

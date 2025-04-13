@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Category;
 use App\Models\User;
 use Carbon\Carbon;
 use Livewire\Attributes\Computed;
@@ -9,7 +10,13 @@ use Livewire\Component;
 
 class ProductSeller extends Component
 {
+    public $search = '';
+    public $selectedCity;
+    public $selectedState;
+    public $selectedCategory;
+
     public $state;
+    public $expert = 0;
     public $city;
     public $categoryIds = [];
     public $stateOptions = [];
@@ -22,6 +29,29 @@ class ProductSeller extends Component
         $this->setCity();
         $this->setState();
         $this->type = $type;
+    }
+
+    #[Computed]
+    public function categories()
+    {
+        return Category::where('type', 'product')->get();
+    }
+
+    #[Computed]
+    public function states() {
+        $allStates = [];
+        foreach(config('state') as $key => $state){
+            $allStates[] = $key;
+        }
+        return $allStates;
+    }
+
+    #[Computed]
+    public function cities(){
+        if($this->selectedState){
+           return config('state')[$this->selectedState];
+        } 
+        return [];
     }
 
     public function setOrderBy($orderBy)
@@ -61,13 +91,56 @@ class ProductSeller extends Component
         }
     }
 
+    public function setExpert(){
+        $this->expert = !$this->expert;
+    }
+
     #[Computed()]
     public function productSellers(){
         if($this->type == 'individual'){
-            $filteredSellers = User::where('type','individual')->get();
+            $query = User::where('type','individual')->with(['address']);
         }else{
-            $filteredSellers = User::where('offering',$this->type)->get();
+            $query = User::where('offering',$this->type)->with(['address']);
         }
+
+        if(!empty($this->search)) {
+            $query->where(function($q) {
+                $q->whereAny(
+                    [
+                        'name',
+                        'phone',
+                        'email',
+                    ],
+                    'LIKE',
+                    "%$this->search%"
+                );
+            });
+        }
+
+        if($this->expert){
+            $query->where('is_reviewer', 1);
+        }
+        
+        if (!empty($this->selectedState)) {
+            $query->whereHas('address', function ($q) {
+                $q->where('state', $this->selectedState);
+            });
+        }
+        
+        if (!empty($this->selectedCity)) {
+            $query->whereHas('address', function ($q) {
+                $q->where('city', $this->selectedCity);
+            });
+        }
+        
+        if (!empty($this->selectedCategory)) {
+            $query->whereHas('category', function ($q) {
+                $q->where('category_id', $this->selectedCategory['id']);
+            });
+        }
+
+        $filteredSellers = $query->get();
+
         if ($this->orderBy === 'state') {
             $filteredSellers = $filteredSellers->groupBy(function ($product) {
                 return $product->address->state;

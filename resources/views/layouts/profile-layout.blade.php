@@ -23,6 +23,36 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
     <style>
+        .topbar {
+            width: 100%;
+            height: 60px;
+            /*background-color: #212529;*/
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* padding: 0 50px; */
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .topbar .brand-logo {
+            height: 40px;
+        }
+        .topbar .page-title {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
         .text-bg-light {
             color: #000 !important;
             background-color: #E8E8E8 !important;
@@ -47,6 +77,10 @@
         .logo-img{
             width: 35px;
         }
+        .content {
+            flex-grow: 1;
+            padding-top: 60px;
+        }
     </style>
     @stack('style')
     @yield('style')
@@ -54,83 +88,8 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white sticky-top"
-            style="background-color: rgba(255, 255, 255, 0.5) !important; ">
-            <div class="container">
-                <a class="navbar-brand opacity-100" href="{{ url('/') }}">
-                    <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse opacity-100" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-                                @php
-                                    $user = Auth::user();
-                                    if ($user->onboard_completed) {
-                                        if ($user->type == 'individual') {
-                                            $route = route('user.profile');
-                                        } elseif ($user->type == 'business') {
-                                            if($user->offering == 'product'){
-                                                $route = route('business.profile');
-                                            }else{
-                                                $route = route('service.profile');
-                                            }
-                                        } 
-                                    } else {
-                                        $route = route('onboarding');
-                                    }
-                                @endphp
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ $route }}">
-                                        Dashboard
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main>
+        @include('layouts.partials.navbar')
+        <main class="content">
             @yield('content')
         </main>
     </div>

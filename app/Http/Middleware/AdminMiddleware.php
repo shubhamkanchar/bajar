@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->is_admin){
+        if(in_array(Auth::user()->role,['superadmin','admin'])){
             return $next($request);
         }
         return redirect()->back();
