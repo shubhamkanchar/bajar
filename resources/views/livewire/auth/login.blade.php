@@ -1,20 +1,30 @@
 <div>
     <div class="container">
-        <div class="row">
+        <div class="row pb-md-0 pb-4">
             <div class="col-md-6">
-                <button class="btn btn-defualt" wire:click="pageChange('signin')">
+                <button class="btn btn-defualt @if ($page == 'signin') d-none @endif" wire:click="pageChange('signin')">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
-                            fill="white" fill-opacity="0.8" />
+                            fill="white" fill-opacity="0.8"/>
                         <path
                             d="M16.7345 19.9974L23.472 13.2599C23.7012 13.0307 23.812 12.7595 23.8043 12.4464C23.7967 12.1332 23.6783 11.862 23.4491 11.6328C23.2199 11.4036 22.9488 11.2891 22.6356 11.2891C22.3224 11.2891 22.0512 11.4036 21.822 11.6328L14.7866 18.6911C14.6033 18.8745 14.4658 19.0807 14.3741 19.3099C14.2824 19.5391 14.2366 19.7682 14.2366 19.9974C14.2366 20.2266 14.2824 20.4557 14.3741 20.6849C14.4658 20.9141 14.6033 21.1203 14.7866 21.3036L21.8449 28.362C22.0741 28.5911 22.3415 28.7019 22.647 28.6943C22.9526 28.6866 23.2199 28.5682 23.4491 28.3391C23.6783 28.1099 23.7929 27.8387 23.7929 27.5255C23.7929 27.2123 23.6783 26.9411 23.4491 26.712L16.7345 19.9974Z"
                             fill="black" />
                     </svg>
 
                 </button>
+                <a href="{{route('home')}}" class="btn btn-defualt @if ($page != 'signin') d-none @endif" >
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
+                            fill="white" fill-opacity="0.8"/>
+                        <path
+                            d="M16.7345 19.9974L23.472 13.2599C23.7012 13.0307 23.812 12.7595 23.8043 12.4464C23.7967 12.1332 23.6783 11.862 23.4491 11.6328C23.2199 11.4036 22.9488 11.2891 22.6356 11.2891C22.3224 11.2891 22.0512 11.4036 21.822 11.6328L14.7866 18.6911C14.6033 18.8745 14.4658 19.0807 14.3741 19.3099C14.2824 19.5391 14.2366 19.7682 14.2366 19.9974C14.2366 20.2266 14.2824 20.4557 14.3741 20.6849C14.4658 20.9141 14.6033 21.1203 14.7866 21.3036L21.8449 28.362C22.0741 28.5911 22.3415 28.7019 22.647 28.6943C22.9526 28.6866 23.2199 28.5682 23.4491 28.3391C23.6783 28.1099 23.7929 27.8387 23.7929 27.5255C23.7929 27.2123 23.6783 26.9411 23.4491 26.712L16.7345 19.9974Z"
+                            fill="black" />
+                    </svg>
+
+                </a>
             </div>
-            <div class="col-md-6 mb-4">
-                <div class="card rounded-4 p-xl-5" style="opacity: 0.97">
+            <div class="col-md-6 d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+                <div class="card rounded-4 p-xl-5 w-100" style="opacity: 0.97">
                     <div class="card-body p-xl-5">
 
                         <form wire:submit.prevent="register" class="@if ($page == 'otp') d-none @endif">
@@ -22,20 +32,24 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <img class=" logo-img" src="{{ asset('assets/logo/logo.png') }}">
+                                    <h3 class="mt-2">Sign In</h3>
+                                    <p>Great to have you back!</p>
                                 </div>
                             </div>
-                            <div class="row">
-                                <h3>Sign In</h3>
-                                <p>Great to have you back!</p>
-                            </div>
-                            <div class="row text-center justify-content-center mb-5">
+                            {{-- <div class="row text-center justify-content-center mb-5">
                                 <div class="bg-white rounded-5 p-2" style="width: fit-content;">
-                                    {{-- <button wire:click="tabChange('email')" type="button"
+                                    <button wire:click="tabChange('email')" type="button"
                                         class="btn rounded-5 email-toggle-btn @if ($tab == 'email') btn-dark @endif"
-                                        data-item="email">Email ID</button> --}}
+                                        data-item="email">Email ID</button>
                                     <button wire:click="tabChange('phone')" type="button"
                                         class="btn rounded-5 email-toggle-btn @if ($tab == 'phone') btn-dark @endif"
                                         data-item="phone">Phone</button>
+                                </div>
+                            </div> --}}
+                            <div class="row">
+                                <div class="col-md-12 py-5">
+                                    <div>Get started using,</div>
+                                    <div class="text-dark fs-5 fw-bold">Phone Number</div>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -66,7 +80,7 @@
                                 </div>
                             </div>
                             <div class="row mb-0">
-                                <div class="col-md-12 ">
+                                <div class="col-md-12">
                                     <button type="submit" class="btn btn-dark w-100">Proceed</button>
                                 </div>
                             </div>
@@ -83,8 +97,8 @@
                                     <a class="me-2 text-primary"><i class="fa-brands fa-facebook"></i></a>
                                 </div>
                             </div> --}}
-                            <div class="row mt-3 text-center">
-                                <div class="col-md-12">
+                            <div class="row mt-2  text-center">
+                                <div class="col-md-12 my-5">
                                     New to {{ env('APP_NAME') }}? <a href="{{ route('signup') }}"
                                         class="text-primary">Sign Up</a>
                                 </div>
@@ -170,8 +184,8 @@
                                     <button type="submit" class="btn btn-dark w-100">Sign In</button>
                                 </div>
                             </div>
-                            <div class="row mt-3 text-center">
-                                <div class="col-md-12">
+                            <div class="row mt-2 text-center">
+                                <div class="col-md-12 my-5">
                                     New to {{ env('APP_NAME') }}? <a href="{{ route('signup') }}"
                                         class="text-primary">Sign Up</a>
                                 </div>

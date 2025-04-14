@@ -52,7 +52,7 @@ class Signup extends Component
             $user->save();
         }
         $this->page = 'otp';
-        $this->seconds = 5;
+        $this->seconds = 60;
     }
 
     public function resendOtp(){

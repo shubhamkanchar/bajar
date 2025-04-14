@@ -67,7 +67,7 @@ class Login extends Component
         }
         if ($user) {
             $this->page = 'otp';
-            $this->seconds = 5;
+            $this->seconds = 60;
         }else{
             $this->dispatch('notify', [
                 'type' => 'error',
