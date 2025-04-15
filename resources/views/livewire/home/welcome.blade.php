@@ -1,13 +1,13 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-4 text-center rounded-4" style="background-image: url({{asset('assets/bg/grey_bar.png')}});background-repeat: no-repeat; background-size: cover">
+            <div class="col-12 mt-4 text-center rounded-4"
+                style="background-image: url({{ asset('assets/bg/grey_bar.png') }});background-repeat: no-repeat; background-size: cover">
                 <div class="pt-3">
                     I am looking for
                 </div>
                 <div class="d-flex justify-content-center mb-4">
-                    <div class="d-flex justify-content-between bg-white rounded-5 p-2 border"
-                        style="width:fit-content">
+                    <div class="d-flex justify-content-between bg-white rounded-5 p-2 border" style="width:fit-content">
                         <button type="button"
                             class="btn rounded-5 @if ($section == 'product') btn-dark @endif email-toggle-btn ps-4 pe-4 pt-2 pb-2"
                             data-item="email" wire:click="setSection('product')">Material</button>
@@ -16,11 +16,37 @@
                             data-item="phone" wire:click="setSection('service')">Services</button>
                     </div>
                 </div>
-                <div class="d-md-flex justify-content-center mb-4">
-                    <div class="bg-white rounded-5 p-2 border me-2" x-data="{ focused: false }" :class="{ 'border-2 border-dark': focused }">
-                        <input  class="form-control rounded-5 mt-1 border border-0 bg-white" name="city" placeholder="City" @focus="focused = true" @blur="focused = false" />
+                <div class="d-md-flex position-relative justify-content-center mb-4">
+                    <div class="bg-white rounded-5 p-2 border me-2" x-data="{ focused: false }"
+                        :class="{ 'border-2 border-dark': focused }">
+                        <input class="form-control rounded-5 mt-1 border border-0 bg-white" name="city"
+                            placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle" 
+                            wire:model="search" 
+                            />
                     </div>
-                    <div class="d-flex align-items-center justify-content-between bg-white rounded-5 p-2 border mt-2 mt-md-0" x-data="{ focused: false }" :class="{ 'border-2 border-dark': focused }">
+                    @if ($isOpen)
+                        <div class="position-absolute mt-2 w-50 shadow bg-white border rounded-4 p-3"
+                            style="z-index: 1050; max-height: 300px; overflow-y: auto;top:65px">
+                            <input type="text" class="form-control mb-3" placeholder="Search"
+                                wire:model.debounce.300ms="search">
+
+                            @if(count($cities) > 0)
+                            <div class="row row-cols-2 row-cols-md-4 g-2">
+                                @foreach($cities as $city)
+                                    <div>
+                                        <button type="button" class="btn btn-light w-100 text-start" wire:click="selectCity('{{ $city }}')">
+                                            {{ $city }}
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @else
+                                <div class="text-center text-muted">No results found</div>
+                            @endif
+                        </div>
+                    @endif
+                    <div class="d-flex align-items-center justify-content-between bg-white rounded-5 p-2 border mt-2 mt-md-0"
+                        x-data="{ focused: false }" :class="{ 'border-2 border-dark': focused }">
 
                         <svg class="mx-2" width="40" height="40" viewBox="0 0 20 20" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -28,8 +54,10 @@
                                 d="M7.39687 14.7937C5.32954 14.7937 3.5799 14.0778 2.14794 12.6458C0.715979 11.2138 0 9.4642 0 7.39687C0 5.32954 0.715979 3.5799 2.14794 2.14794C3.5799 0.715979 5.32954 0 7.39687 0C9.4642 0 11.2138 0.715979 12.6458 2.14794C14.0778 3.5799 14.7937 5.32954 14.7937 7.39687C14.7937 8.23139 14.661 9.01849 14.3954 9.75818C14.1299 10.4979 13.7696 11.1522 13.3144 11.7212L19.6871 18.0939C19.8957 18.3025 20 18.568 20 18.8905C20 19.2129 19.8957 19.4784 19.6871 19.6871C19.4784 19.8957 19.2129 20 18.8905 20C18.568 20 18.3025 19.8957 18.0939 19.6871L11.7212 13.3144C11.1522 13.7696 10.4979 14.1299 9.75818 14.3954C9.01849 14.661 8.23139 14.7937 7.39687 14.7937ZM7.39687 12.5178C8.81935 12.5178 10.0284 12.0199 11.0242 11.0242C12.0199 10.0284 12.5178 8.81935 12.5178 7.39687C12.5178 5.9744 12.0199 4.76529 11.0242 3.76956C10.0284 2.77383 8.81935 2.27596 7.39687 2.27596C5.9744 2.27596 4.76529 2.77383 3.76956 3.76956C2.77383 4.76529 2.27596 5.9744 2.27596 7.39687C2.27596 8.81935 2.77383 10.0284 3.76956 11.0242C4.76529 12.0199 5.9744 12.5178 7.39687 12.5178Z"
                                 fill="#CCCCCC" />
                         </svg>
-                        <input class="form-control border border-0 rounded-5 me-2 bg-white" type="text" placeholder="Search"  @focus='focused = true' @blur="focused = false">
-                        <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4" data-item="phone" :class="{ 'btn-dark': focused,'btn-secondary': !focused }">Search</button>
+                        <input class="form-control border border-0 rounded-5 me-2 bg-white" type="text"
+                            placeholder="Search" @focus='focused = true' @blur="focused = false">
+                        <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
+                            data-item="phone" :class="{ 'btn-dark': focused, 'btn-secondary': !focused }">Search</button>
                     </div>
                 </div>
             </div>
@@ -135,7 +163,7 @@
                 </div>
             </div>
 
-            
+
         </div>
     </div>
 </div>
