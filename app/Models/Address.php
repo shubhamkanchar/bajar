@@ -16,4 +16,8 @@ class Address extends Model
         'pincode',
         'address'
     ];
+
+    public function getFullAddressAttribute(){
+        return $this->address.', '.$this->city.', '.$this->state;
+    }
 }

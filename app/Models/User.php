@@ -64,6 +64,18 @@ class User extends Authenticatable
         return $this->hasMany(BusinessCategory::class,'user_id','id');
     }
 
+    public function categories()
+{
+    return $this->hasManyThrough(
+        Category::class,         // Final model
+        BusinessCategory::class, // Intermediate model
+        'user_id',               // Foreign key on BusinessCategory table
+        'id',                    // Foreign key on Category table (referenced by BusinessCategory)
+        'id',                    // Local key on User
+        'category_id'            // Local key on BusinessCategory pointing to Category
+    );
+}
+
     protected static function boot()
     {
         parent::boot();
