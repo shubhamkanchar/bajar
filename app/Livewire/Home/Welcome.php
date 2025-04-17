@@ -23,9 +23,10 @@ class Welcome extends Component
     public $sellers = [];
     public $searchStarted = false;
 
-    public function mount(){
+    public function mount()
+    {
         $this->section = 'product';
-        $this->data = Category::where('type',$this->section)->get();
+        $this->data = Category::where('type', $this->section)->get();
     }
 
     public function updatedSearch()
@@ -37,29 +38,28 @@ class Welcome extends Component
             ->toArray();
     }
 
-    public function searchProduct(){
-        $this->searchStarted = true;    
-        $this->sellers = User::with(['address','category'])
-            // ->where('city',$this->search)
-            // ->where('offering',$this->section)
-            ->get();
-    
-
-        // $this->sellers = [
-        //     [
-        //         'name' => 'Elemento Enterprise',
-        //         'image' => asset('images/elemento.jpg'),
-        //         'rating' => 400,
-        //         'visitors' => 20,
-        //         'timing' => '9:00AM - 5:00PM',
-        //         'gst' => '27ADSF54809E1ZP',
-        //         'categories' => ['Tiles & Granites', 'Ply & Laminates', 'Bricks | Paints'],
-        //         'address' => '1st Floor, Sagar Heights, Nagar-Pune Road, Opposite McDonalds, Kedgaon-414005',
-        //     ]
-        // ];
+    public function searchProduct()
+    {
+        if ($this->selectedCity) {
+            $this->searchStarted = true;
+            $this->sellers = User::with(['address', 'category'])
+                ->whereHas('address', function ($query) {
+                    $query->where('addresses.city', $this->selectedCity);
+                })
+                ->whereNotIn('role', ['superadmin', 'admin'])
+                ->where('offering', $this->section)
+                ->get();
+        } else {
+            $text = $this->section == 'product' ? 'product sellers' : 'service providers';
+            $this->dispatch('notify', [
+                'type' => 'Error',
+                'message' => 'Please select city to search '.$text
+            ]);
+        }
     }
 
-    public function clearSearch(){
+    public function clearSearch()
+    {
         $this->searchStarted = false;
         $this->productName = '';
         $this->sellers = [];
@@ -97,14 +97,15 @@ class Welcome extends Component
         }
     }
 
-    public function setSection($test){
+    public function setSection($test)
+    {
         $this->section = $test;
-        $this->data = Category::where('type',$this->section)->get();
+        $this->data = Category::where('type', $this->section)->get();
     }
 
     public function render()
     {
-        
+
         return view('livewire.home.welcome')->extends('layouts.home');;
     }
 }

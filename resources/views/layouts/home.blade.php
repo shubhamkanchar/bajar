@@ -218,23 +218,10 @@
     <script
         src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js"
         integrity="sha256-A+2opyqhvbBV8tbd9mIM8w9zvvMYHOawY03BQRtq7Kw=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"
-        integrity="sha512-79j1YQOJuI8mLseq9icSQKT6bLlLtWknKwj1OpJZMdPt2pFBry3vQTt+NZuJw7NSd1pHhZlu0s12Ngqfa371EA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @stack('scripts')
     @yield('scripts')
+    @include('layouts.partials.notify')
     <script>
-        document.addEventListener('notify', event => {
-            console.log(event);
-            Toastify({
-                text: event.detail[0].message,
-                duration: 3000,
-                gravity: "top",
-                position: "right",
-                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
-            }).showToast();
-        });
-
         const splide = new Splide('.splide', {
             type: 'loop',
             drag: 'free',

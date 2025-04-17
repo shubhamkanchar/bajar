@@ -98,7 +98,7 @@ class ProductSeller extends Component
     #[Computed()]
     public function productSellers(){
         if($this->type == 'individual'){
-            $query = User::where('type','individual')->with(['address']);
+            $query = User::where('type','individual')->with(['address'])->whereNotIn('role', ['superadmin', 'admin']);
         }else{
             $query = User::where('offering',$this->type)->with(['address']);
         }
