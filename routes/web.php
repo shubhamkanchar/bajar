@@ -38,7 +38,7 @@ Route::get('/login', Login::class)->name('login');
 Route::get('/signup', Signup::class)->name('signup');
 Route::get('/blog',Blog::class)->name('blogs');
 Route::get('/blogs/{slug}',Blog::class)->name('blog');
-Route::get('/{slug}',Page::class)->name('page');
+Route::get('page/{slug}',Page::class)->name('page');
 
 Route::middleware('auth')->group(function () {
     Route::get('/on-boarding', LivewireOnboarding::class)->name('onboarding');

@@ -32,6 +32,8 @@
                                 $route = route('service.profile');
                             }
                         }
+                    }else{
+                        $route = route('onboarding');
                     }
                 @endphp
                 <li><a class="dropdown-item" href="{{$route}}">Profile</a></li>
