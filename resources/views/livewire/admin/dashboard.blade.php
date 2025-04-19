@@ -30,6 +30,9 @@
         @case('setting')
             <livewire:admin.setting/>
             @break
+        @case('ads')
+            <livewire:admin.ads/>
+            @break
         @default
             <livewire:admin.product-review />
     @endswitch

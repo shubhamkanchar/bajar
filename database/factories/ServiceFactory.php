@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,7 @@ class ServiceFactory extends Factory
             'description' => $this->faker->sentence,
             'category_id' => rand(1, 10), // Adjust as needed
             'service_tag_group_id' => rand(1, 5), // Adjust as needed
-            'user_id' => 1, // Default user
+            'user_id' => User::where('email','service@bajarbhaw.com')->value('id'), // Default user
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), // Random date within the past year
             'updated_at' => now(),
         ];

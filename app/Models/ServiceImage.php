@@ -8,9 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceImage extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'service_id',
         'path',
         'order',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

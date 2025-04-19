@@ -16,7 +16,7 @@ use Symfony\Component\Finder\Glob;
 
 class Login extends Component
 {
-    public  $email, $phone, $tab = 'phone', $page = 'signin';
+    public  $email, $phone = '', $tab = 'phone', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
     public $remember = true;
     public $seconds;
@@ -86,7 +86,7 @@ class Login extends Component
             $user->phone_otp = $otp;
             $user->save();
             GlobalHelper::sendOtp($user->phone, $otp);
-            $this->seconds = 5;
+            $this->seconds = 60;
             $this->dispatch('notify', [
                 'type' => 'success',
                 'message' => 'OTP send successfully'
@@ -153,7 +153,7 @@ class Login extends Component
     public function loginSucess($user)
     {
         Auth::login($user,$this->remember);
-        session()->regenerate();
+        // session()->regenerate();
         if($user->role == 'superadmin' || $user->role == 'admin'){
             return redirect()->route('admin.dashboard');
         }else if ($user->onboard_completed) {

@@ -188,6 +188,7 @@
             <a class="btn {{ request('tab') == 'individuals' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'individuals')}}">Individuals</a>
        
             <div class="fs-5 fw-bold mt-4">Content Management</div>
+            <a class="btn {{ request('tab') == 'ads' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'ads')}}">Ads</a>
             <a class="btn {{ request('tab') == 'blogs' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'blogs')}}">Blogs</a>
             <a class="btn {{ request('tab') == 'tc' ? 'btn-dark text-white' : 'bg-secondary-subtle text-secondary' }} rounded-3" href="{{route('admin.dashboard', 'tc')}}">Terms and policies</a>
        

@@ -183,6 +183,7 @@
                 @endif
             @endif
 
+            @if(count($ads) > 0)
             {{-- Ads --}}
             <div class="col-md-12 text-center justify-content-center">
                 {{-- <div class="text-warning mt-5 fw-bold fs-5">Brands</div> --}}
@@ -192,7 +193,12 @@
                 <div class="splide">
                     <div class="splide__track">
                         <ul class="splide__list">
+                            @foreach($ads as $ad)
                             <li class=" splide__slide p-2">
+                                <img class="w-100" src="{{ asset('storage/'.$ad->image) }}">
+                            </li>
+                            @endforeach
+                            {{-- <li class=" splide__slide p-2">
                                 <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
                             </li>
                             <li class=" splide__slide p-2">
@@ -206,48 +212,37 @@
                             </li>
                             <li class=" splide__slide p-2">
                                 <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li>
-                            <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
             </div>
+            @endif
 
-            @if (empty($sellers))
+            @if (empty($sellers) && count($blogs) > 0)
                 {{-- Blogs --}}
                 <div class="col-md-12 text-center justify-content-center">
                     {{-- <div class="text-warning mt-5 fw-bold fs-5">Blogs</div> --}}
                     <div class="h3 fw-bold mt-5">Ideas that shape the future</div>
                     <div>Stay ahead with expert advice, innovative ideas, and <br> the latest updates from the world of
                         construction</div>
-                    <button class="btn btn-dark rounded-5 m-4">Read more</button>
-                    <div class="row mt-5 text-md-start justify-content-center">
-                        <div class="col-md-3 col-lg-2 col-6">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            <p>Cement & steel</p>
+                    <a href="{{ route('blogs') }}" class="btn btn-dark rounded-5 m-4">Read more</a>
+                    <div class="row mt-5 text-start justify-content-center">
+                        @foreach($blogs as $data)
+                        <div class="col-md-3 col-lg-2 col-6" wire:click="viewBlog('{{$data->slug}}')">
+                            <div class="border rounded position-relative rounded-3">
+                                <div class="ratio ratio-16x9">
+                                    <img src="{{ asset('storage/' . $data->blog_image) }}" class="d-block w-100 rounded-3" alt="Product Image">
+                                </div>
+                                <div style="height: 140px">
+                                    <div class="p-1 fw-bold text-title"> {{ $data->title }}</div>
+                                    <div class="p-1 text-secondary text-description"> {!! $data->description !!}
+                                    </div>
+                                    <small class="p-1 text-secondary position-absolute bottom-0">{{ $data->created_at->format('F j, Y') }}</small>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-lg-2 col-6">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            <p>Bricks</p>
-                        </div>
-                        <div class="col-md-3 col-lg-2 col-6">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            <p>Tiles & Granites</p>
-                        </div>
-                        <div class="col-md-3 col-lg-2 col-6">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            <p>Electrical Materials</p>
-                        </div>
-                        <div class="col-md-3 col-lg-2 col-6">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            <p>Plumbing Materials</p>
-                        </div>
-                        <div class="col-md-3 col-lg-2 col-6">
-                            <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            <p>Ply & Laminates</p>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             @endif
@@ -299,6 +294,21 @@
         }
         .ratio-21x9 {
             --bs-aspect-ratio: 28.857143%;
+        }
+
+        .text-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .text-title{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
     </style>
 @endpush

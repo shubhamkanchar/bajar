@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 py-5">
+                                    <div class="col-md-12 py-4">
                                         <div>Get started using,</div>
                                         <div class="text-dark fs-5 fw-bold">Phone Number</div>
                                     </div>
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 my-2">
-                                        <p>By signing up you agree to our <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a></p>
+                                        <p>By signing up you agree to our <a href="{{route('page',['slug'=>'terms-and-conditions'])}}">Terms & Conditions</a> and <a href="{{route('page',['slug'=>'privacy-policy'])}}">Privacy Policy</a></p>
                                     </div>
                                 </div>
                                 {{-- <div class="row mt-5 text-center">

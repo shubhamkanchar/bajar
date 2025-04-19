@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,7 +29,7 @@ class ProductFactory extends Factory
             'product_tag_group_id' => rand(1, 5), // Adjust as needed
             'price' => $this->faker->randomFloat(2, 10, 1000),
             'quantity' => rand(1, 50),
-            'user_id' => 1, // Default user
+            'user_id' => User::where('email','product@bajarbhaw.com')->value('id'), // Default user
             'business_id' => 1,
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), // Random date within the past year
             'updated_at' => now(),

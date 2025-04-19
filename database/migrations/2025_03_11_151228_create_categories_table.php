@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('type',['service','product']);
             $table->string('title');
             $table->tinyInteger('active')->default(1);
+            $table->integer('order');
             $table->timestamps();
         });
     }

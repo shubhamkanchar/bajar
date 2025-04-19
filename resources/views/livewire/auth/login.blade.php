@@ -47,7 +47,7 @@
                                 </div>
                             </div> --}}
                             <div class="row">
-                                <div class="col-md-12 py-5">
+                                <div class="col-md-12 py-4">
                                     <div>Get started using,</div>
                                     <div class="text-dark fs-5 fw-bold">Phone Number</div>
                                 </div>
@@ -69,7 +69,7 @@
                                 <div class="col-md-12 @if ($tab == 'email') d-none @endif" id="phoneDiv">
                                     <div class="form-floating">
                                         <input type="number" class="form-control rounded-4" id="phoneInput"
-                                            placeholder="" wire:model="phone">
+                                            placeholder="" wire:model.live="phone">
                                         <label for="phoneInput">Phone</label>
                                     </div>
                                     @error('phone')
@@ -81,7 +81,7 @@
                             </div>
                             <div class="row mb-0">
                                 <div class="col-md-12">
-                                    <button type="submit" class="btn btn-dark w-100">Proceed</button>
+                                    <button type="submit" class="btn w-100 @if($phone) btn-dark @else btn-secondary @endif">Proceed</button>
                                 </div>
                             </div>
                             {{-- <div class="row mt-5 text-center">

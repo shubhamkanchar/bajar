@@ -168,7 +168,7 @@
                         <div class="col-12 col-md-6 border-end border-secondary">
                             <div class="d-flex">
                                 @foreach ($product->images as $image)
-                                    <div class="ratio ratio-21x9 m-2">
+                                    <div class="ratio ratio-1x1 m-2">
                                         <img src="{{ asset('storage/' . $image->path) }}"
                                             class="d-block w-100 rounded" alt="Service Image" loading="lazy">
                                     </div>

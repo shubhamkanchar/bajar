@@ -49,6 +49,15 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .form-control:focus {
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+            border-color: black;
+            outline: 0;
+            box-shadow: none;
+            border: 2px solid black;
+        }
     </style>
 </head>
 

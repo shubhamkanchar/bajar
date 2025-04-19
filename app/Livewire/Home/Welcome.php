@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Home;
 
+use App\Models\Advertisement;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Product;
@@ -13,7 +15,7 @@ use Livewire\Component;
 class Welcome extends Component
 {
 
-    public $section;
+    public $section, $ads;
     public $data = [];
     public $search = '';
     public $isOpen = false;
@@ -21,12 +23,21 @@ class Welcome extends Component
     public $selectedCity = '';
     public $productName;
     public $sellers = [];
+    public $blogs = [];
     public $searchStarted = false;
+
 
     public function mount()
     {
+        $this->blogs = Blog::orderBy('updated_at', 'DESC')->limit(6)->get();
+        $this->ads = Advertisement::all();
         $this->section = 'product';
         $this->data = Category::where('type', $this->section)->get();
+    }
+
+    public function viewBlog($slug)
+    {
+        return redirect()->route('blog', ['slug' => $slug]);
     }
 
     public function updatedSearch()
@@ -53,7 +64,7 @@ class Welcome extends Component
             $text = $this->section == 'product' ? 'product sellers' : 'service providers';
             $this->dispatch('notify', [
                 'type' => 'Error',
-                'message' => 'Please select city to search '.$text
+                'message' => 'Please select city to search ' . $text
             ]);
         }
     }
@@ -106,6 +117,6 @@ class Welcome extends Component
     public function render()
     {
 
-        return view('livewire.home.welcome')->extends('layouts.home');;
+        return view('livewire.home.welcome')->extends('layouts.home');
     }
 }

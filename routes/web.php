@@ -9,6 +9,8 @@ use App\Livewire\Auth\Otp;
 use App\Livewire\Auth\Signup;
 use App\Livewire\Business\Edit;
 use App\Livewire\Business\Profile;
+use App\Livewire\Home\Blog;
+use App\Livewire\Home\Page;
 use App\Livewire\Home\Welcome;
 use App\Livewire\Onboarding as LivewireOnboarding;
 use App\Livewire\Service\Edit as ServiceEdit;
@@ -34,6 +36,9 @@ use Laravel\Socialite\Facades\Socialite;
 Route::get('/', Welcome::class)->name('home');
 Route::get('/login', Login::class)->name('login');
 Route::get('/signup', Signup::class)->name('signup');
+Route::get('/blog',Blog::class)->name('blogs');
+Route::get('/blogs/{slug}',Blog::class)->name('blog');
+Route::get('/{slug}',Page::class)->name('page');
 
 Route::middleware('auth')->group(function () {
     Route::get('/on-boarding', LivewireOnboarding::class)->name('onboarding');

@@ -100,7 +100,7 @@ class ProductSeller extends Component
         if($this->type == 'individual'){
             $query = User::where('type','individual')->with(['address'])->whereNotIn('role', ['superadmin', 'admin']);
         }else{
-            $query = User::where('offering',$this->type)->with(['address']);
+            $query = User::where('offering',$this->type)->whereNotIn('role', ['superadmin', 'admin'])->with(['address']);
         }
 
         if(!empty($this->search)) {
