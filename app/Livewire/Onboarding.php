@@ -88,6 +88,7 @@ class Onboarding extends Component
                 $user->name = $this->name;
                 $user->phone = $this->phone;
                 $user->type = 'individual';
+                $user->role = 'individual';
                 $user->save();
 
                 $address = Address::firstOrNew(['user_id' => $user->id]);
@@ -108,6 +109,7 @@ class Onboarding extends Component
                 $user->name = $this->name;
                 $user->phone = $this->phone;
                 $user->type = 'business';
+                $user->role = 'business';
                 $user->offering = $this->offering;
                 $user->gst = $this->gst_number;
                 $user->save();
@@ -144,11 +146,11 @@ class Onboarding extends Component
         $user->onboard_completed = 1;
         $user->save();
 
-        if ($user->type == 'individual') {
+        if ($user->role == 'individual') {
             return redirect()->route('home');
-        } else if ($user->type == 'business') {
+        } else if ($user->role == 'business') {
             return redirect()->route('business.profile');
-        } else if ($user->type == 'service') {
+        } else if ($user->role == 'service') {
             return redirect()->route('service.profile');
         }
     }

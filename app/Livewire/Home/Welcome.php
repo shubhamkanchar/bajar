@@ -96,11 +96,11 @@ class Welcome extends Component
     {
         $user = Auth::user();
         if ($user->onboard_completed) {
-            if ($user->type == 'individual') {
+            if ($user->role == 'individual') {
                 return route('user.profile');
-            } else if ($user->type == 'business') {
+            } else if ($user->role == 'business') {
                 return route('business.profile');
-            } else if ($user->type == 'service') {
+            } else if ($user->role == 'service') {
                 return route('service.profile');
             }
         } else {

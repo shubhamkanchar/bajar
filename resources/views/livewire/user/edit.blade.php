@@ -69,9 +69,9 @@
                 @php
                     $user = Auth::user();
                     if ($user->onboard_completed) {
-                        if ($user->type == 'individual') {
+                        if ($user->role == 'individual') {
                             $route = route('user.profile');
-                        } elseif ($user->type == 'business') {
+                        } elseif ($user->role == 'business') {
                             if($user->offering == 'product'){
                                 $route = route('business.profile');
                             }else{

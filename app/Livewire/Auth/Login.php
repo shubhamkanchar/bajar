@@ -157,9 +157,9 @@ class Login extends Component
         if($user->role == 'superadmin' || $user->role == 'admin'){
             return redirect()->route('admin.dashboard');
         }else if ($user->onboard_completed) {
-            if ($user->type == 'individual') {
+            if ($user->role == 'individual') {
                 return redirect()->route('user.profile');
-            } else if ($user->type == 'business') {
+            } else if ($user->role == 'business') {
                 if($user->offering == 'product'){
                     return redirect()->route('business.profile');
                 }else{

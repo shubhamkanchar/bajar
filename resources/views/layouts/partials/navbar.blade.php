@@ -23,9 +23,9 @@
                     if($user->role == 'superadmin' || $user->role == 'admin'){
                         $route = route('admin.dashboard');
                     }else if ($user->onboard_completed) {
-                        if ($user->type == 'individual') {
+                        if ($user->role == 'individual') {
                             $route = route('user.profile');
-                        } else if ($user->type == 'business') {
+                        } else if ($user->role == 'business') {
                             if($user->offering == 'product'){
                                 $route = route('business.profile');
                             }else{
