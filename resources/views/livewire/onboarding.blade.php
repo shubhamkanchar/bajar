@@ -25,8 +25,10 @@
                     </h3>
                 </div>
                 <div class="row">
-                    <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3">
-                        <button class="border rounded-4 py-5 px-md-5 px-3 text-center {{ $userType === 'individual' ? 'border-dark' : '' }} w-100 w-md-auto" wire:click="selectUserType('individual')">
+                    <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3 position-relative">
+                        <button
+                            class="border rounded-4 py-5 px-md-5 px-3 position-relative text-center {{ $userType === 'individual' ? 'border-dark' : '' }} w-100 w-md-auto"
+                            wire:click="selectUserType('individual')">
                             <svg width="60" height="60" viewBox="0 0 60 60" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -36,10 +38,28 @@
                             <h6 class="fw-bold">
                                 Individual
                             </h6>
+                            @if($userType === 'individual')
+                            <svg class="position-absolute top-0 end-0 m-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_737_3347)">
+                                    <circle cx="12" cy="12" r="12" fill="black" />
+                                    <path
+                                        d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
+                                        fill="white" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_737_3347">
+                                        <rect width="24" height="24" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            @endif
                         </button>
                     </div>
                     <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3">
-                        <button class="border rounded-4 py-5 px-md-5 px-3 text-center {{ $userType === 'business' ? 'border-dark' : '' }} w-100 w-md-auto" wire:click="selectUserType('business')">
+                        <button
+                            class="border rounded-4 py-5 px-md-5 px-3 position-relative text-center {{ $userType === 'business' ? 'border-dark' : '' }} w-100 w-md-auto"
+                            wire:click="selectUserType('business')">
                             <svg width="60" height="60" viewBox="0 0 60 60" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -49,11 +69,27 @@
                             <h6 class="fw-bold ">
                                 Business
                             </h6>
+                            @if($userType === 'business')
+                            <svg class="position-absolute top-0 end-0 m-2" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_737_3347)">
+                                    <circle cx="12" cy="12" r="12" fill="black" />
+                                    <path
+                                        d="M9.75049 14.0613L16.5811 7.23293C16.7363 7.07764 16.9337 7 17.1733 7C17.4131 7 17.6108 7.07746 17.7666 7.23237C17.9222 7.38729 18 7.5844 18 7.82369C18 8.06318 17.9222 8.26066 17.7666 8.41613L10.4622 15.6955C10.2588 15.8985 10.0216 16 9.75049 16C9.47943 16 9.2422 15.8985 9.0388 15.6955L6.23339 12.9065C6.0778 12.7515 6 12.5545 6 12.3154C6 12.0761 6.07761 11.8787 6.23282 11.7233C6.38804 11.568 6.58553 11.4903 6.82529 11.4903C7.06524 11.4903 7.2631 11.568 7.41888 11.7233L9.75049 14.0613Z"
+                                        fill="white" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_737_3347">
+                                        <rect width="24" height="24" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            @endif
                         </button>
                     </div>
                 </div>
                 <div class="mt-5">
-                    <a href="{{route('home')}}" class="btn btn-defualt">
+                    <a href="{{ route('home') }}" class="btn btn-defualt">
                         <svg width="50" height="50" viewBox="0 0 50 50" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect x="-1" y="1" width="47" height="47" rx="24"
@@ -118,10 +154,11 @@
                     <!-- State Dropdown -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <select class="form-select" id="state" wire:model="state"  wire:click="setState">
+                            <select class="form-select" id="state" wire:model="state" wire:click="setState">
                                 <option value="">Select State</option>
                                 @foreach ($stateOptions as $stateOption)
-                                    <option @if($stateOption==$state) selected @endif value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                    <option @if ($stateOption == $state) selected @endif
+                                        value="{{ $stateOption }}">{{ $stateOption }}</option>
                                 @endforeach
                             </select>
                             <label for="state">State</label>
@@ -134,10 +171,11 @@
                     <!-- City Dropdown -->
                     <div class="col-12 col-md-6">
                         <div class="mb-3 form-floating">
-                            <select class="form-select" id="city" wire:model="city"  wire:click="setCity">
+                            <select class="form-select" id="city" wire:model="city" wire:click="setCity">
                                 <option value="">Select City</option>
                                 @foreach ($cityOptions as $cityOption)
-                                    <option @if($cityOption==$city) selected @endif value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                    <option @if ($cityOption == $city) selected @endif
+                                        value="{{ $cityOption }}">{{ $cityOption }}</option>
                                 @endforeach
                             </select>
                             <label for="city">City</label>
@@ -237,8 +275,8 @@
                     <!-- Phone Number -->
                     <div class="col-12 col-md-6 mb-3">
                         <div class="form-floating">
-                            <input maxlength="10" type="text" id="phone" class="form-control" wire:model="phone"
-                                placeholder="Please enter your phone number">
+                            <input maxlength="10" type="text" id="phone" class="form-control"
+                                wire:model="phone" placeholder="Please enter your phone number">
                             <label for="phone">Phone Number *</label>
                         </div>
                         @error('phone')
@@ -280,7 +318,8 @@
                             <select class="form-select" id="state" wire:model="state" wire:click="setState">
                                 <option value="">Select State</option>
                                 @foreach ($stateOptions as $stateOption)
-                                    <option @if($stateOption==$state) selected @endif value="{{ $stateOption }}">{{ $stateOption }}</option>
+                                    <option @if ($stateOption == $state) selected @endif
+                                        value="{{ $stateOption }}">{{ $stateOption }}</option>
                                 @endforeach
                             </select>
                             <label for="state">State</label>
@@ -296,7 +335,8 @@
                             <select class="form-select" id="city" wire:model="city" wire:click="setCity">
                                 <option value="">Select City</option>
                                 @foreach ($cityOptions as $cityOption)
-                                    <option @if($cityOption==$city) selected @endif value="{{ $cityOption }}">{{ $cityOption }}</option>
+                                    <option @if ($cityOption == $city) selected @endif
+                                        value="{{ $cityOption }}">{{ $cityOption }}</option>
                                 @endforeach
                             </select>
                             <label for="city">City</label>
@@ -423,13 +463,14 @@
                     </div>
                     @if ($offering == 'service')
                         <div class="col-12">
-                            <h4 class="fw-bold mt-3">Service i provide ({{str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT)}}/03)</h4>
+                            <h4 class="fw-bold mt-3">Service i provide
+                                ({{ str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT) }}/03)</h4>
                             @foreach ($serviceCategories as $category)
                                 @if (in_array($category->id, $categoryIds))
-                                    <span role="button" wire:click="removeCategory({{$category->id}})"
+                                    <span role="button" wire:click="removeCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1 border-dark bg-secondary-subtle">{{ $category->title }}</span>
                                 @else
-                                    <span role="button" wire:click="addCategory({{$category->id}})"
+                                    <span role="button" wire:click="addCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">{{ $category->title }}</span>
                                 @endif
                             @endforeach
@@ -437,13 +478,14 @@
                     @endif
                     @if ($offering == 'product')
                         <div class="col-12">
-                            <h4 class="fw-bold mt-3">Categories i deal in ({{str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT)}}/03)</h4>
+                            <h4 class="fw-bold mt-3">Categories i deal in
+                                ({{ str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT) }}/03)</h4>
                             @foreach ($productCategories as $category)
                                 @if (in_array($category->id, $categoryIds))
-                                    <span role="button" wire:click="removeCategory({{$category->id}})"
+                                    <span role="button" wire:click="removeCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1 border-dark bg-secondary-subtle">{{ $category->title }}</span>
                                 @else
-                                    <span role="button" wire:click="addCategory({{$category->id}})"
+                                    <span role="button" wire:click="addCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">{{ $category->title }}</span>
                                 @endif
                             @endforeach

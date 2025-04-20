@@ -3,11 +3,11 @@
         <div class="row">
             <div class="col-12 mt-4 position-relative">
                 @if ($bgImage)
-                    <img class="w-100 h-250" src="{{ $bgImage->temporaryUrl() }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ $bgImage->temporaryUrl() }}">
                 @elseif($this->user->bg_image)
-                    <img class="w-100 h-250" src="{{ asset('storage/' . $this->user->bg_image) }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
-                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
                 <input type="file" wire:model="bgImage" hidden id="bgImage">
                 <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
@@ -41,7 +41,7 @@
                         $route = route('onboarding');
                     }
 
-                    if (Auth::user()->is_admin) {
+                    if ($user->role == 'admin' || $user->role == 'superadmin') {
                         $route = route('admin.dashboard', ['tab' => 'product-sellers']);
                     }
                 @endphp
@@ -59,16 +59,16 @@
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
+                    <div class="col-lg-2 col-md-3 mb-3 col-6 position-relative" style="margin-top:-70px">
                         @if ($profileImage)
-                            <img class="w-100 ms-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
+                            <img class="w-100 ps-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif($this->user->profile_image)
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/' . $this->user->profile_image) }}">
+                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
-                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2"
+                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4"
                             style="z-index: 1">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +84,7 @@
                             </svg>
                         </label>
                     </div>
-                    <div class="col-md-5 p-3">
+                    <div class="col-lg-5 col-md-4 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
                             <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
                         </div>
@@ -103,12 +103,12 @@
                                 </svg>
                             </span>
                             <span>
-                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
-                                {{ $this->user->address->state }}
+                                {{ $this->user->address?->address }}, {{ $this->user->address?->city }},
+                                {{ $this->user->address?->state }}
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-5 p-3">
+                    <div class="col-lg-5 col-md-5 p-3">
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end order-1"
                             style="height:100%">
                             <button class="btn btn-dark me-2">

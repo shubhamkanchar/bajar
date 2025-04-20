@@ -3,14 +3,14 @@
         <div class="row">
             <div class="col-12 mt-4">
                 @if($this->user->bg_image)
-                    <img class="w-100 h-250" src="{{ asset('storage/'.$this->user->bg_image) }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/'.$this->user->bg_image) }}">
                 @else
-                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
+                    <div class="col-md-2 mb-3 col-6 position-relative" style="margin-top:-70px">
                         @if($this->user->profile_image)
                             <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
                         @else

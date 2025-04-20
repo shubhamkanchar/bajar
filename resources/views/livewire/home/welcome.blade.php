@@ -76,7 +76,7 @@
                         area.</span>
                     <div class="row mt-5 text-md-start justify-content-center">
                         @foreach ($data as $item)
-                            <div class="col-md-3 col-lg-2 col-3">
+                            <div class="col-md-3 col-lg-2 col-3 text-break">
                                 <img class="w-100 category-image"
                                     src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
                                 <p>{{ $item->title }}</p>
@@ -93,7 +93,7 @@
                         hassle-free</span>
                     <div class="row mt-5 text-md-start justify-content-center">
                         @foreach ($data as $item)
-                            <div class="col-md-3 col-lg-2 col-3">
+                            <div class="col-md-3 col-lg-2 col-3 text-break">
                                 <img class="w-100 category-image"
                                     src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
                                 <p>{{ $item->title }}</p>
@@ -305,7 +305,7 @@
         }
         .text-title{
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             /* Number of lines */
             -webkit-box-orient: vertical;
             overflow: hidden;

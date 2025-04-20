@@ -5,7 +5,7 @@
     @if(str_contains(request()->path(), 'admin'))
     <div class="page-title">Admin Dashboard</div>
     @endif
-    <div class="dropdown me-md-5 pe-2">
+    <div class="dropdown pe-md-5 pe-2">
         @guest
             <a href="{{ route('login') }}" class=" btn btn-dark rounded-5 me-1" href="">Sign In</a>
             <a href="{{ route('signup') }}" class="btn bg-secondary-subtle rounded-5" href="">Sign Up</a>

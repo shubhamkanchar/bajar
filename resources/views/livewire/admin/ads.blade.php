@@ -1,10 +1,10 @@
 <div>
     <div class="row m-4">
         <div class="col-md-12 text-end">
-            <button class="btn btn-dark" wire:click="openSlider()">Add</button>
+            <button class="btn btn-dark m-3" wire:click="openSlider()">Add</button>
         </div>
         @foreach ($this->ads as $ad)
-            <div class="col-md-3 position-relative">
+            <div class="col-md-3 position-relative my-2">
                 <div class="ratio ratio-21x9">
                     <img class="w-100 object-fit-cover" src="{{ asset('storage/' . $ad->image) }}">
                 </div>

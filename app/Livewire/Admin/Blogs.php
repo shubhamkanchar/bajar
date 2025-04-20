@@ -61,6 +61,10 @@ class Blogs extends Component
         return $filteredProducts;
     }
 
+    public function deleteImage(){
+        $this->blog_image = null;
+    }
+
     public function updatedOrderBy($value)
     {
         if ($value != 'date-range') {

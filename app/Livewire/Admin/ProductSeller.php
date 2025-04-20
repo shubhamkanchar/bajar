@@ -147,11 +147,11 @@ class ProductSeller extends Component
             });
         } else if($this->orderBy === 'city') {
             $filteredSellers = $filteredSellers->groupBy(function ($product) {
-                return $product->address->city;
+                return $product->address?->city;
             });
         }else{
             $filteredSellers = $filteredSellers->groupBy(function ($product) {
-                return $product->address->city;
+                return $product->address?->city;
             });
         }
         return $filteredSellers;

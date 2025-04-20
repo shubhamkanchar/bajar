@@ -124,7 +124,7 @@
 
         <!-- Pending Approvals & Download Button -->
         <div class="col-md-3">
-            <div class="d-flex float-md-end mt-2">
+            <div class="d-flex float-md-end m-2">
                 <span class="text-end me-2">
                     <span class="d-block">Total Products</span>
                     <span class="d-block"></span>
