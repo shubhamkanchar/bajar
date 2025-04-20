@@ -156,9 +156,9 @@
                                     </div>
 
                                     <div class="p-2 d-flex justify-content-between">
-                                        <button class="btn btn-outline-dark w-100 me-1">
+                                        <a class="btn btn-outline-dark w-100 me-1" href="{{ route('view-shop', $seller->uuid)}}">
                                             <i class="bi bi-shop me-1"></i> View Shop
-                                        </button>
+                                        </a>
                                         <div class="d-flex">
                                             <button class="btn btn-dark me-1">
                                                 <i class="bi bi-telephone-fill"></i>

@@ -17,6 +17,7 @@ use App\Livewire\Service\Edit as ServiceEdit;
 use App\Livewire\Service\Profile as ServiceProfile;
 use App\Livewire\User\Edit as UserEdit;
 use App\Livewire\User\Profile as UserProfile;
+use App\Livewire\User\ViewBusinessProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-edit', UserEdit::class)->name('user.edit');
     Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::get('/view-business-profile/{uuid}', ViewBusinessProfile::class)->name('view-shop');
+
 });
 
 Route::middleware(['auth','admin'])->group(function () {

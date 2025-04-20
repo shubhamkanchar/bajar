@@ -23,4 +23,9 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function wishlistedBy()
+    {
+        return $this->morphMany(Wishlist::class, 'wishable');
+    }
 }

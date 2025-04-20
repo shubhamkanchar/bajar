@@ -88,4 +88,10 @@ class User extends Authenticatable
             $user->uuid = $uuid;
         });
     }
+
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
 }
