@@ -119,6 +119,7 @@
                                     @else
                                         {{ $phone }}
                                     @endif
+                                    is {{$otp}}
                                 </p>
                             </div>
                             <div class="row mb-5">

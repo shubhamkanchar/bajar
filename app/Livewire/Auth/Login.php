@@ -19,7 +19,7 @@ class Login extends Component
     public  $email, $phone = '', $tab = 'phone', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
     public $remember = true;
-    public $seconds;
+    public $seconds,$otp;
 
     public function tick()
     {
@@ -43,26 +43,26 @@ class Login extends Component
         ]);
 
         if ($this->tab == 'email') {
-            $otp = GlobalHelper::generateOtp();
+            $this->otp = GlobalHelper::generateOtp();
             $user = User::where([
                 'email' => $this->email
             ])->first();
             if ($user) {
                 $user->email = $this->email;
-                $user->email_otp = $otp;
+                $user->email_otp = $this->otp;
                 $user->save();
-                Mail::to($user->email)->send(new OtpMail($otp, $user));
+                Mail::to($user->email)->send(new OtpMail($this->otp, $user));
             }
         } else {
-            $otp = GlobalHelper::generateOtp();
+            $this->otp = GlobalHelper::generateOtp();
             $user = User::where([
                 'phone' => $this->phone
             ])->first();
             if ($user) {
                 $user->phone = $this->phone;
-                $user->phone_otp = $otp;
+                $user->phone_otp = $this->otp;
                 $user->save();
-                GlobalHelper::sendOtp($user->phone, $otp);
+                // GlobalHelper::sendOtp($user->phone, $this->otp);
             }
         }
         if ($user) {
@@ -77,15 +77,15 @@ class Login extends Component
     }
 
     public function resendOtp(){
-        $otp = GlobalHelper::generateOtp();
+        $this->otp = GlobalHelper::generateOtp();
         $user = User::where([
             'phone' => $this->phone
         ])->first();
         if ($user) {
             $user->phone = $this->phone;
-            $user->phone_otp = $otp;
+            $user->phone_otp = $this->otp;
             $user->save();
-            GlobalHelper::sendOtp($user->phone, $otp);
+            // GlobalHelper::sendOtp($user->phone, $this->otp);
             $this->seconds = 60;
             $this->dispatch('notify', [
                 'type' => 'success',
@@ -112,12 +112,12 @@ class Login extends Component
             'six' => 'OTP is required',
         ]);
 
-        $otp = $this->one . $this->two . $this->three . $this->four . $this->five . $this->six;
+        $this->otp = $this->one . $this->two . $this->three . $this->four . $this->five . $this->six;
         $success = false;
         if ($this->tab == 'email') {
             $user = User::where([
                 'email' => $this->email,
-                'email_otp' => $otp
+                'email_otp' => $this->otp
             ])->first();
             if ($user) {
                 $user->update([
@@ -129,7 +129,7 @@ class Login extends Component
         } else {
             $user = User::where([
                 'phone' => $this->phone,
-                'phone_otp' => $otp
+                'phone_otp' => $this->otp
             ])->first();
             if ($user) {
                 $user->update([
