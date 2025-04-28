@@ -128,7 +128,21 @@ class Signup extends Component
 
         if($success){
             Auth::login($user);
-            return redirect()->route('onboarding');
+            if($user->role == 'superadmin' || $user->role == 'admin'){
+                return redirect()->route('admin.dashboard');
+            }else if ($user->onboard_completed) {
+                if ($user->role == 'individual') {
+                    return redirect()->route('user.profile');
+                } else if ($user->role == 'business') {
+                    if($user->offering == 'product'){
+                        return redirect()->route('business.profile');
+                    }else{
+                        return redirect()->route('service.profile');
+                    }
+                }
+            } else {
+                return redirect()->route('onboarding');
+            }
         }
     }
 

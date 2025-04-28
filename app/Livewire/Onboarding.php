@@ -32,6 +32,24 @@ class Onboarding extends Component
     public $gst_number;
     public $google_map_link;
 
+    public function mount(){
+        $user = Auth::user();
+        if($user->role == 'superadmin' || $user->role == 'admin'){
+            return redirect()->route('admin.dashboard');
+        }else if ($user->onboard_completed) {
+            if ($user->role == 'individual') {
+                return redirect()->route('user.profile');
+            } else if ($user->role == 'business') {
+                if($user->offering == 'product'){
+                    return redirect()->route('business.profile');
+                }else{
+                    return redirect()->route('service.profile');
+                }
+            }
+        } else {
+            return redirect()->route('onboarding');
+        }
+    }
     // Define validation rules for step 2
     protected function rules()
     {
