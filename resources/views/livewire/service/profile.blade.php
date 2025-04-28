@@ -2,26 +2,26 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4">
-                @if(auth()->user()->bg_image)
-                    <img class="w-100 h-250" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @if($this->user->bg_image)
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/'.$this->user->bg_image) }}">
                 @else
-                    <img class="w-100 h-250" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-2 mb-3 position-relative" style="margin-top:-70px">
-                        @if(auth()->user()->profile_image)
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                    <div class="col-md-2 mb-3 col-6 position-relative" style="margin-top:-70px">
+                        @if($this->user->profile_image)
+                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
                         @else
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">{{$this->user->name}}</span>
+                            <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
                             <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                                {{$this->user->gst}}</span>
+                            {{ $this->user->gst }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -93,9 +93,8 @@
                                 {{$this->bussinessTime()}}
                             </span>
                         </div>
-                        <div class="d-lg-flex justify-content-end align-items-end float-md-end" style="height:60%">
-                            <a id="openReviewSliderBtn" class="btn bg-secondary-subtle me-2">
-
+                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100" style="height:60%">
+                            <a id="openReviewSliderBtn" class="btn bg-secondary-subtle me-2 mb-2">
                                 <svg class="me-2" width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -104,8 +103,8 @@
                                 </svg>
                                 Expert Review
                             </a>
-                            <a href="{{ route('business.edit', ['uuid' => auth()->user()->uuid ]) }}" class="btn btn-dark">
-                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
+                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid ]) }}" class="btn btn-dark me-2 mb-2">
+                                <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
                                         stroke-linecap="round" stroke-linejoin="round" />

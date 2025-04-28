@@ -47,7 +47,7 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-md-2">
-                        <img class="w-100 ms-md-4" style="margin-top:-70px" src="{{ asset('assets/image/profile.png') }}">
+                        <img class="w-100 ps-md-4" style="margin-top:-70px" src="{{ asset('assets/image/profile.png') }}">
                     </div>
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">

@@ -67,7 +67,7 @@ class Login extends Component
         }
         if ($user) {
             $this->page = 'otp';
-            $this->seconds = 60;
+            $this->seconds = 120;
         }else{
             $this->dispatch('notify', [
                 'type' => 'error',
@@ -86,7 +86,7 @@ class Login extends Component
             $user->phone_otp = $this->otp;
             $user->save();
             // GlobalHelper::sendOtp($user->phone, $this->otp);
-            $this->seconds = 60;
+            $this->seconds = 120;
             $this->dispatch('notify', [
                 'type' => 'success',
                 'message' => 'OTP send successfully'

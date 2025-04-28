@@ -12,9 +12,9 @@
                 <div class="row">
                     <div class="col-md-2 mb-3 col-6 position-relative" style="margin-top:-70px">
                         @if($this->user->profile_image)
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
+                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
                         @else
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-5 p-3">
@@ -93,7 +93,7 @@
                                 {{$this->bussinessTime()}}
                             </span>
                         </div>
-                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100" style="height:60%">
+                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2" style="height:60%">
                             <a href="{{ route('business.edit', ['uuid' => $this->user->uuid ]) }}" class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">

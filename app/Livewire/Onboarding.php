@@ -148,9 +148,9 @@ class Onboarding extends Component
 
         if ($user->role == 'individual') {
             return redirect()->route('home');
-        } else if ($user->role == 'business') {
+        } else if ($user->offering == 'business') {
             return redirect()->route('business.profile');
-        } else if ($user->role == 'service') {
+        } else if ($user->offering == 'service') {
             return redirect()->route('service.profile');
         }
     }

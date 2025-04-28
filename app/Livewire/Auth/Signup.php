@@ -12,7 +12,6 @@ class Signup extends Component
 {
     public  $email, $phone, $tab = 'phone', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
-
     public $seconds,$otp;
 
     public function tick()
@@ -37,22 +36,25 @@ class Signup extends Component
         ]);
 
         if ($this->tab == 'email') {
+            $this->otp = GlobalHelper::generateOtp();
             $user = User::firstOrNew([
                 'email' => $this->email
             ]);
             $user->email = $this->email;
-            $user->email_otp = rand(000000, 999999);
+            $user->email_otp = $this->otp;
             $user->save();
         } else {
+            $this->otp = GlobalHelper::generateOtp();
             $user = User::firstOrNew([
                 'phone' => $this->phone
             ]);
             $user->phone = $this->phone;
-            $user->phone_otp = rand(000000, 999999);
+            $user->phone_otp = $this->otp;
             $user->save();
+            // GlobalHelper::sendOtp($user->phone, $this->otp);
         }
         $this->page = 'otp';
-        $this->seconds = 60;
+        $this->seconds = 120;
     }
 
     public function resendOtp(){
@@ -65,7 +67,7 @@ class Signup extends Component
             $user->phone_otp = $this->otp;
             $user->save();
             // GlobalHelper::sendOtp($user->phone, $this->otp);
-            $this->seconds = 5;
+            $this->seconds = 120;
             $this->dispatch('notify', [
                 'type' => 'success',
                 'message' => 'OTP send successfully'
