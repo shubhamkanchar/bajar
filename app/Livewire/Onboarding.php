@@ -46,9 +46,7 @@ class Onboarding extends Component
                     return redirect()->route('service.profile');
                 }
             }
-        } else {
-            return redirect()->route('onboarding');
-        }
+        } 
     }
     // Define validation rules for step 2
     protected function rules()
