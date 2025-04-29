@@ -16,40 +16,17 @@ class AdminSeeder extends Seeder
         $admins = [
             [
                 'name' => 'Super Admin',
-                'phone' => '8208449976',
+                'phone' => '9923593375',
                 'email' => 'superadmin@bajarbhaw.com',
                 'role' => 'superadmin',
                 'onboard_completed' => 1
             ],
             [
                 'name' => 'Admin',
-                'phone' => '9158853602',
+                'phone' => '7588297575',
                 'email' => 'admin@bajarbhaw.com',
-                'role' => 'admin',
+                'role' => 'superadmin',
                 'onboard_completed' => 1
-            ],
-            [
-                'name' => 'Product Business',
-                'phone' => '1234567890',
-                'email' => 'product@bajarbhaw.com',
-                'role' => 'business',
-                'offering' => 'product',
-                'onboard_completed' => 0
-            ],
-            [
-                'name' => 'Service Business',
-                'phone' => '0123456789',
-                'email' => 'service@bajarbhaw.com',
-                'role' => 'business',
-                'offering' => 'Service',
-                'onboard_completed' => 0
-            ],
-            [
-                'name' => 'Individual',
-                'phone' => '1023456789',
-                'email' => 'individual@bajarbhaw.com',
-                'role' => 'individual',
-                'onboard_completed' => 0
             ]
         ];
         foreach($admins as $admin){
