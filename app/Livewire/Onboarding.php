@@ -32,21 +32,20 @@ class Onboarding extends Component
     public $gst_number;
     public $google_map_link;
 
-    public function mount(){
+    public function mount()
+    {
         $user = Auth::user();
-        if($user->role == 'superadmin' || $user->role == 'admin'){
-            return redirect()->route('admin.dashboard');
-        }else if ($user->onboard_completed) {
-            if ($user->role == 'individual') {
-                return redirect()->route('user.profile');
-            } else if ($user->role == 'business') {
-                if($user->offering == 'product'){
-                    return redirect()->route('business.profile');
-                }else{
-                    return redirect()->route('service.profile');
-                }
-            }
-        } 
+        // if ($user->role == 'superadmin' || $user->role == 'admin') {
+        //     return redirect()->route('admin.dashboard');
+        // }elseif ($user->onboard_completed) {
+        //     if ($user->role == 'individual') {
+        //         return redirect()->route('user.profile');
+        //     } else if ($user->offering == 'product') {
+        //         return redirect()->route('business.profile');
+        //     } else if ($user->offering == 'service') {
+        //         return redirect()->route('service.profile');
+        //     }
+        // }
     }
     // Define validation rules for step 2
     protected function rules()
@@ -103,6 +102,7 @@ class Onboarding extends Component
                 $user = Auth::user();
                 $user->name = $this->name;
                 $user->phone = $this->phone;
+                $user->email = $this->email;
                 $user->type = 'individual';
                 $user->role = 'individual';
                 $user->save();
@@ -124,6 +124,7 @@ class Onboarding extends Component
                 $user = Auth::user();
                 $user->name = $this->name;
                 $user->phone = $this->phone;
+                $user->email = $this->email;
                 $user->type = 'business';
                 $user->role = 'business';
                 $user->offering = $this->offering;
@@ -164,7 +165,7 @@ class Onboarding extends Component
 
         if ($user->role == 'individual') {
             return redirect()->route('home');
-        } else if ($user->offering == 'business') {
+        } else if ($user->offering == 'product') {
             return redirect()->route('business.profile');
         } else if ($user->offering == 'service') {
             return redirect()->route('service.profile');
@@ -202,16 +203,18 @@ class Onboarding extends Component
         $this->categoryIds = $arr;
     }
 
-    public function setState(){
-        foreach(config('state') as $key => $state){
-            array_push($this->stateOptions,$key);
+    public function setState()
+    {
+        foreach (config('state') as $key => $state) {
+            array_push($this->stateOptions, $key);
         }
     }
 
-    public function setCity(){
-        if($this->state){
+    public function setCity()
+    {
+        if ($this->state) {
             $this->cityOptions = config('state')[$this->state];
-        }else{
+        } else {
             $this->cityOptions = [];
         }
     }
@@ -229,11 +232,11 @@ class Onboarding extends Component
         if (Auth::user()->name) {
             $this->name = Auth::user()->name;
         }
-        
+
 
         $cities = [];
-        foreach(config('state') as $key => $state){
-            array_push($cities,$key);
+        foreach (config('state') as $key => $state) {
+            array_push($cities, $key);
         }
         $productCategories = Category::where('type', 'product')->get();
         $serviceCategories = Category::where('type', 'service')->get();
