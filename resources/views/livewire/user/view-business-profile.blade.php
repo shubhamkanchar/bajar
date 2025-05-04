@@ -20,8 +20,6 @@
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
                             <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
-                            <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                            {{ $this->user->gst }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -46,7 +44,9 @@
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex float-md-end">
                             <span
-                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Premium</span>
+                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">
+                                Premium
+                            </span>
 
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
@@ -93,6 +93,26 @@
                                 {{$this->bussinessTime()}}
                             </span>
                         </div>
+                        <div class="d-lg-flex gap-1 float-md-end">
+                            @if ($user->address && $user->address->map_link)
+                                <a href="{{ $user->address->map_link }}" target="_blank" class="btn btn-dark text-white text-decoration-none">
+                                        <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16.4922 9.01524L10.5302 15.0408L3.74941 10.7997C2.77786 10.1918 2.97996 8.71608 4.07888 8.39471L20.1784 3.67997C21.1846 3.38503 22.1172 4.32587 21.8183 5.33541L17.0553 21.4237C16.729 22.5242 15.2617 22.7208 14.6596 21.7451L10.5271 15.0419" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Get Direction
+                                </a>
+                            @endif
+
+                            <a href="tel:{{ $user->phone }}" class="btn btn-dark"> 
+                                <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0096 13.4895C16.1649 17.6436 17.1076 12.8377 19.7533 15.4816C22.3039 18.0315 23.7699 18.5424 20.5383 21.7731C20.1335 22.0985 17.5616 26.0122 8.52302 16.9762C-0.516644 7.93906 3.39488 5.36453 3.72028 4.95984C6.95976 1.72015 7.46184 3.19467 10.0125 5.74461C12.6582 8.38958 7.85433 9.33533 12.0096 13.4895Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Call 
+                            </a>
+                            <button class="btn btn-dark" x-data x-on:click="$wire.set('showReviewForm', true)">
+                                Review {{ $user->offering === 'product' ? 'Seller' : 'Service Provider' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,91 +123,136 @@
                     <span class="badge rounded-pill {{$selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light'}}  fs-6 p-3 m-1"  role="button" tabindex="0" wire:click="changeCategory({{$cat->id}})">{{$cat->title}}</span>
                 @endforeach
             </div>
-            {{-- <div class="col-md-3">
-                <div class="d-flex float-md-end mt-3">
-                    <span class="text-end me-2">
-                        <span class="d-block">Total work Added</span>
-                        <span class="d-block">{{count($this->allProducts)}}</span>
-                    </span>
-                    <button class="btn btn-default rounded-5 bg-custom-secondary">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M14.7369 2.75784H8.08489C6.00489 2.74984 4.30089 4.40684 4.25089 6.48684V17.2238C4.20589 19.3258 5.87389 21.0658 7.97489 21.1108C8.01189 21.1108 8.04889 21.1118 8.08489 21.1108H16.0729C18.1629 21.0368 19.8149 19.3148 19.8029 17.2238V8.03384L14.7369 2.75784Z"
-                                stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M14.4766 2.75V5.659C14.4766 7.079 15.6256 8.23 17.0456 8.234H19.7996"
-                                stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M11.6406 15.9472V9.90625" stroke="black" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M9.29688 13.5938L11.6419 15.9488L13.9869 13.5938" stroke="black"
-                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-
-                    </button>
-                </div>
-            </div> --}}
             <div class="col-12 mt-3 product-list">
-                @foreach ($this->allProducts as $key => $products)
-                    <h6 class="fw-bold">{{$key}}</h6>
-                    <div class="row mb-2">
-                        @foreach ($products as $product)
-                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                                <div class="border rounded position-relative">
-                                    <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            @foreach ($product->images as $key => $productImage)
-                                                <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
-                                                    <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
-                                    </div>
-                                    <div class="p-2 text-start fw-bold" style="font-size: 12px;">
-                                        <span class="d-block p-1" style="min-height: 20px;">
-                                            {{ substr($product->description, 0, 50) }}
-                                        </span>
-                                        <span class="text-secondary fw-light text-start p-1">{{$product->brand_name}}</span>
-                                        @if ($product->show_price) 
-                                            <span class="d-block p-1">Rs.{{$product->price}}<span class="p-1 text-secondary fw-light">per</span>Unit</span>  
-                                        @else
-                                            <span class="d-block">Contact Us for pricing</span>
-                                        @endif
-                                        <button class="btn w-100 btn-secondary view-product" data-id="{{ $product->id }}">
-                                            Give a Call
-                                        </button>
-                                    </div>
-
-                                    @php
-                                        $inWishlist = in_array($product->id, $this->wishlistProductIds); // Or however you check it
-                                    @endphp
-
-                                    <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
-                                    style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"  wire:click.prevent="toggleWishlist({{ $product->id }})">
-                                        <i class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"
-                                        ></i>
-                                    </a>
-                                 
-                                </div>
-                            </div>
-                        @endforeach
+                @if (!$isLoaded)
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
-                @endforeach
+                @endif
+                
+                @if ($user->offering === 'product')
+                    @foreach ($this->allItems as $key => $products)
+                        <h6 class="fw-bold">{{$key}}</h6>
+                        <div class="row mb-2">
+                            @foreach ($products as $product)
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-3">
+                                    <div class="border rounded position-relative h-100 d-flex flex-column">
+                                        <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                @foreach ($product->images as $key => $productImage)
+                                                    <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                        <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                        <div class="p-2 text-start fw-bold flex-grow-1" style="font-size: 12px;">
+                                            <span class="d-block p-1" style="min-height: 20px;">
+                                                {{ substr($product->description, 0, 50) }}
+                                            </span>
+                                            <span class="text-secondary fw-light text-start p-1">{{$product->brand_name}}</span>
+                                            @if ($product->show_price) 
+                                                <span class="d-block p-1">Rs.{{$product->price}}<span class="p-1 text-secondary fw-light">per</span>Unit</span>  
+                                            @else
+                                                <span class="d-block">Contact Us for pricing</span>
+                                            @endif
+                                            <div class="d-flex gap-2 justify-content-between mt-auto">
+                                                <a href="tel:{{ $user->phone }}" class="w-50 btn btn-dark">
+                                                    <i class="fas fa-phone me-2"></i>
+                                                </a>
+                                                <button  class="w-50 btn btn-secondary view-product" data-id="{{ $product->id }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        @php
+                                            $inWishlist = in_array($product->id, $this->wishlistIds);
+                                        @endphp
+
+                                        <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
+                                        style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"  wire:click.prevent="toggleWishlist({{ $product->id }})">
+                                            <i class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"
+                                            ></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                @else
+                    @foreach ($this->allItems as $key => $services)
+                        <h6 class="fw-bold">{{$key}}</h6>
+                        <div class="row mb-2">
+                            @foreach ($services as $service)
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-3">
+                                    <div class="border rounded position-relative h-100 d-flex flex-column">
+                                        <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                @foreach ($service->images as $key => $serviceImage)
+                                                    <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                        <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                        <div class="p-2 text-start fw-bold flex-grow-1" style="font-size: 12px;">
+                                            <span class="d-block p-1" style="min-height: 20px;">
+                                                {{ substr($service->description, 0, 50) }}
+                                            </span>
+                                            <span class="text-secondary fw-light text-start p-1">{{$service->work_brief}}</span>
+                                            <div class="d-flex gap-2 justify-content-between mt-auto">
+                                                <a href="tel:{{ $user->phone }}" class="w-50 btn btn-dark">
+                                                    <i class="fas fa-phone me-2"></i>
+                                                </a>
+                                                <button  class="w-50 btn btn-secondary view-product" data-id="{{ $service->id }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        @php
+                                            $inWishlist = in_array($service->id, $this->wishlistIds);
+                                        @endphp
+
+                                        <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
+                                        style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"  wire:click.prevent="toggleWishlist({{ $service->id }})">
+                                            <i class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"
+                                            ></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
+    
     <div class="slider-form" wire:ignore.self>
         <div class="slider-content">
             <div class="row">
                 <div class="col-md-8">
-                    <p class="fw-bold fs-3">Product</p>
+                    <p class="fw-bold fs-3">{{ $user->offering === 'product' ? 'Product Details' : 'Service Details' }}</p>
                 </div>
                 <div class="col-md-4 text-md-end mb-2">
                     <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" id="closeSliderBtn">
@@ -195,105 +260,283 @@
                     </a>
                 </div>
             </div>
-
-            <form>
+    
+            @if($user->offering === 'product')
                 <div class="row">            
-                    <div class="col-md-5 mb-3 position-relative">
-                        <div class="dashed-border ratio ratio-1x1">
-                            @if ($isEdit && gettype($product_images['product_image1']) == 'string')
-                                <img src="{{ asset('storage/' . $product_images['product_image1']) }}" class="img-fluid">
-                            @elseif ($product_images['product_image1'])
-                                <img src="{{$product_images['product_image1']->temporaryUrl()}}" class="img-fluid">
-                            @else
-            
+                    <div class="col-md-5 mb-3">
+                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner ratio ratio-1x1">
+                                @foreach($product_images as $key => $image)
+                                    @if($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
+                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                            <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}" 
+                                                 class="d-block w-100 rounded" alt="Product Image">
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            @if(count(array_filter($product_images)) > 1)
+                                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             @endif
                         </div>
                     </div>
                     
                     <div class="col-md-7">
-                        <div class="row">
-                            @foreach([2, 3, 4, 5, 6] as $index)
-                                <div class="col-md-4 mb-3 position-relative">
-                                    <div class="dashed-border ratio ratio-1x1">
-                                        @if ($isEdit && gettype($product_images['product_image'. $index]) == 'string')
-                                            <img src="{{ asset('storage/' . $product_images['product_image'. $index]) }}" class="img-fluid">
-                                        @elseif($product_images['product_image' . $index])
-                                            <img src="{{$product_images['product_image' . $index]->temporaryUrl()}}" class="img-fluid">
-                                        @else
-                                        @endif
-                                    </div>
-        
+                        <div class="product-details">
+                            <h4 class="fw-bold">{{ $product_name }}</h4>
+                            <p class="text-muted">{{ $brand_name }}</p>
+                            <hr>
+                            
+                            <div class="mb-3">
+                                <h6>Description</h6>
+                                <p>{{ $description }}</p>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h6>Category</h6>
+                                    <p>
+                                        @foreach($this->categories as $cat)
+                                            @if($cat->id == $category)
+                                                {{ $cat->title }}
+                                            @endif
+                                        @endforeach
+                                    </p>
                                 </div>
-                            @endforeach
-                        </div>
-                    </div>                    
-                    <div class="col-12">
-                        <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Product Name" wire:model="product_name">
-                            <label for="name">Product Name</label>
-
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name" wire:model="brand_name">
-                            <label for="name" >Brand Name</label>
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example"
-                                wire:model="category">
-                                <option selected>Open this select menu</option>
-                                @foreach ($this->categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                @endforeach
-                            </select>
-                            <label for="floatingSelect">Product Category</label>
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example"
-                                wire:model="product_tag_group_id">
-                                <option selected>Open this select menu</option>
-                                @foreach ($this->categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                @endforeach
-                            </select>
-                            <label for="floatingSelect">Product Tag/Product Group</label>
-
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="form-floating mb-2 mt-2 w-100">
-                            <input type="text" name="name" class="form-control" id="price"
-                                placeholder="Price" wire:model="price">
-                            <label for="name">Price</label>
-
-
-                        </div>
-                        <span class="m-2">Per</span>
-                        <div class="form-floating mb-2 mt-2 w-100" wire:model="quantity">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example" wire:model="quantity">
-                                <option selected></option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label for="floatingSelect">Qty</label>
+                                
+                                @if($showPrice && $price)
+                                <div class="col-md-6 mb-3">
+                                    <h6>Price</h6>
+                                    <p>Rs. {{ number_format($price, 2) }} per {{ $quantity }}</p>
+                                </div>
+                                @endif
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
+                                    <i class="fas fa-phone me-2"></i> Call Us
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            @else
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner ratio ratio-1x1">
+                                @foreach($service_images as $key => $image)
+                                    @if($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
+                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                            <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}" 
+                                                 class="d-block w-100 rounded" alt="Service Image">
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            @if(count(array_filter($service_images)) > 1)
+                                <button class="carousel-control-prev" type="button" data-bs-target="#serviceCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#serviceCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-7">
+                        <div class="service-details">
+                            <h4 class="fw-bold">{{ $service_description }}</h4>
+                            <hr>
+                            
+                            <div class="mb-3">
+                                <h6>Work Brief</h6>
+                                <p>{{ $work_brief }}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>Category</h6>
+                                <p>
+                                    @foreach($this->categories as $cat)
+                                        @if($cat->id == $service_category)
+                                            {{ $cat->title }}
+                                        @endif
+                                    @endforeach
+                                </p>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
+                                    <i class="fas fa-phone me-2"></i> Call Us
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>    
+    </div>
+    <div class="slider-review-form" x-cloak x-data="{showReviewForm: @entangle("showReviewForm")}" x-show="showReviewForm" x-on:click.away="showReviewForm = false; $wire.set('showReviewForm', false)" wire:ignore.self>
+        <div class="slider-content">
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="fw-bold fs-3">Review Product Seller</p>
+                </div>
+                <div class="col-md-4 text-md-end mb-2">
+                    <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"  x-on:click="showReviewForm = false; $wire.set('showReviewForm', false)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 p-0">
+                    <div class="d-flex border rounded-4 p-2 gap-3">
+                        @if($this->user->bg_image)
+                            <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4" src="{{ asset('storage/'.$this->user->bg_image) }}">
+                        @else
+                            <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
+                        @endif
+        
+                        <div class="d-flex flex-column justify-content-center">
+                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                            <div class="d-flex align-items-start mt-1 text-muted" style="font-size: 0.9rem;">
+                                <span class="me-2">
+                                    <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M11.5 8.50051C11.5 7.11924 10.3808 6 9.00051 6C7.61924 6 6.5 7.11924 6.5 8.50051C6.5 9.88076 7.61924 11 9.00051 11C10.3808 11 11.5 9.88076 11.5 8.50051Z"
+                                            stroke="#808080" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M8.99951 19C7.80104 19 1.5 13.8984 1.5 8.56329C1.5 4.38664 4.8571 1 8.99951 1C13.1419 1 16.5 4.38664 16.5 8.56329C16.5 13.8984 10.198 19 8.99951 19Z"
+                                            stroke="#808080" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                                <span>
+                                    {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                    {{ $this->user->address->state }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3 p-4">
+                <!-- Question 1: Is the contact information accurate? -->
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="form-label text-secondary">
+                        Is the contact information accurate?
+                    </label>
+                    <div class="form-group">
+                        <div class="form-check-inline">
+                            <input class="square-checkbox"  name="is_contact_accurate" type="radio" id="contactYes" value="yes" wire:model="is_contact_accurate">
+                            <label class="form-check-label" for="contactYes">Yes</label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input class="square-checkbox" name="is_contact_accurate" type="radio" id="contactNo" value="no" wire:model="is_contact_accurate">
+                            <label class="form-check-label" for="contactNo">No</label>
+                        </div>
+                        @error('is_contact_accurate')
+                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            
+                <!-- Question 2: Is the location accurate? -->
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="form-label text-secondary">
+                        Is the location accurate?
+                    </label>
+                    <div class="form-group">
+                        <div class="form-check-inline">
+                            <input class="square-checkbox" name="is_location_accurate" type="radio" id="locationYes" value="yes" wire:model="is_location_accurate">
+                            <label class="form-check-label" for="locationYes">Yes</label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input class="square-checkbox" name="is_location_accurate" type="radio" id="locationNo" value="no" wire:model="is_location_accurate">
+                            <label class="form-check-label" for="locationNo">No</label>
+                        </div>
+                    </div>
+                    @error('is_contact_accurate')
+                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- Question 1: Rate the contact information -->
+                <div class="col-12 col-md-12 mb-3" 
+                    x-data="{ rating: @entangle('communication_and_professionalism') }" 
+                    style="user-select: none;">
+                    <label class="form-label text-secondary"
+                        style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                        How would you rate communication and professionalism?
+                    </label>
+                    <div class="rating fs-5">
+                        <template x-for="i in 5" :key="i">
+                            <span x-on:click="rating = i; $wire.set('communication_and_professionalism', i)" style="cursor: pointer;">
+                                <i :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                            </span>
+                        </template>
+                    </div>
+                    @error('communication_and_professionalism')
+                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-12 col-md-12 mb-3" 
+                    x-data="{ rating: @entangle('quality_or_service') }" 
+                    style="user-select: none;">
+                    <label class="form-label text-secondary"
+                        style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                        How satisfied are you with the quality of the products or services provided?
+                    </label>
+                    <div class="rating fs-5">
+                        <template x-for="i in 5" :key="i">
+                            <span x-on:click="rating = i; $wire.set('quality_or_service', i)" style="cursor: pointer;">
+                                <i :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                            </span>
+                        </template>
+                    </div>
+                    @error('quality_or_service')
+                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                    @enderror
+
+                </div>
+                <div class="col-12 col-md-12 mb-3" 
+                    x-data="{ rating: @entangle('recommendation') }" 
+                    style="user-select: none;">
+                    <label class="form-label text-secondary"
+                        style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                        How likely are you to recommend this seller/service provider to others?
+                    </label>
+                    <div class="rating fs-5">
+                        <template x-for="i in 5" :key="i">
+                            <span x-on:click="rating = i; $wire.set('recommendation', i)" style="cursor: pointer;">
+                                <i :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                            </span>
+                        </template>
+                    </div>
+                    @error('recommendation')
+                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Question 2: Rate the location -->                
+            </div>  
+            <div class="row p-4">
+                <div class="col-12">
+                    <button class="btn px-4 btn-dark" wire:click.prevent="submitReview">Submit review</button>
+                </div>
+            </div>                      
+        </div>        
     </div>
 </div>
 @section('style')
@@ -313,30 +556,78 @@
         overflow: scroll;
     }
 
+    .slider-review-form {
+        position: fixed;
+        top: 0;
+        right: 0;
+        /* Hide off-screen initially */
+        width: 100%;
+        height: 100%;
+        background-color: #f8f9fa;
+        transition: right 0.3s ease;
+        z-index: 1050;
+        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
+        overflow: scroll;
+    }
     /* Show the slider when active (slide in from the right) */
     .slider-form.open {
         right: 0;
     }
-
     /* Form content styling */
     .slider-content {
         padding: 30px;
     }
 
+    
     /* Adjust the width of the form based on screen size */
     @media (max-width: 767px) {
-        .slider-form {
+        .slider-form,.slider-review-form {
             width: 100%;
             /* Full width on small screens */
         }
     }
 
     @media (min-width: 768px) {
-        .slider-form {
+        .slider-form,.slider-review-form {
             width: 75%;
             /* 75% width on medium and larger screens */
         }
     }
+
+    /* Square, rounded, black-filled radio buttons */
+    .square-checkbox {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #000;         /* White border */
+        border-radius: 6px;             /* Rounded square */
+        background-color: #fff;         /* Black background */
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .square-checkbox:checked {
+        background-color: #000;         /* Still black when checked */
+        border-color: #fff;   
+        outline: 2px solid #000;          /* Keep white border */
+    }
+
+    .square-checkbox:checked::after {
+        content: '';
+        display: none;                  /* No inner icon or tick */
+    }
+
+    .star-color {
+        color: #22B14D;                 /* Gold color for filled stars */
+    }
+    .star-color-outer {
+        color: #CCCCCC;                 /* Gray color for unfilled stars */
+    }
+
+
 </style>
 @endsection
 
@@ -369,4 +660,12 @@
         }
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            @this.set('isLoaded', true);
+        }, 500);
+    });
+
 </script>
+          
+                    

@@ -1,90 +1,79 @@
-<style>
-    /* Initially set the slider to be hidden off-screen on the right */
-    .slider-form {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        /* Hide off-screen initially */
-        width: 100%;
-        height: 100%;
-        background-color: #f8f9fa;
-        transition: right 0.3s ease;
-        z-index: 1050;
-        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
-        overflow: scroll;
-    }
+@section('style')
+    <style>
+        .product-card,
+        .service-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
 
-    /* Show the slider when active (slide in from the right) */
-    .slider-form.open {
-        right: 0;
-    }
+        .product-carousel,
+        .service-carousel {
+            height: 150px;
+            overflow: hidden;
+        }
 
-    /* Form content styling */
-    .slider-content {
-        padding: 30px;
-    }
-
-    /* Adjust the width of the form based on screen size */
-    @media (max-width: 767px) {
-        .slider-form {
+        .product-carousel .carousel-item img,
+        .service-carousel .carousel-item img {
+            object-fit: cover;
             width: 100%;
-            /* Full width on small screens */
+            height: 100%;
         }
-    }
 
-    @media (min-width: 768px) {
-        .slider-form {
-            width: 75%;
-            /* 75% width on medium and larger screens */
+        .product-details,
+        .service-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            font-size: 12px;
         }
-    }
-    .star-rating {
-        font-size: 24px;
-        cursor: pointer;
-        color: #ccc;
-    }
-    
-</style>
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 10;
+        }
+    </style>
+@endsection
+
 <div>
-    <div class="container">
+    <div class="container" x-data="{ tab: @entangle('tab') }">
         <div class="row">
             <div class="col-12 mt-4">
-                @if(auth()->user()->bg_image)
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                @if (auth()->user()->bg_image)
+                    <img class="w-100 h-250 object-fit-cover rounded-4"
+                        src="{{ asset('storage/' . auth()->user()->bg_image) }}">
                 @else
                     <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
                 @endif
             </div>
+
             <div class="col-12">
                 <div class="row">
                     <div class="col-lg-2 col-md-3 mb-3 col-6 position-relative" style="margin-top:-70px">
-                        @if(auth()->user()->profile_image)
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                        @if (auth()->user()->profile_image)
+                            <img class="w-100 ms-md-4 h-100"
+                                src="{{ asset('storage/' . auth()->user()->profile_image) }}">
                         @else
                             <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
+
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex align-items-center ms-md-2">
                             <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
-                            
                         </div>
                         <div class="ms-md-3 mt-2">
                             Individual
                         </div>
                     </div>
+
                     <div class="col-md-5 p-3">
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end">
-                            {{-- <a id="openReviewSliderBtn" class="btn bg-secondary-subtle me-2">
-
-                                <svg class="me-2" width="18" height="20" viewBox="0 0 18 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M8.7281 19.9137C8.83884 19.9715 8.96266 20.0009 9.08649 20C9.21032 19.999 9.33314 19.9686 9.44489 19.9097L13.0128 18.0025C14.0245 17.4631 14.8168 16.8601 15.435 16.1579C16.779 14.6282 17.5129 12.6758 17.4998 10.6626L17.4575 4.02198C17.4535 3.25711 16.9511 2.57461 16.2082 2.32652L9.57073 0.0995642C9.17106 -0.0357592 8.73313 -0.0328174 8.3405 0.106428L1.72824 2.41281C0.989299 2.67071 0.495998 3.35811 0.500024 4.12396L0.542307 10.7597C0.555395 12.7758 1.31448 14.7194 2.68062 16.2334C3.3048 16.9258 4.10415 17.52 5.12699 18.0505L8.7281 19.9137ZM7.78119 12.1106C7.93019 12.2538 8.12348 12.3244 8.31678 12.3225C8.51007 12.3215 8.70236 12.2489 8.84934 12.1038L12.7484 8.25981C13.0414 7.97053 13.0384 7.50572 12.7424 7.22037C12.4454 6.93501 11.9672 6.93697 11.6742 7.22625L8.3057 10.5466L6.92647 9.2208C6.62949 8.93545 6.15229 8.93839 5.85832 9.22767C5.56536 9.51694 5.56838 9.98175 5.86537 10.2671L7.78119 12.1106Z"
-                                        fill="black" />
-                                </svg>
-                                Expert Review
-                            </a> --}}
                             <a href="{{ route('user.edit') }}" class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -103,74 +92,124 @@
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="col-md-12">
-                <button class="badge rounded-pill text-bg-dark fs-6 p-3 m-1">Product Whishlist</button>
-                <button class="badge rounded-pill text-bg-light fs-6 p-3 m-1">Service Whishlist</button>
-            </div>
-            <div class="col-12 mt-3 mb-5">
-                <div class="row">
-                    <div class=" col-12 text-center">
-                        <img src="{{ asset('assets/image/empty.png') }}">
-                    </div>
-                    <div class="text-center col-12">
-                        <i class="d-block">Your wishlist is looking a little lonely!</i>
-                        <i>Start exploring and add your favourites!</i>
-                    </div>
-                </div>
 
+            <hr>
+
+            <div class="col-md-12">
+                <button x-on:click="tab = 'product'; $wire.set('tab', 'product')"
+                    :class="tab === 'product' ? 'text-bg-dark' : 'text-bg-light'"
+                    class="badge rounded-pill fs-6 p-3 m-1">
+                    Product Wishlist
+                </button>
+                <button x-on:click="tab = 'service'; $wire.set('tab', 'service')"
+                    :class="tab === 'service' ? 'text-bg-dark' : 'text-bg-light'"
+                    class="badge rounded-pill fs-6 p-3 m-1">
+                    Service Wishlist
+                </button>
+            </div>
+
+            <div class="col-12 mt-3 mb-5">
+                <div class="row" x-show="tab === 'product'">
+                    @if ($this->products->count() > 0)
+                        @foreach ($this->products as $product)
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
+                                <div class="border rounded product-card">
+                                    <button class="btn btn-sm btn-danger remove-btn view-product" wire:click="removeFromWishlist({{ $product->id }})">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <div id="carouselProduct{{ $product->id }}" class="carousel slide product-carousel" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @foreach ($product->images as $key => $productImage)
+                                                <div class="carousel-item @if($key == 0) active @endif">
+                                                    <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </button>
+                                    </div>
+                                    <div class="product-details">
+                                        <div>
+                                            <span class="d-block p-1">{{ substr($product->description, 0, 50) }}</span>
+                                            <span class="text-secondary fw-light p-1">{{ $product->brand_name }}</span>
+                                            @if ($product->show_price)
+                                                <span class="d-block p-1">Rs.{{ $product->price }}<span class="p-1 text-secondary fw-light">per</span>Unit</span>
+                                            @else
+                                                <span class="d-block p-1">Contact Us for pricing</span>
+                                            @endif
+                                        </div>
+                                        <a href="tel:{{ $product->user->phone }}" class="btn btn-dark w-100 mt-2">
+                                            <i class="fa fa-phone"></i> Call Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="col-12 text-center">
+                            <img src="{{ asset('assets/image/empty.png') }}" alt="Empty Wishlist">
+                        </div>
+                        <div class="text-center col-12">
+                            <i class="d-block">Your wishlist is looking a little lonely!</i>
+                            <i>Start exploring and add your favourites!</i>
+                        </div>
+                    @endif
+                </div>
+                <div class="row" x-show="tab === 'service'">
+                    @if ($this->services->count() > 0)
+                        @foreach ($this->services as $service)
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
+                                <div class="border rounded service-card">
+                                    <button class="btn btn-sm btn-danger remove-btn view-service"  wire:click="removeFromWishlist({{ $service->id }})">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <div id="carouselProduct{{ $service->id }}" class="carousel slide service-carousel" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @foreach ($service->images as $key => $serviceImage)
+                                                <div class="carousel-item @if($key == 0) active @endif">
+                                                    <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $service->id }}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $service->id }}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </button>
+                                    </div>
+                                    <div class="service-details">
+                                        <div>
+                                            <span class="d-block p-1">{{ substr($service->description, 0, 50) }}</span>
+                                            <span class="text-secondary fw-light p-1">{{ $service->provider }}</span>
+                                            @if ($service->show_price)
+                                                <span class="d-block p-1">Rs.{{ $service->price }}<span class="p-1 text-secondary fw-light">per</span>Service</span>
+                                            @else
+                                                <span class="d-block p-1">Contact Us for pricing</span>
+                                            @endif
+                                        </div>
+                                        <a href="tel:{{ $service->user->phone }}" class="btn btn-dark w-100 mt-2">
+                                            <i class="fa fa-phone"></i> Call Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="col-12 text-center">
+                            <img src="{{ asset('assets/image/empty.png') }}" alt="Empty Wishlist">
+                        </div>
+                        <div class="text-center col-12">
+                            <i class="d-block">Your wishlist is looking a little lonely!</i>
+                            <i>Start exploring and add your favourites!</i>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-    {{-- @include('livewire.service.partial.service-slider') --}}
-    {{-- @include('livewire.service.partial.review-slider') --}}
 </div>
-
-<script>
-    // Toggle slider form on button click
-    //product slider
-    const openSliderBtn = document.getElementById("openSliderBtn");
-    const sliderForm = document.querySelector(".slider-form");
-    const closeSliderBtn = document.getElementById("closeSliderBtn");
-
-    openSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.toggle("open");
-    });
-
-    closeSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.remove("open");
-    });
-
-    //review slider
-    const openReviewSliderBtn = document.getElementById("openReviewSliderBtn");
-    const reviewSliderForm = document.getElementById("reviewSlider");
-    const closeReviewSliderBtn = document.getElementById("closeReviewSliderBtn");
-
-    openReviewSliderBtn.addEventListener("click", function() {
-        reviewSliderForm.classList.toggle("open");
-    });
-
-    closeReviewSliderBtn.addEventListener("click", function() {
-        reviewSliderForm.classList.remove("open");
-    });
-
-    const stars = document.querySelectorAll('.star-rating i');
-
-    stars.forEach(star => {
-        star.addEventListener('click', function () {
-            let value = this.getAttribute('data-value');
-            // ratingValue.innerText = value;
-
-            // Update star colors
-            stars.forEach((s, index) => {
-                if (index < value) {
-                    s.classList.add('text-success');
-                    // s.classList.remove('fa-star-o');
-                } else {
-                    // s.classList.add('fa-star-o');
-                    s.classList.remove('text-success');
-                }
-            });
-        });
-    });
-</script>
