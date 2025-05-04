@@ -1,6 +1,8 @@
 <nav class="topbar navbar-light bg-white sticky-top">
     <div class="ps-md-5 ps-2" onclick="toggleMobileSidebar()">
-        <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
+        <a href="{{ route('home') }}">
+            <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
+        </a>
     </div>
     @if(str_contains(request()->path(), 'admin'))
     <div class="page-title">Admin Dashboard</div>
