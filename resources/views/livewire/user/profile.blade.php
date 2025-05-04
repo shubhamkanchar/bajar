@@ -114,9 +114,7 @@
                         @foreach ($this->products as $product)
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
                                 <div class="border rounded product-card">
-                                    <button class="btn btn-sm btn-danger remove-btn view-product" wire:click="removeFromWishlist({{ $product->id }})">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                                    <i class="fa fa-trash text-danger remove-btn" wire:click="removeFromWishlist({{ $product->id }})"></i>
                                     <div id="carouselProduct{{ $product->id }}" class="carousel slide product-carousel" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                             @foreach ($product->images as $key => $productImage)
@@ -164,9 +162,7 @@
                         @foreach ($this->services as $service)
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
                                 <div class="border rounded service-card">
-                                    <button class="btn btn-sm btn-danger remove-btn view-service"  wire:click="removeFromWishlist({{ $service->id }})">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                                        <i class="fa fa-trash text-danger remove-btn" wire:click="removeFromWishlist({{ $service->id }})"></i>
                                     <div id="carouselProduct{{ $service->id }}" class="carousel slide service-carousel" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                             @foreach ($service->images as $key => $serviceImage)
