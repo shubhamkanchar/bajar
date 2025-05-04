@@ -144,7 +144,7 @@
             </div>
             <div class="col-12 mt-3 product-list">
                 @if(count($this->allProducts) == 0)
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 product-card">
                         <a id="openSliderBtn">
                             <div class="dashed-border ratio ratio-add-product">
                                 <span class="text-center p-4" style="top: 25%">
@@ -157,50 +157,52 @@
                     </div>
                 @endif
                 @foreach ($this->allProducts as $key => $products)
-                    <h6 class="fw-bold">{{$key}}</h6>
-                    <div class="row mb-2">
-                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                            <a id="openSliderBtn">
-                                {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
-                                <div class="dashed-border ratio ratio-add-product">
-                                    <span class="text-center p-4" style="top: 25%">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
-                                        <div class="fs-4 fw-bold">Add Product</div>
-                                        <small>Adding more products improve your search rankings</small>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
-                        @foreach ($products as $product)
-                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                                <div class="border rounded position-relative">
-                                    <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            @foreach ($product->images as $key => $productImage)
-                                                <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
-                                                    <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
+                    <div class="mb-4">
+                        <h6 class="fw-bold">{{$key}}</h6>
+                        <div class="row mb-2">
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 product-card">
+                                <a id="openSliderBtn">
+                                    {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
+                                    <div class="dashed-border ratio ratio-add-product">
+                                        <span class="text-center p-4" style="top: 25%">
+                                            <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
+                                            <div class="fs-4 fw-bold">Add Product</div>
+                                            <small>Adding more products improve your search rankings</small>
+                                        </span>
                                     </div>
-                                    <div class="ratio ratio ratio-16x9">
-                                        <div class="p-2 text-center fw-bold"> {{ $product->description }}</div>
-                                    </div>
-                                    
-                                    <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                        <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct" data-id="{{ $product->id }}"></i>
-                                    </a>
-                                </div>
+                                </a>
                             </div>
-                        @endforeach
+                            @foreach ($products as $product)
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 editProduct" data-id="{{ $product->id }}">
+                                    <div class="border rounded position-relative">
+                                        <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                @foreach ($product->images as $key => $productImage)
+                                                    <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                        <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                        <div class="ratio ratio ratio-16x9">
+                                            <div class="p-2 text-center fw-bold"> {{ $product->description }}</div>
+                                        </div>
+                                        
+                                        <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct" data-id="{{ $product->id }}"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -428,6 +430,7 @@
                 </div>
             </form>
         </div>
+        @dd($errors)
     </div>
 </div>
 @section('style')
@@ -481,7 +484,8 @@
     const closeSliderBtn = document.getElementById("closeSliderBtn");
 
     document.querySelector(".product-list").addEventListener("click", function (event) {
-        if (event.target.classList.contains("openSlider")) {
+    
+        if (event.target.classList.contains("product-card") || event.target.classList.contains("openSlider")) {
             sliderForm.classList.toggle("open");
         }
     });

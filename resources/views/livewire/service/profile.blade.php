@@ -154,7 +154,7 @@
             <div class="col-12 mt-3 service-list">
                 @if(count($this->allServices) == 0)
                     <div class="row mb-2">
-                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12" class="openSlider">
+                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 service-card" class="openSlider">
                             <a id="openSliderBtn">
                                 {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
                                 <div class="dashed-border ratio ratio-add-product">
@@ -169,49 +169,51 @@
                     </div>
                 @endif
                 @foreach ($this->allServices as $categoryName => $services) 
-                    <h6 class="fw-bold">{{$categoryName}}</h6> 
-                    <div class="row mb-2">
-                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                            <a id="openSliderBtn">
-                                <div class="dashed-border ratio ratio-add-product">
-                                    <span class="text-center p-4" style="padding-top: 30% !important;">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
-                                        <div class="fs-5 fw-bold">Add Previous Work</div>
-                                        <small>Adding more products improve your search rankings</small>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>   
-                        @foreach ($services as $service)
-                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12">
-                                <div class="border rounded position-relative">
-                                    <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            @foreach ($service->images as $key => $serviceImage)
-                                                <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
-                                                    <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
-                                                </div>
-                                            @endforeach
+                    <div class="mb-3">
+                        <h6 class="fw-bold">{{$categoryName}}</h6> 
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 service-card">
+                                <a id="openSliderBtn">
+                                    <div class="dashed-border ratio ratio-add-product">
+                                        <span class="text-center p-4" style="padding-top: 30% !important;">
+                                            <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
+                                            <div class="fs-5 fw-bold">Add Previous Work</div>
+                                            <small>Adding more products improve your search rankings</small>
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>   
+                            @foreach ($services as $service)
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 editService" data-id="{{ $service->id }}">
+                                    <div class="border rounded position-relative">
+                                        <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                @foreach ($service->images as $key => $serviceImage)
+                                                    <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
+                                                        <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
+                                        <div class="ratio ratio ratio-16x9">
+                                            <div class="p-2 fw-bold"> {{ $this->limitText($service->work_brief) }}</div>
+                                        </div>
+                                        
+                                        <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService" data-id="{{ $service->id }}"></i>
+                                        </a>
                                     </div>
-                                    <div class="ratio ratio ratio-16x9">
-                                        <div class="p-2 fw-bold"> {{ $this->limitText($service->description) }}</div>
-                                    </div>
-                                    
-                                    <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                        <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService" data-id="{{ $service->id }}"></i>
-                                    </a>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -278,7 +280,7 @@
     const closeSliderBtn = document.getElementById("closeSliderBtn");
 
     document.querySelector(".service-list").addEventListener("click", function (event) {
-        if (event.target.classList.contains("openSlider")) {
+        if (event.target.classList.contains("service-card") || event.target.classList.contains("openSlider")) {
             sliderForm.classList.toggle("open");
         }
     });
