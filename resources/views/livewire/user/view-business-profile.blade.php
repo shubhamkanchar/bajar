@@ -248,7 +248,7 @@
         </div>
     </div>
     
-    <div class="slider-form" wire:ignore.self>
+    <div class="slider-form" wire:ignore.self x-cloak x-data="{showDetailSlider: @entangle("showDetailSlider")}" x-show="showDetailSlider" x-on:click.away="showDetailSlider = false; $wire.set('showDetailSlider', false)">
         <div class="slider-content">
             <div class="row">
                 <div class="col-md-8">
@@ -262,15 +262,15 @@
             </div>
     
             @if($user->offering === 'product')
-                <div class="row">            
-                    <div class="col-md-5 mb-3">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
                         <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner ratio ratio-1x1">
+                            <div class="carousel-inner ratio">
                                 @foreach($product_images as $key => $image)
                                     @if($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
                                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                                             <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}" 
-                                                 class="d-block w-100 rounded" alt="Product Image">
+                                                 class="d-block w-100 rounded carousel-fixed-image" alt="Product Image">
                                         </div>
                                     @endif
                                 @endforeach
@@ -287,18 +287,18 @@
                             @endif
                         </div>
                     </div>
-                    
-                    <div class="col-md-7">
+    
+                    <div class="col-md-12">
                         <div class="product-details">
                             <h4 class="fw-bold">{{ $product_name }}</h4>
                             <p class="text-muted">{{ $brand_name }}</p>
                             <hr>
-                            
+    
                             <div class="mb-3">
                                 <h6>Description</h6>
                                 <p>{{ $description }}</p>
                             </div>
-                            
+    
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <h6>Category</h6>
@@ -310,7 +310,7 @@
                                         @endforeach
                                     </p>
                                 </div>
-                                
+    
                                 @if($showPrice && $price)
                                 <div class="col-md-6 mb-3">
                                     <h6>Price</h6>
@@ -318,7 +318,7 @@
                                 </div>
                                 @endif
                             </div>
-                            
+    
                             <div class="d-grid gap-2 mt-4">
                                 <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
                                     <i class="fas fa-phone me-2"></i> Call Us
@@ -329,14 +329,14 @@
                 </div>
             @else
                 <div class="row">
-                    <div class="col-md-5 mb-3">
+                    <div class="col-md-12 mb-3">
                         <div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner ratio ratio-1x1">
+                            <div class="carousel-inner ratio">
                                 @foreach($service_images as $key => $image)
                                     @if($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
                                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                                             <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}" 
-                                                 class="d-block w-100 rounded" alt="Service Image">
+                                                 class="d-block w-100 rounded carousel-fixed-image" alt="Service Image">
                                         </div>
                                     @endif
                                 @endforeach
@@ -353,17 +353,17 @@
                             @endif
                         </div>
                     </div>
-                    
-                    <div class="col-md-7">
+    
+                    <div class="col-md-12">
                         <div class="service-details">
-                            <h4 class="fw-bold">{{ $service_description }}</h4>
+                            <h4 class="fw-bold">{{ $work_brief }}</h4>
                             <hr>
-                            
+    
                             <div class="mb-3">
-                                <h6>Work Brief</h6>
-                                <p>{{ $work_brief }}</p>
+                                <h6>Description</h6>
+                                <p>{{ $service_description }}</p>
                             </div>
-                            
+    
                             <div class="mb-3">
                                 <h6>Category</h6>
                                 <p>
@@ -374,7 +374,7 @@
                                     @endforeach
                                 </p>
                             </div>
-                            
+    
                             <div class="d-grid gap-2 mt-4">
                                 <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
                                     <i class="fas fa-phone me-2"></i> Call Us
@@ -384,7 +384,7 @@
                     </div>
                 </div>
             @endif
-        </div>    
+        </div>
     </div>
     <div class="slider-review-form" x-cloak x-data="{showReviewForm: @entangle("showReviewForm")}" x-show="showReviewForm" x-on:click.away="showReviewForm = false; $wire.set('showReviewForm', false)" wire:ignore.self>
         <div class="slider-content">
@@ -545,7 +545,7 @@
     .slider-form {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: 0;
         /* Hide off-screen initially */
         width: 100%;
         height: 100%;
@@ -570,9 +570,6 @@
         overflow: scroll;
     }
     /* Show the slider when active (slide in from the right) */
-    .slider-form.open {
-        right: 0;
-    }
     /* Form content styling */
     .slider-content {
         padding: 30px;
@@ -584,6 +581,10 @@
         .slider-form,.slider-review-form {
             width: 100%;
             /* Full width on small screens */
+        }
+        .carousel-fixed-image,
+        .carousel-inner.ratio {
+            height: 250px;
         }
     }
 
@@ -626,6 +627,15 @@
     .star-color-outer {
         color: #CCCCCC;                 /* Gray color for unfilled stars */
     }
+    .carousel-fixed-image {
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .carousel-inner.ratio {
+        height: 400px; /* Ensures the wrapper doesn't stretch too much */
+    }
+
 
 
 </style>
@@ -637,14 +647,8 @@
     const sliderForm = document.querySelector(".slider-form");
     const closeSliderBtn = document.getElementById("closeSliderBtn");
 
-    document.querySelector(".product-list").addEventListener("click", function (event) {
-        if (event.target.classList.contains("openSlider")) {
-            sliderForm.classList.toggle("open");
-        }
-    });
-
     closeSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.remove("open");
+        @this.set('showDetailSlider', false);
         @this.call('resetProduct')
     });
 
@@ -655,7 +659,7 @@
             let productId = target.getAttribute('data-id');
             
             @this.call('editProduct', productId).then(function() {
-                sliderForm.classList.toggle("open");
+                @this.set('showDetailSlider', true);
             });
         }
     });

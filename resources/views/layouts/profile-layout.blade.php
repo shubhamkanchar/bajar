@@ -81,6 +81,7 @@
             flex-grow: 1;
             padding-top: 60px;
         }
+        
     </style>
     @stack('style')
     @yield('style')

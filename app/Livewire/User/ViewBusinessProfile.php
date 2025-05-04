@@ -58,6 +58,7 @@ class ViewBusinessProfile extends Component
     //rating form
     public $authUserRating;
     public $showReviewForm = false;   
+    public $showDetailSlider = false;   
     public $is_location_accurate; 
     public $is_contact_accurate; 
     public $communication_and_professionalism;
