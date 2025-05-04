@@ -430,7 +430,6 @@
                 </div>
             </form>
         </div>
-        @dd($errors)
     </div>
 </div>
 @section('style')
