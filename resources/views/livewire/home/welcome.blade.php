@@ -16,33 +16,35 @@
                             data-item="phone" wire:click="setSection('service')">Services</button>
                     </div>
                 </div>
-                <div  x-data="{open: @entangle('isOpen')}" class="d-md-flex position-relative justify-content-center mb-4">
+                <div class="d-md-flex position-relative justify-content-center mb-4">
                     <div class="bg-white rounded-5 p-2 border me-2" x-data="{ focused: false }"
                         :class="{ 'border-2 border-dark': focused }">
                         <input class="form-control rounded-5 mt-1 border border-0 bg-white" name="city"
-                            placeholder="City" @focus="focused = true" @blur="focused = false" x-on:click="open = true; $wire.set('isOpen', true)"
+                            placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle"
                             wire:model="selectedCity" readonly />
                     </div>
-                    <div x-show="open" x-on:click.away="open = false; $wire.set('isOpen', false); $wire.set('search', '');" class="position-absolute mt-2 w-sp shadow bg-white border rounded-4 p-3"
-                        style="z-index: 1050; max-height: 300px; overflow-y: auto;top:65px">
-                        <input type="text" class="form-control mb-3" placeholder="Search"
-                            wire:model.live="search">
+                    @if ($isOpen)
+                        <div class="position-absolute mt-2 w-sp shadow bg-white border rounded-4 p-3"
+                            style="z-index: 1050; max-height: 300px; overflow-y: auto;top:65px">
+                            <input type="text" class="form-control mb-3" placeholder="Search"
+                                wire:model.live="search">
 
-                        @if (count($this->cities) > 0)
-                            <div class="row row-cols-2 row-cols-md-4 g-2">
-                                @foreach ($this->cities as $city)
-                                    <div>
-                                        <button type="button" class="btn w-100 text-start {$selectedCity == $city ? 'btn-dark' : 'btn-light'}"
-                                            wire:click="selectCity('{{ $city }}')">
-                                            {{ $city }}
-                                        </button>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center text-muted">No results found</div>
-                        @endif
-                    </div>
+                            @if (count($cities) > 0)
+                                <div class="row row-cols-2 row-cols-md-4 g-2">
+                                    @foreach ($cities as $city)
+                                        <div>
+                                            <button type="button" class="btn btn-light w-100 text-start"
+                                                wire:click="selectCity('{{ $city }}')">
+                                                {{ $city }}
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center text-muted">No results found</div>
+                            @endif
+                        </div>
+                    @endif
                     <div class="d-flex align-items-center justify-content-between bg-white rounded-5 p-2 border mt-2 mt-md-0"
                         x-data="{ focused: false }" :class="{ 'border-2 border-dark': focused }">
                         <svg class="mx-2" width="40" height="40" viewBox="0 0 20 20" fill="none"
@@ -51,13 +53,21 @@
                                 d="M7.39687 14.7937C5.32954 14.7937 3.5799 14.0778 2.14794 12.6458C0.715979 11.2138 0 9.4642 0 7.39687C0 5.32954 0.715979 3.5799 2.14794 2.14794C3.5799 0.715979 5.32954 0 7.39687 0C9.4642 0 11.2138 0.715979 12.6458 2.14794C14.0778 3.5799 14.7937 5.32954 14.7937 7.39687C14.7937 8.23139 14.661 9.01849 14.3954 9.75818C14.1299 10.4979 13.7696 11.1522 13.3144 11.7212L19.6871 18.0939C19.8957 18.3025 20 18.568 20 18.8905C20 19.2129 19.8957 19.4784 19.6871 19.6871C19.4784 19.8957 19.2129 20 18.8905 20C18.568 20 18.3025 19.8957 18.0939 19.6871L11.7212 13.3144C11.1522 13.7696 10.4979 14.1299 9.75818 14.3954C9.01849 14.661 8.23139 14.7937 7.39687 14.7937ZM7.39687 12.5178C8.81935 12.5178 10.0284 12.0199 11.0242 11.0242C12.0199 10.0284 12.5178 8.81935 12.5178 7.39687C12.5178 5.9744 12.0199 4.76529 11.0242 3.76956C10.0284 2.77383 8.81935 2.27596 7.39687 2.27596C5.9744 2.27596 4.76529 2.77383 3.76956 3.76956C2.77383 4.76529 2.27596 5.9744 2.27596 7.39687C2.27596 8.81935 2.77383 10.0284 3.76956 11.0242C4.76529 12.0199 5.9744 12.5178 7.39687 12.5178Z"
                                 fill="#CCCCCC" />
                         </svg>
-                        <input wire:model.defer="looking_for" class="form-control border border-0 rounded-5 me-2 bg-white"
+                        <input wire:model="productName" class="form-control border border-0 rounded-5 me-2 bg-white"
                             type="text" placeholder="Search" @focus='focused = true' @blur="focused = false">
+                        @if ($searchStarted)
+                            <button type="button" class="btn btn-dark rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
+                                wire:click="clearSearch()">Clear</button>
+                        @else
+                            <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
+                                :class="{ 'btn-dark': focused, 'btn-secondary': !focused }"
+                                wire:click="searchProduct()">Search</button>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            @if (count($this->sellers) == 0)
+            @if (empty($sellers))
                 {{-- Top Material Categories --}}
                 <div class="col-md-12 text-center" wire:show="section == 'product'" x-transition.duration.500ms>
                     {{-- <div class="text-warning mt-5 fw-bold fs-5">Material</div> --}}
@@ -93,16 +103,14 @@
                 </div>
             @endif
 
-            @if (count($this->sellers) > 0)
+            @if (count($sellers) > 0)
                 <div class="container py-4">
                     <h5 class="mb-4">
-
-                        Top {{ $section == "product" ? "Seller" : "Service providers"}} 
-                        {{-- for <strong>{{ $productName }}</strong> --}}
+                        Top Sellers for <strong>{{ $productName }}</strong>
                     </h5>
 
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-                        @foreach ($this->sellers as $seller)
+                        @foreach ($sellers as $seller)
                             <div class="col">
                                 <div class="card h-100 shadow-sm">
                                     <div class="ratio ratio-21x9">
@@ -172,7 +180,7 @@
                     </div>
                 </div>
             @else
-                @if ($looking_for != '')
+                @if ($searchStarted)
                     <div class="container py-4 text-center">
                         <h4 class="mb-4">
                             No Results Found
@@ -217,7 +225,7 @@
             </div>
             @endif
 
-            @if (count($this->sellers) == 0 && count($blogs) > 0)
+            @if (empty($sellers) && count($blogs) > 0)
                 {{-- Blogs --}}
                 <div class="col-md-12 text-center justify-content-center">
                     {{-- <div class="text-warning mt-5 fw-bold fs-5">Blogs</div> --}}

@@ -19,9 +19,10 @@ class Welcome extends Component
     public $data = [];
     public $search = '';
     public $isOpen = false;
-    // public $cities = [];
+    public $cities = [];
     public $selectedCity = '';
     public $productName;
+    public $sellers = [];
     public $blogs = [];
     public $searchStarted = false;
 
@@ -32,13 +33,6 @@ class Welcome extends Component
         $this->ads = Advertisement::all();
         $this->section = 'product';
         $this->data = Category::where('type', $this->section)->get();
-        $user = Auth::user();
-        if($user) {
-            $this->selectedCity = $user->address?->city ?? '';
-        }
-        $this->updatedSearch();
-        $this->isOpen = false;
-
     }
 
     public function viewBlog($slug)
@@ -49,26 +43,39 @@ class Welcome extends Component
     public function updatedSearch()
     {
         $this->isOpen = true;
+        $this->cities = City::where('title', 'like', '%' . $this->search . '%')
+            ->limit(50)
+            ->pluck('title')
+            ->toArray();
     }
 
-    #[Computed]
-    public function cities() {
-        return City::where('title', 'like', '%' . $this->search . '%')
-        ->limit(50)
-        ->pluck('title')
-        ->toArray();
-    }
-
-    #[Computed]
-    public function sellers() {
-        return User::with(['address', 'category'])
+    public function searchProduct()
+    {
+        if ($this->selectedCity) {
+            $this->searchStarted = true;
+            $this->sellers = User::with(['address', 'category'])
                 ->whereHas('address', function ($query) {
                     $query->where('addresses.city', $this->selectedCity);
                 })
                 ->whereNotIn('role', ['superadmin', 'admin'])
                 ->where('offering', $this->section)
                 ->get();
+        } else {
+            $text = $this->section == 'product' ? 'product sellers' : 'service providers';
+            $this->dispatch('notify', [
+                'type' => 'Error',
+                'message' => 'Please select city to search ' . $text
+            ]);
+        }
     }
+
+    public function clearSearch()
+    {
+        $this->searchStarted = false;
+        $this->productName = '';
+        $this->sellers = [];
+    }
+
 
     public function selectCity($city)
     {
