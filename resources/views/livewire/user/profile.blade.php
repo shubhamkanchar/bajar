@@ -48,7 +48,11 @@
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . auth()->user()->bg_image) }}">
                 @else
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <picture>
+                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
+                        <img class="w-100 object-fit-cover rounded-4"
+                            src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                    </picture>
                 @endif
             </div>
 
@@ -114,19 +118,25 @@
                         @foreach ($this->products as $product)
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
                                 <div class="border rounded product-card">
-                                    <i class="fa fa-trash text-danger remove-btn" wire:click="removeFromWishlist({{ $product->id }})"></i>
-                                    <div id="carouselProduct{{ $product->id }}" class="carousel slide product-carousel" data-bs-ride="carousel">
+                                    <i class="fa fa-trash text-danger remove-btn"
+                                        wire:click="removeFromWishlist({{ $product->id }})"></i>
+                                    <div id="carouselProduct{{ $product->id }}" class="carousel slide product-carousel"
+                                        data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                             @foreach ($product->images as $key => $productImage)
-                                                <div class="carousel-item @if($key == 0) active @endif">
-                                                    <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                                <div
+                                                    class="carousel-item @if ($key == 0) active @endif">
+                                                    <img src="{{ asset('storage/' . $productImage->path) }}"
+                                                        class="d-block w-100" alt="Product Image">
                                                 </div>
                                             @endforeach
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon"></span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
                                             <span class="carousel-control-next-icon"></span>
                                         </button>
                                     </div>
@@ -135,7 +145,8 @@
                                             <span class="d-block p-1">{{ substr($product->description, 0, 50) }}</span>
                                             <span class="text-secondary fw-light p-1">{{ $product->brand_name }}</span>
                                             @if ($product->show_price)
-                                                <span class="d-block p-1">Rs.{{ $product->price }}<span class="p-1 text-secondary fw-light">per</span>Unit</span>
+                                                <span class="d-block p-1">Rs.{{ $product->price }}<span
+                                                        class="p-1 text-secondary fw-light">per</span>Unit</span>
                                             @else
                                                 <span class="d-block p-1">Contact Us for pricing</span>
                                             @endif
@@ -162,28 +173,38 @@
                         @foreach ($this->services as $service)
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
                                 <div class="border rounded service-card">
-                                        <i class="fa fa-trash text-danger remove-btn" wire:click="removeFromWishlist({{ $service->id }})"></i>
-                                    <div id="carouselProduct{{ $service->id }}" class="carousel slide service-carousel" data-bs-ride="carousel">
+                                    <i class="fa fa-trash text-danger remove-btn"
+                                        wire:click="removeFromWishlist({{ $service->id }})"></i>
+                                    <div id="carouselProduct{{ $service->id }}"
+                                        class="carousel slide service-carousel" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                             @foreach ($service->images as $key => $serviceImage)
-                                                <div class="carousel-item @if($key == 0) active @endif">
-                                                    <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                                <div
+                                                    class="carousel-item @if ($key == 0) active @endif">
+                                                    <img src="{{ asset('storage/' . $serviceImage->path) }}"
+                                                        class="d-block w-100" alt="Service Image">
                                                 </div>
                                             @endforeach
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $service->id }}" data-bs-slide="prev">
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselProduct{{ $service->id }}"
+                                            data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon"></span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $service->id }}" data-bs-slide="next">
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carouselProduct{{ $service->id }}"
+                                            data-bs-slide="next">
                                             <span class="carousel-control-next-icon"></span>
                                         </button>
                                     </div>
                                     <div class="service-details">
                                         <div>
-                                            <span class="d-block p-1">{{ substr($service->description, 0, 50) }}</span>
+                                            <span
+                                                class="d-block p-1">{{ substr($service->description, 0, 50) }}</span>
                                             <span class="text-secondary fw-light p-1">{{ $service->provider }}</span>
                                             @if ($service->show_price)
-                                                <span class="d-block p-1">Rs.{{ $service->price }}<span class="p-1 text-secondary fw-light">per</span>Service</span>
+                                                <span class="d-block p-1">Rs.{{ $service->price }}<span
+                                                        class="p-1 text-secondary fw-light">per</span>Service</span>
                                             @else
                                                 <span class="d-block p-1">Contact Us for pricing</span>
                                             @endif

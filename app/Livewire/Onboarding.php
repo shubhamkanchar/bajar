@@ -14,7 +14,7 @@ class Onboarding extends Component
 {
     public $step = 1;
     public $userType;
-    public $totalSteps;
+    public $totalSteps=3;
 
     // Step 2 fields for Individual
     public $name;
@@ -50,7 +50,7 @@ class Onboarding extends Component
     // Define validation rules for step 2
     protected function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:255',
             'phone' => [
                 'required',
@@ -67,6 +67,13 @@ class Onboarding extends Component
             'state' => 'required|string',
             'city' => 'required|string',
         ];
+
+        if($this->step == 2 && $this->userType == 'business'){
+            $rules['address'] = 'required';
+            $rules['gst_number'] = 'required|min:15|max:15';
+            $rules['google_map_link'] = 'required|url';
+        }
+        return $rules;
     }
 
     // Define custom messages for validation errors
@@ -77,7 +84,7 @@ class Onboarding extends Component
         'email.email' => 'Please enter a valid email address.',
         'state.required' => 'Please select a state.',
         'city.required' => 'Please select a city.',
-        // 'google_map_link.url' => 'Please enter a valid Google Map link.',
+        'google_map_link' => 'Please enter a valid Google Map link.',
     ];
 
 
@@ -89,6 +96,8 @@ class Onboarding extends Component
 
     public function nextStep()
     {
+        
+        
         if ($this->step !== 1) {
             $this->validate();
         }

@@ -22,7 +22,7 @@
             </div>
 
             <!-- Sorting Options -->
-            
+
 
             <template x-if="selectedState">
                 <span role="button"
@@ -117,7 +117,9 @@
                 </div>
             </template>
 
-            <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1 {{$expert == 1 ? 'border-dark bg-secondary-subtle' : ''}}" wire:click="setExpert()">
+            <span role="button"
+                class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1 {{ $expert == 1 ? 'border-dark bg-secondary-subtle' : '' }}"
+                wire:click="setExpert()">
                 Expert Reviewer
             </span>
         </div>
@@ -155,70 +157,75 @@
         </div>
     </div>
     <div class="row justify-content-center product-list p-2">
-        @foreach ($this->productSellers as $key => $data)
-            <div class="fw-bold text-secondary">
-                {{ $key }}
-            </div>
-            @foreach ($data as $seller)
-                <div class="col-12">
-                    <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
-                        <div class="col-12 col-md-3 border-end border-secondary">
-                            <div class="row">
-                                <div class="col-3">
-                                    <span class="ratio ratio-1x1 w-100">
-                                        <img src="{{ asset('storage/' . $seller->profile_image) }}"
-                                            class="d-block w-100 rounded" alt="Service Image">
-                                    </span>
-                                </div>
-                                <div class="text-secondary col-9">{{ $seller->name }}
-                                    <span class="d-block fw-bold">
-                                        @if($type == 'product')
-                                        <span>Product Seller</span>
-                                        @elseif($type == 'service')
-                                        <span>Service Provider</span>
-                                        @else
-                                            <span>Individual</span>
-                                        @endif
-                                    </span>
+        @if (count($this->productSellers) > 0)
+            @foreach ($this->productSellers as $key => $data)
+                <div class="fw-bold text-secondary">
+                    {{ $key }}
+                </div>
+                @foreach ($data as $seller)
+                    <div class="col-12">
+                        <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
+                            <div class="col-12 col-md-3 border-end border-secondary">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span class="ratio ratio-1x1 w-100">
+                                            <img src="{{ asset('storage/' . $seller->profile_image) }}"
+                                                class="d-block w-100 rounded" alt="Service Image">
+                                        </span>
+                                    </div>
+                                    <div class="text-secondary col-9">{{ $seller->name }}
+                                        <span class="d-block fw-bold">
+                                            @if ($type == 'product')
+                                                <span>Product Seller</span>
+                                            @elseif($type == 'service')
+                                                <span>Service Provider</span>
+                                            @else
+                                                <span>Individual</span>
+                                            @endif
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-3 border-end border-secondary">
-                            <span class="fw-bold "> {{ $seller->phone }} </span>
-                            <span class="d-block fw-bold text-wrap"> {{ $seller->email }} </span>
-                        </div>
+                            <div class="col-12 col-md-3 border-end border-secondary">
+                                <span class="fw-bold "> {{ $seller->phone }} </span>
+                                <span class="d-block fw-bold text-wrap"> {{ $seller->email }} </span>
+                            </div>
 
-                        <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary">Total Products</span>
-                            <span class="d-flex fw-bold">
-                                <span>{{ sprintf('%02d', $seller->product->count()) }}</span>
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-1 border-end border-secondary">
-                            <span class="text-secondary">Categories</span>
-                            <span class="d-flex fw-bold">
-                                <span>{{ sprintf('%02d', $seller->category->count()) }}</span>
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary">Standard</span>
-                            <span class="d-flex fw-bold">
-                                <span>{{ $seller->created_at }}</span>
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-1 text-end">
-                            <div class="d-flex">
-                                <a href="{{ route('business.edit', ['uuid' => $seller->uuid]) }}">
-                                    <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
-                                        role="button"></i>
-                                </a>
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2" role="button" wire:click="deleteProductSeller('{{$seller->uuid}}')"
-                                wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE"></i>
+                            <div class="col-12 col-md-2 border-end border-secondary">
+                                <span class="text-secondary">Total Products</span>
+                                <span class="d-flex fw-bold">
+                                    <span>{{ sprintf('%02d', $seller->product->count()) }}</span>
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-1 border-end border-secondary">
+                                <span class="text-secondary">Categories</span>
+                                <span class="d-flex fw-bold">
+                                    <span>{{ sprintf('%02d', $seller->category->count()) }}</span>
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-2 border-end border-secondary">
+                                <span class="text-secondary">Standard</span>
+                                <span class="d-flex fw-bold">
+                                    <span>{{ $seller->created_at }}</span>
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-1 text-end">
+                                <div class="d-flex">
+                                    <a href="{{ route('business.edit', ['uuid' => $seller->uuid]) }}">
+                                        <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
+                                            role="button"></i>
+                                    </a>
+                                    <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
+                                        role="button" wire:click="deleteProductSeller('{{ $seller->uuid }}')"
+                                        wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             @endforeach
-        @endforeach
+        @else
+            <div class="text-center h4 fw-bold">No data found</div>
+        @endif
     </div>
 </div>

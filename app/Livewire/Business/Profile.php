@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Business;
 
+use App\Models\BusinessCategory;
 use App\Models\BusinessTime;
 use App\Models\Category;
 use App\Models\Product;
@@ -20,10 +21,11 @@ class Profile extends Component
     public $editProductId;
     public $selectedCategory = 'all';
     public $user;
-    
+    public $allTags = ['Laravel', 'Vue', 'Livewire'];
+
     #[
         Validate(
-            rule: ['product_images.*' => 'required|image|max:1024'],
+            rule: ['product_images.product_image1' => 'required|image|max:1024'],
             message: [
                 'product_images.*.required' => 'Please add image.',
                 'product_images.*.image' => 'The image must be a valid image file.',
@@ -54,9 +56,10 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select category')]
     public $category;
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
-    public $product_tag_group_id;
+    public $product_tag = [];
 
-    public function mount(){
+    public function mount()
+    {
         $this->user = Auth::user();
     }
 
@@ -76,12 +79,12 @@ class Profile extends Component
             'user_id' => Auth::user()->id,
             'day' => date("l")
         ])->first();
-        if($time && $time['open_time'] && $time['close_time']) {
-            return date("g:i A", strtotime($time['open_time'])).' - '.date("g:i A", strtotime($time['close_time']));
+        if ($time && $time['open_time'] && $time['close_time']) {
+            return date("g:i A", strtotime($time['open_time'])) . ' - ' . date("g:i A", strtotime($time['close_time']));
         }
         return 'Closed';
     }
-    
+
     public function editProduct($id)
     {
         $product = Product::with('images')->findOrFail($id);
@@ -91,21 +94,21 @@ class Profile extends Component
         $this->description = $product->description;
         $this->category = $product->category_id;
         $this->showPrice = $product->show_price;
-        $this->product_tag_group_id = $product->product_tag_group_id;
+        $this->product_tag = explode(',', $product->product_tag);
         $this->price = $product->price;
         $this->quantity = $product->quantity;
-    
+
         foreach ($product->images as $index => $image) {
             $this->product_images['product_image' . ($index + 1)] = $image->path;
         }
 
         $this->isEdit = true;
     }
-    
+
     #[Computed]
     public function allProducts()
     {
-        if($this->selectedCategory == 'all') {
+        if ($this->selectedCategory == 'all') {
             return Product::with(['images', 'category'])->where('user_id', auth()->id())->get()->groupBy('category.title');
         }
         return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
@@ -114,20 +117,24 @@ class Profile extends Component
     #[Computed]
     public function categories()
     {
-        return Category::where('type', 'product')->get();
+        $businessCategories = BusinessCategory::where('user_id', Auth::user()->id)->pluck('category_id');
+        return Category::where('type', 'product')->whereIn('id', $businessCategories)->get();
     }
 
     #[Computed]
-    public function businessCategories() {
+    public function businessCategories()
+    {
         $ids = Product::where('user_id', auth()->id())->pluck('category_id');
         return Category::where('type', 'product')->whereIn('id', $ids)->get();
     }
 
-    public function changeCategory($value) {
+    public function changeCategory($value)
+    {
         $this->selectedCategory = $value;
     }
 
-    public function resetProduct() {
+    public function resetProduct()
+    {
         $this->reset([
             'isEdit',
             'editProductId',
@@ -137,7 +144,7 @@ class Profile extends Component
             'description',
             'category',
             'showPrice',
-            'product_tag_group_id',
+            'product_tag',
             'price',
             'quantity'
         ]);
@@ -151,17 +158,17 @@ class Profile extends Component
             'description' => 'required',
             'category' => 'required',
             'showPrice' => 'required',
-            'product_tag_group_id' => 'required',
+            'product_tag' => 'required',
             'price' => 'required|numeric',
             'quantity' => 'required',
         ];
-    
+
         // If creating a new product, ensure images are uploaded
         if (!$this->isEdit) {
-            $rules['product_images.*'] = 'required|image|max:1024';
+            $rules['product_images.product_image1'] = 'required|image|max:1024';
         } else {
             // If editing, allow either a file upload or an existing image string
-            $rules['product_images.*'] = 'required|max:2048';
+            $rules['product_images.product_image1'] = 'required|max:2048';
         }
         $this->validate($rules);
 
@@ -172,7 +179,7 @@ class Profile extends Component
         $product->description = $this->description;
         $product->category_id = $this->category;
         $product->show_price = $this->showPrice;
-        $product->product_tag_group_id = $this->product_tag_group_id;
+        $product->product_tag = implode(',', $this->product_tag);
         $product->price = $this->price;
         $product->quantity = $this->quantity;
         $product->user_id = auth()->id();
@@ -217,7 +224,7 @@ class Profile extends Component
             'type' => 'success',
             'message' => $this->isEdit ? 'Producted updated successfully' : 'Product added successfully'
         ]);
-
+        $this->product_tag = [];
         $this->reset([
             'isEdit',
             'editProductId',
@@ -227,17 +234,29 @@ class Profile extends Component
             'description',
             'category',
             'showPrice',
-            'product_tag_group_id',
+            'product_tag',
             'price',
             'quantity'
         ]);
+    }
+
+    protected $listeners = ['updateTags'];
+
+    public function updateTags($value)
+    {
+        $this->product_tag = $value;
+    }
+
+    public function updatedTags()
+    {
+        $this->dispatchBrowserEvent('reinitSelect2');
     }
 
     public function deleteProduct()
     {
         $product = $this->isEdit ? Product::findOrFail($this->editProductId) : new Product();
         $productImages = $product->images();
-        foreach($productImages as $image) {
+        foreach ($productImages as $image) {
             $imagePath = public_path("storage/{$image->path}");
 
             if (file_exists($imagePath)) {

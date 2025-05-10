@@ -118,17 +118,16 @@
                         @error('category') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-floating mb-2 mt-2">
-                        <select class="form-select" id="serviceTag" name="service_tag"
-                            aria-label="Floating label select example" wire:model="service_tag_group_id">
-                            <option selected>Open this select menu</option>
-                            @foreach ($this->categories as $category)
-                                <option value="{{$category->id}}">{{$category->title}}</option>
-                            @endforeach
+                
+                <div class="col-md-6" wire:ignore>
+                    <div class="form-group mb-2 mt-2">
+                        <label for="tags">Product Tag/Product Group</label>
+                        <select class="form-select" id="tags" wire:model="service_tag_group_id" multiple="multiple">
+                            <option></option>
                         </select>
-                        <label for="serviceTag">Service Tag</label>
-                        @error('service_tag_group_id') <span class="text-danger">{{ $message }}</span> @enderror
+                        @error('service_tag_group_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-12">

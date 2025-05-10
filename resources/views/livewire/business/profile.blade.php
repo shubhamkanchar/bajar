@@ -2,28 +2,36 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4">
-                @if($this->user->bg_image)
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/'.$this->user->bg_image) }}">
+                @if ($this->user->bg_image)
+                    <img class="w-100 h-250 object-fit-cover rounded-4"
+                        src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <picture>
+                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
+                        <img class="w-100 object-fit-cover rounded-4"
+                            src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                    </picture>
                 @endif
             </div>
-            <div class="col-12">
+            <div class="col-12 mb-3 mt-2">
                 <div class="row">
-                    <div class="col-md-2 mb-3 col-6 position-relative" style="margin-top:-70px">
-                        @if($this->user->profile_image)
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-12 position-relative text-center"
+                        style="margin-top:-70px">
+                        @if ($this->user->profile_image)
+                            <img class="w-mobile-50 ps-md-4 ratio ratio-1x1"
+                                src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="w-mobile-50 ps-md-4 ratio ratio-1x1"
+                                src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
-                    <div class="col-md-5 p-3">
-                        <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
-                            <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                            {{ $this->user->gst }}</span>
+                    <div class="col-md-4 col-lg-5 col-xl-5 col-12">
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                            <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number : </span>
+                                {{ $this->user->gst }}</span>
                         </div>
-                        <div class="ms-md-3 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -43,11 +51,10 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-5 p-3">
-                        <div class="d-lg-flex float-md-end">
+                    <div class="col-md-4 col-lg-4 col-xl-5 col-12 text-md-end">
+                        <div class="d-lg-flex float-md-end text-md-end">
                             <span
-                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Premium</span>
-
+                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                 <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -90,11 +97,12 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                {{$this->bussinessTime()}}
+                                {{ $this->bussinessTime() }}
                             </span>
                         </div>
-                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2" style="height:60%">
-                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid ]) }}" class="btn btn-dark">
+                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2"
+                            style="height:60%">
+                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid]) }}" class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
@@ -114,16 +122,21 @@
             </div>
             <hr>
             <div class="col-md-9">
-                <span class="badge rounded-pill {{$selectedCategory == 'all' ? 'text-bg-dark' : 'text-bg-light'}} fs-6 p-3 m-1" wire:click="changeCategory('all')"  role="button" tabindex="0">All</span>
-                @foreach ($this->businessCategories as $cat)                    
-                    <span class="badge rounded-pill {{$selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light'}}  fs-6 p-3 m-1"  role="button" tabindex="0" wire:click="changeCategory({{$cat->id}})">{{$cat->title}}</span>
+                <span
+                    class="badge rounded-pill {{ $selectedCategory == 'all' ? 'text-bg-dark' : 'text-bg-light' }} fs-6 p-3 m-1"
+                    wire:click="changeCategory('all')" role="button" tabindex="0">All</span>
+                @foreach ($this->businessCategories as $cat)
+                    <span
+                        class="badge rounded-pill {{ $selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light' }}  fs-6 p-3 m-1"
+                        role="button" tabindex="0"
+                        wire:click="changeCategory({{ $cat->id }})">{{ $cat->title }}</span>
                 @endforeach
             </div>
             <div class="col-md-3">
                 <div class="d-flex float-md-end mt-3">
                     <span class="text-end me-2">
                         <span class="d-block">Total work Added</span>
-                        <span class="d-block">{{count($this->allProducts)}}</span>
+                        <span class="d-block">{{ count($this->allProducts) }}</span>
                     </span>
                     <button class="btn btn-default rounded-5 bg-custom-secondary">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -142,62 +155,79 @@
                     </button>
                 </div>
             </div>
-            <div class="col-12 mt-3 product-list">
-                @if(count($this->allProducts) == 0)
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 product-card">
+            <div class="col-12 mt-3 mb-5 product-list">
+                @if (count($this->allProducts) == 0)
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                         <a id="openSliderBtn">
-                            <div class="dashed-border ratio ratio-add-product">
-                                <span class="text-center p-4" style="top: 25%">
-                                    <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
-                                    <div class="fs-4 fw-bold">Add Product</div>
-                                    <small>Adding more products improve your search rankings</small>
-                                </span>
+                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                                style="height: 100%; min-height: 250px;">
+                                <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
+                                    role="button"></i>
+                                <div class="fs-4 fw-bold">Add Product</div>
+                                <small>Adding more products improve your search rankings</small>
                             </div>
                         </a>
                     </div>
                 @endif
                 @foreach ($this->allProducts as $key => $products)
                     <div class="mb-4">
-                        <h6 class="fw-bold">{{$key}}</h6>
+                        <h6 class="fw-bold">{{ $key }}</h6>
                         <div class="row mb-2">
-                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 product-card">
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                                 <a id="openSliderBtn">
-                                    {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
-                                    <div class="dashed-border ratio ratio-add-product">
-                                        <span class="text-center p-4" style="top: 25%">
-                                            <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
-                                            <div class="fs-4 fw-bold">Add Product</div>
-                                            <small>Adding more products improve your search rankings</small>
-                                        </span>
+                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                                        style="height: 100%; min-height: 200px;">
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
+                                            role="button"></i>
+                                        <div class="fs-4 fw-bold">Add Product</div>
+                                        <small>Adding more products improve your search rankings</small>
                                     </div>
                                 </a>
                             </div>
                             @foreach ($products as $product)
-                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 editProduct" data-id="{{ $product->id }}">
-                                    <div class="border rounded position-relative">
-                                        <div id="carouselProduct{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 editProduct"
+                                    data-id="{{ $product->id }}">
+                                    <div class=" position-relative">
+                                        <div id="carouselProduct{{ $product->id }}" class="border rounded carousel slide"
+                                            data-bs-ride="carousel">
                                             <div class="carousel-inner">
                                                 @foreach ($product->images as $key => $productImage)
-                                                    <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
-                                                        <img src="{{ asset('storage/' . $productImage->path) }}" class="d-block w-100" alt="Product Image">
+                                                    <div
+                                                        class="carousel-item @if ($key == 0) active @endif ratio ratio-4x3">
+                                                        <img src="{{ asset('storage/' . $productImage->path) }}"
+                                                            class="d-block w-100" alt="Product Image">
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="prev">
+                                            <button class="carousel-control-prev" type="button"
+                                                data-bs-target="#carouselProduct{{ $product->id }}"
+                                                data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Previous</span>
                                             </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct{{ $product->id }}" data-bs-slide="next">
+                                            <button class="carousel-control-next" type="button"
+                                                data-bs-target="#carouselProduct{{ $product->id }}"
+                                                data-bs-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Next</span>
                                             </button>
                                         </div>
-                                        <div class="ratio ratio ratio-16x9">
-                                            <div class="p-2 text-center fw-bold"> {{ $product->description }}</div>
+                                        <div class="">
+                                            <span class="text-description fw-bold">{{ $product->description }}</span>
                                         </div>
-                                        
+                                        <div class="py-1">
+                                            <span class="text-title">{{ $product->brand_name }}</span>
+                                        </div>
+                                        <div class="py-1">
+                                            @if($product->show_price)
+                                            <span><strong>RS.{{$product->price}}</strong> per <strong>Unit</strong></span>
+                                            @else
+                                            <strong>Contact us for pricing</strong>
+                                            @endif
+                                        </div>
                                         <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct" data-id="{{ $product->id }}"></i>
+                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct"
+                                                data-id="{{ $product->id }}"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -208,326 +238,147 @@
             </div>
         </div>
     </div>
-    <div class="slider-form" wire:ignore.self>
-        <div class="slider-content">
-            <div class="row">
-                <div class="col-md-8">
-                    <p class="fw-bold fs-3">Add Product</p>
-                </div>
-                <div class="col-md-4 text-md-end mb-2">
-                    <span class="badge rounded-pill text-bg-light p-3 me-3">
-                        <svg class="me-2" width="12" height="13" viewBox="0 0 12 13" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M2.76677 12.8203C1.33814 12.8203 0.179688 11.662 0.179688 10.2338L0.179688 7.39006C0.179688 5.96135 1.33806 4.80298 2.76677 4.80298H3.31102C3.55265 4.80298 3.74852 4.99885 3.74852 5.24048C3.74852 5.4821 3.55265 5.67798 3.31102 5.67798H2.76677C1.82131 5.67798 1.05469 6.4446 1.05469 7.39006L1.05469 10.2338C1.05469 11.1786 1.82123 11.9453 2.76677 11.9453H9.25927C10.2048 11.9453 10.9714 11.1786 10.9714 10.2338V7.38423C10.9714 6.44211 10.2075 5.67798 9.26569 5.67798H8.7156C8.47398 5.67798 8.2781 5.4821 8.2781 5.24048C8.2781 4.99885 8.47398 4.80298 8.7156 4.80298H9.26569C10.6911 4.80298 11.8464 5.95917 11.8464 7.38423V10.2338C11.8464 11.662 10.6879 12.8203 9.25927 12.8203H2.76677Z"
-                                fill="black" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M6.01562 8.74219C5.774 8.74219 5.57812 8.54631 5.57812 8.30469L5.57813 1.28077C5.57813 1.03914 5.774 0.843269 6.01563 0.843269C6.25725 0.843269 6.45312 1.03914 6.45312 1.28077V8.30469C6.45312 8.54631 6.25725 8.74219 6.01562 8.74219Z"
-                                fill="black" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M4.00383 3.29442C3.8326 3.12395 3.83198 2.84694 4.00245 2.6757L5.70287 0.967705C5.78496 0.885246 5.89652 0.838885 6.01288 0.838875C6.12924 0.838865 6.2408 0.885206 6.32291 0.967652L8.02391 2.67565C8.19441 2.84686 8.19385 3.12387 8.02264 3.29437C7.85144 3.46487 7.57443 3.4643 7.40392 3.2931L6.01297 1.89642L4.62255 3.29305C4.45207 3.46428 4.17506 3.4649 4.00383 3.29442Z"
-                                fill="black" />
-                        </svg>
-                        Bulk Upload
-                    </span>
-                    <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" id="closeSliderBtn">
-                        <i class="fa-solid fa-xmark"></i>
-                    </a>
-                </div>
-            </div>
-
-            <form>
-                <div class="row">            
-                    <div class="col-md-5 mb-3 position-relative">
-                        @if ($product_images['product_image1'])
-                            <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image1')" wire:key="remove-button-1">
-                                <i class="fa fa-times"></i>
-                            </button>
-                        @endif
-                        <div class="dashed-border ratio ratio-1x1">
-                            @if ($isEdit && gettype($product_images['product_image1']) == 'string')
-                                <img src="{{ asset('storage/' . $product_images['product_image1']) }}" class="img-fluid">
-                            @elseif ($product_images['product_image1'])
-                                <img src="{{$product_images['product_image1']->temporaryUrl()}}" class="img-fluid">
-                            @else
-                                <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image1">
-                                    <input type="file" wire:model.blur="product_images.product_image1" id="productImage1" hidden accept="image/*">
-                                    <label for="productImage1">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                    </label>
-                                </span>
-                            @endif
-                    
-                            <!-- Show loader during image upload -->
-                            <div wire:loading wire:target="product_images.product_image1" style="top: 35%;">
-                                <div class="d-flex justify-content-center">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @error('product_images.product_image1') <span class="text-danger">{{ $message }}</span> @enderror
-                    </div>
-                    
-                    <div class="col-md-7">
-                        <div class="row">
-                            @foreach([2, 3, 4, 5, 6] as $index)
-                                <div class="col-md-4 mb-3 position-relative">
-                                    @if ($product_images['product_image' . $index])
-                                        <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('product_image{{ $index }}')" wire:key="remove-button-{{ $index }}" accept="image/*">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    @endif
-                                    <div class="dashed-border ratio ratio-1x1">
-                                        @if ($isEdit && gettype($product_images['product_image'. $index]) == 'string')
-                                            <img src="{{ asset('storage/' . $product_images['product_image'. $index]) }}" class="img-fluid">
-                                        @elseif($product_images['product_image' . $index])
-                                            <img src="{{$product_images['product_image' . $index]->temporaryUrl()}}" class="img-fluid">
-                                        @else
-                                            <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="product_images.product_image{{$index}}">
-                                                <input type="file" wire:model.blur="product_images.product_image{{$index}}" id="productImage{{$index}}" hidden>
-                                                <label for="productImage{{$index}}">
-                                                    <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                                </label>
-                                            </span>
-                                        @endif
-                    
-                                        <!-- Show loader during image upload -->
-                                        <div wire:loading wire:target="product_images.product_image{{$index}}" style="top: 35%">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="spinner-border text-primary" role="status">
-                                                    <span class="sr-only">Loading...</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @error('product_images.product_image' . $index) <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>                    
-                    <div class="col-12">
-                        <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Product Name" wire:model="product_name">
-                            <label for="name">Product Name</label>
-                            @error('product_name') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-floating mb-2 mt-2">
-                            <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name" wire:model="brand_name">
-                            <label for="name" >Brand Name</label>
-                            @error('brand_name') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example"
-                                wire:model="category">
-                                <option selected>Open this select menu</option>
-                                @foreach ($this->categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                @endforeach
-                            </select>
-                            <label for="floatingSelect">Product Category</label>
-                            @error('category') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example"
-                                wire:model="product_tag_group_id">
-                                <option selected>Open this select menu</option>
-                                @foreach ($this->categories as $category)    
-                                    <option value="{{$category->id}}">{{ $category->title }}</option>
-                                @endforeach
-                            </select>
-                            <label for="floatingSelect">Product Tag/Product Group</label>
-                            @error('product_tag_group_id') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="form-floating mb-2 mt-2 w-100">
-                            <input type="text" name="name" class="form-control" id="price"
-                                placeholder="Price" wire:model="price">
-                            <label for="name">Price</label>
-                            @error('price') <span class="text-danger">{{ $message }}</span> @enderror
-
-                        </div>
-                        <span class="m-2">Per</span>
-                        <div class="form-floating mb-2 mt-2 w-100" wire:model="quantity">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example" wire:model="quantity">
-                                <option selected></option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label for="floatingSelect">Qty</label>
-                            @error('quantity') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6"  x-data="{ showPrice: @entangle('showPrice') }">
-                        <div class="mt-2 d-flex justify-content-between bg-white rounded-5 p-2 border">
-                            <button 
-                                type="button" 
-                                class="btn rounded-5 pt-2 pb-2 w-100"
-                                :class="{ 'btn-dark': showPrice, 'btn-light': !showPrice }" 
-                                data-item="email" 
-                                x-on:click="showPrice = true; $wire.set('showPrice', true)">
-                                Show Price
-                            </button>
-                            
-                            <!-- Hide Price Button -->
-                            <button 
-                                type="button" 
-                                class="btn rounded-5 pt-2 pb-2 w-100"
-                                :class="{ 'btn-dark': !showPrice, 'btn-light': showPrice }" 
-                                data-item="phone" 
-                                x-on:click="showPrice = false; $wire.set('showPrice', false)">
-                                Hide Price
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5" wire:model="description"></textarea>
-                        @error('decription') <span class="text-danger">{{ $message }}</span> @enderror
-
-                    </div>
-                    <div class="col-md-12 mt-4">
-                        <p>*Your product will be under review for the initial 24 hours before it’s live</p>
-                        <div class="row">
-                            <div class="col-md-5 mt-2 mb-2">
-                                <button class="btn btn-dark w-100" wire:click.prevent="saveProduct">{{ $isEdit ? 'Update Product' : 'Add Product'}}</button>
-                            </div>
-                            <div class="col-md-5 mt-2 mb-2">
-                                @if ($isEdit)    
-                                    <button wire:click.prevent="deleteProduct" wire:loading.attr="disabled"  wire:confirm="Are you sure want to delete this product" class="btn btn-default bg-custom-secondary">
-                                        <svg class="me-2" width="19" height="20" viewBox="0 0 19 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M16.3238 7.46875C16.3238 7.46875 15.7808 14.2037 15.4658 17.0407C15.3158 18.3957 14.4788 19.1898 13.1078 19.2148C10.4988 19.2618 7.88681 19.2648 5.27881 19.2098C3.95981 19.1828 3.13681 18.3788 2.98981 17.0478C2.67281 14.1858 2.13281 7.46875 2.13281 7.46875"
-                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M17.708 4.24219H0.75" stroke="black" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                            <path
-                                                d="M14.4386 4.239C13.6536 4.239 12.9776 3.684 12.8236 2.915L12.5806 1.699C12.4306 1.138 11.9226 0.75 11.3436 0.75H7.11063C6.53163 0.75 6.02363 1.138 5.87363 1.699L5.63063 2.915C5.47663 3.684 4.80063 4.239 4.01562 4.239"
-                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                        Delete
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+    @include('livewire.business.partial.slider')
 </div>
 @section('style')
-<style>
-    /* Initially set the slider to be hidden off-screen on the right */
-    .slider-form {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        /* Hide off-screen initially */
-        width: 100%;
-        height: 100%;
-        background-color: #f8f9fa;
-        transition: right 0.3s ease;
-        z-index: 1050;
-        box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
-        overflow: scroll;
-    }
-
-    /* Show the slider when active (slide in from the right) */
-    .slider-form.open {
-        right: 0;
-    }
-
-    /* Form content styling */
-    .slider-content {
-        padding: 30px;
-    }
-
-    /* Adjust the width of the form based on screen size */
-    @media (max-width: 767px) {
+    <style>
+        /* Initially set the slider to be hidden off-screen on the right */
         .slider-form {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            /* Hide off-screen initially */
             width: 100%;
-            /* Full width on small screens */
+            height: 100%;
+            background-color: #f8f9fa;
+            transition: right 0.3s ease;
+            z-index: 1050;
+            box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
+            overflow: scroll;
         }
-    }
 
-    @media (min-width: 768px) {
-        .slider-form {
-            width: 75%;
-            /* 75% width on medium and larger screens */
+        /* Show the slider when active (slide in from the right) */
+        .slider-form.open {
+            right: 0;
         }
-    }
-</style>
+
+        /* Form content styling */
+        .slider-content {
+            padding: 30px;
+        }
+
+        /* Adjust the width of the form based on screen size */
+        @media (max-width: 767px) {
+            .slider-form {
+                width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .slider-form {
+                width: 75%;
+                /* 75% width on medium and larger screens */
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .w-mobile-50 {
+                width: 50% !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .w-mobile-50 {
+                width: 100% !important;
+            }
+        }
+
+        .select2-selection--multiple {
+            padding-top: 20px
+        }
+
+        .text-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .text-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 @endsection
 
-<script>
-    // Toggle slider form on button click
-    // const openSliderBtn = document.getElementById("openSliderBtn");
-    const sliderForm = document.querySelector(".slider-form");
-    const closeSliderBtn = document.getElementById("closeSliderBtn");
+@push('scripts')
+    <script>
+        // Toggle slider form on button click
+        // const openSliderBtn = document.getElementById("openSliderBtn");
+        const sliderForm = document.querySelector(".slider-form");
+        const closeSliderBtn = document.getElementById("closeSliderBtn");
 
-    document.querySelector(".product-list").addEventListener("click", function (event) {
-    
-        if (event.target.classList.contains("product-card") || event.target.classList.contains("openSlider")) {
-            sliderForm.classList.toggle("open");
-        }
-    });
+        document.querySelector(".product-list").addEventListener("click", function(event) {
 
-    closeSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.remove("open");
-        @this.call('resetProduct')
-    });
-
-    document.addEventListener('click', function(event) {
-        let target = event.target.closest('.editProduct'); 
-        if (target) {
-            event.stopPropagation();
-            let productId = target.getAttribute('data-id');
-            
-            @this.call('editProduct', productId).then(function() {
+            if (event.target.classList.contains("product-card") || event.target.classList.contains("openSlider")) {
                 sliderForm.classList.toggle("open");
-            });
-        }
-    });
+            }
+        });
 
-    document.addEventListener('productUpdated', event => {
-        Toastify({
-            text: event.detail[0].message,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
-        }).showToast();
+        closeSliderBtn.addEventListener("click", function() {
+            sliderForm.classList.remove("open");
+            @this.call('resetProduct')
+        });
 
-        sliderForm.classList.remove("open");
-    });
+        document.addEventListener('click', function(event) {
+            let target = event.target.closest('.editProduct');
+            if (target) {
+                event.stopPropagation();
+                let productId = target.getAttribute('data-id');
 
-    document.addEventListener('productDeleted', event => {
-        Toastify({
-            text: event.detail[0].message,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
-        }).showToast();
+                @this.call('editProduct', productId).then(function() {
+                    sliderForm.classList.toggle("open");
+                });
+            }
+        });
 
-        sliderForm.classList.remove("open");
-    });
+        document.addEventListener('productUpdated', event => {
+            Toastify({
+                text: event.detail[0].message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+            }).showToast();
 
-</script>
+            sliderForm.classList.remove("open");
+        });
+
+        document.addEventListener('productDeleted', event => {
+            Toastify({
+                text: event.detail[0].message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+            }).showToast();
+
+            sliderForm.classList.remove("open");
+        });
+
+        $('#tagInput').select2({
+            tags: true,
+            tokenSeparators: [',', ' '],
+            placeholder: 'Enter or select tags',
+            width: '100%'
+        });
+        $('#tagInput').on('change', function() {
+            @this.set('product_tag', $(this).val());
+        });
+    </script>
+@endpush

@@ -44,15 +44,21 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4 position-relative">
-                @if($bgImage)
-                <img class="w-100 h-250 object-fit-cover rounded-4" src="{{$bgImage->temporaryUrl()}}" >
+                @if ($bgImage)
+                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ $bgImage->temporaryUrl() }}">
                 @elseif(auth()->user()->bg_image)
-                <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/'.auth()->user()->bg_image) }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4"
+                        src="{{ asset('storage/' . auth()->user()->bg_image) }}">
                 @else
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <picture>
+                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
+                        <img class="w-100 object-fit-cover rounded-4"
+                            src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                    </picture>
                 @endif
-                <input type="file" wire:model="bgImage" hidden id="bgImage"> 
-                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1" wire:target="bgImage" for="bgImage">
+                <input type="file" wire:model="bgImage" hidden id="bgImage">
+                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    wire:target="bgImage" for="bgImage">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
@@ -72,17 +78,18 @@
                         if ($user->role == 'individual') {
                             $route = route('user.profile');
                         } elseif ($user->role == 'business') {
-                            if($user->offering == 'product'){
+                            if ($user->offering == 'product') {
                                 $route = route('business.profile');
-                            }else{
+                            } else {
                                 $route = route('service.profile');
                             }
-                        } 
+                        }
                     } else {
                         $route = route('onboarding');
                     }
                 @endphp
-                <a href="{{$route}}" role="button" class="position-absolute top-0 start-0 p-2 ps-4" style="z-index: 1">
+                <a href="{{ $route }}" role="button" class="position-absolute top-0 start-0 p-2 ps-4"
+                    style="z-index: 1">
                     <svg width="40" height="40" viewBox="0 0 50 50" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <rect x="-1" y="1" width="47" height="47" rx="24"
@@ -96,15 +103,17 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-lg-2 col-md-3 mb-3 col-6 position-relative" style="margin-top:-70px">
-                        @if($profileImage)
+                        @if ($profileImage)
                             <img class="w-100 ps-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif(auth()->user()->profile_image)
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/'.auth()->user()->profile_image) }}">
+                            <img class="w-100 ps-md-4 h-100"
+                                src="{{ asset('storage/' . auth()->user()->profile_image) }}">
                         @else
                             <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
                         @endif
-                        <input type="file" wire:model="profileImage" hidden id="profileImage"> 
-                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 pt-2 pe-4" style="z-index: 1">
+                        <input type="file" wire:model="profileImage" hidden id="profileImage">
+                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 pt-2 pe-4"
+                            style="z-index: 1">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)"
@@ -143,7 +152,7 @@
                             <label for="name">Name</label>
                         </div>
                         @error('name')
-                        <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
@@ -155,7 +164,7 @@
                             <label for="phone">Phone Number</label>
                         </div>
                         @error('phone')
-                        <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -186,7 +195,7 @@
                             <label for="email">Email</label>
                         </div>
                         @error('Email')
-                        <div class="text-danger">{{$message}}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
@@ -260,7 +269,7 @@
 
                 <hr>
                 <div class="col-md-12 mt-4">
-                    <button type="button" wire:click="update"  class="btn btn-dark btn-lg">update</button>
+                    <button type="button" wire:click="update" class="btn btn-dark btn-lg">update</button>
                 </div>
             </form>
         </div>

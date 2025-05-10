@@ -58,14 +58,13 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                @foreach ($this->categories as $category)
-                                    <option value="{{ $category->id }}" @selected($category->id == $selectedProduct->product_tag_group_id)>
-                                        {{ $category->title }}</option>
+                        <div class="form-floating my-2" wire:ignore>
+                            <select class="form-select" id="tagInput" multiple wire:model.live="product_tag">
+                                @foreach($allTags as $tag)
+                                    <option {{in_array($tag, $product_tag) ? 'selected' : '' }} value="{{ $tag }}">{{ $tag }}</option>
                                 @endforeach
                             </select>
-                            <label for="floatingSelect">Product Tag/Product Group</label>
+                            <label for="tagInput">Tags</label>
                         </div>
                     </div>
                     <div class="col-md-6 d-flex align-items-center justify-content-center">
@@ -76,11 +75,7 @@
                         </div>
                         <span class="m-2">Per</span>
                         <div class="form-floating mb-2 mt-2 w-100">
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                                <option value="1" @selected($selectedProduct->quantity == 1)>One</option>
-                                <option value="2" @selected($selectedProduct->quantity == 2)>Two</option>
-                                <option value="3" @selected($selectedProduct->quantity == 3)>Three</option>
-                            </select>
+                            <input type="number" min="0" class="form-control" placeholder="Qty" id="floatingSelect"  value="{{ $selectedProduct->quantity }}">
                             <label for="floatingSelect">Qty</label>
                         </div>
                     </div>

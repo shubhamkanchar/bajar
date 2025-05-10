@@ -213,6 +213,8 @@
                 <i class="fa fa-arrow-right"></i> <!-- Bootstrap Icon -->
             </button>
         </div>
+    @else
+    <div class="text-center h4 fw-bold">No data found</div>
     @endif
     @include('livewire.admin.partial.service-slider')
 </div>

@@ -135,7 +135,7 @@
                                             type="password" id="fourth" maxlength="1" placeholder="-" />
                                         <input wire:model="five" class="m-md-2 me-1 text-center form-control rounded"
                                             type="password" id="fifth" maxlength="1" placeholder="-" />
-                                        <input wire:model="six" class="m-md-2 me-1 text-center form-control rounded"
+                                        <input wire:model.live="six" class="m-md-2 me-1 text-center form-control rounded"
                                             type="password" id="sixth" maxlength="1" placeholder="-" />
                                     </div>
 
@@ -182,7 +182,7 @@
                             </div>
                             <div class="row mb-0">
                                 <div class="col-md-12 ">
-                                    <button type="submit" class="btn btn-dark w-100">Sign In</button>
+                                    <button type="submit" class="btn @if($six) btn-dark @else btn-secondary @endif w-100">Sign In</button>
                                 </div>
                             </div>
                             <div class="row mt-2 text-center">

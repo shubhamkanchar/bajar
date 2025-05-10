@@ -53,7 +53,7 @@
                         </svg>
 
                     </span>
-                    <span>
+                    <span class="mt-1">
 
                         <svg width="30" height="22" viewBox="0 0 30 22" fill="none"
                             xmlns="http://www.w3.org/2000/svg">

@@ -19,6 +19,8 @@ class ProductReview extends Component
     public $currentPage = 1;
     public $perPage = 10;
     public $totalPage = 1;
+    public $allTags = ['Laravel', 'Vue', 'Livewire'];
+    public $product_tag = [];
 
     #[Computed()]
     public function products()

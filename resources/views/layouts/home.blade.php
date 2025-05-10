@@ -104,6 +104,21 @@
                 border-bottom: none !important;
             }
         }
+        .text-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .text-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 

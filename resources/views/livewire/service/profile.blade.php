@@ -2,26 +2,34 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4">
-                @if($this->user->bg_image)
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/'.$this->user->bg_image) }}">
+                @if ($this->user->bg_image)
+                    <img class="w-100 h-250 object-fit-cover rounded-4"
+                        src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <picture>
+                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
+                        <img class="w-100 object-fit-cover rounded-4"
+                            src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                    </picture>
                 @endif
             </div>
-            <div class="col-12">
+            <div class="col-12 mb-3 mt-2">
                 <div class="row">
-                    <div class="col-md-2 mb-3 col-6 position-relative" style="margin-top:-70px">
-                        @if($this->user->profile_image)
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/'.$this->user->profile_image) }}">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-12 position-relative text-center"
+                        style="margin-top:-70px">
+                        @if ($this->user->profile_image)
+                            <img class="w-mobile-50 ps-md-4 ratio ratio-1x1"
+                                src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="w-mobile-50 ps-md-4 ratio ratio-1x1"
+                                src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
-                    <div class="col-md-5 p-3">
-                        <div class="d-lg-flex align-items-center ms-md-2">
+                    <div class="col-md-4 col-lg-4 col-xl-5 col-12">
+                        <div class="d-lg-flex align-items-center ms-md-2 text-center">
                             <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
                             <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                            {{ $this->user->gst }}</span>
+                                {{ $this->user->gst }}</span>
                         </div>
                         <div class="ms-md-3 mt-2 d-flex">
                             <span class="me-2">
@@ -43,11 +51,10 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-5 p-3">
+                    <div class="col-md-4 col-lg-4 col-xl-5 col-12">
                         <div class="d-lg-flex float-md-end">
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Premium</span>
-
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                 <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -90,21 +97,13 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                {{$this->bussinessTime()}}
+                                {{ $this->bussinessTime() }}
                             </span>
                         </div>
-                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100" style="height:60%">
-                            <a id="openReviewSliderBtn" class="btn bg-secondary-subtle me-2 mb-2">
-                                <svg class="me-2" width="18" height="20" viewBox="0 0 18 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M8.7281 19.9137C8.83884 19.9715 8.96266 20.0009 9.08649 20C9.21032 19.999 9.33314 19.9686 9.44489 19.9097L13.0128 18.0025C14.0245 17.4631 14.8168 16.8601 15.435 16.1579C16.779 14.6282 17.5129 12.6758 17.4998 10.6626L17.4575 4.02198C17.4535 3.25711 16.9511 2.57461 16.2082 2.32652L9.57073 0.0995642C9.17106 -0.0357592 8.73313 -0.0328174 8.3405 0.106428L1.72824 2.41281C0.989299 2.67071 0.495998 3.35811 0.500024 4.12396L0.542307 10.7597C0.555395 12.7758 1.31448 14.7194 2.68062 16.2334C3.3048 16.9258 4.10415 17.52 5.12699 18.0505L8.7281 19.9137ZM7.78119 12.1106C7.93019 12.2538 8.12348 12.3244 8.31678 12.3225C8.51007 12.3215 8.70236 12.2489 8.84934 12.1038L12.7484 8.25981C13.0414 7.97053 13.0384 7.50572 12.7424 7.22037C12.4454 6.93501 11.9672 6.93697 11.6742 7.22625L8.3057 10.5466L6.92647 9.2208C6.62949 8.93545 6.15229 8.93839 5.85832 9.22767C5.56536 9.51694 5.56838 9.98175 5.86537 10.2671L7.78119 12.1106Z"
-                                        fill="black" />
-                                </svg>
-                                Expert Review
-                            </a>
-                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid ]) }}" class="btn btn-dark me-2 mb-2">
-                                <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
+                        <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2"
+                            style="height:60%">
+                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid]) }}" class="btn btn-dark">
+                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
                                         stroke-linecap="round" stroke-linejoin="round" />
@@ -123,16 +122,21 @@
             </div>
             <hr>
             <div class="col-md-9">
-                <span class="badge rounded-pill {{$selectedCategory == 'all' ? 'text-bg-dark' : 'text-bg-light'}} fs-6 p-3 m-1" wire:click="changeCategory('all')"  role="button" tabindex="0">All</span>
-                @foreach ($this->businessCategories as $cat)                    
-                    <span class="badge rounded-pill {{$selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light'}}  fs-6 p-3 m-1"  role="button" tabindex="0" wire:click="changeCategory({{$cat->id}})">{{$cat->title}}</span>
+                <span
+                    class="badge rounded-pill {{ $selectedCategory == 'all' ? 'text-bg-dark' : 'text-bg-light' }} fs-6 p-3 m-1"
+                    wire:click="changeCategory('all')" role="button" tabindex="0">All</span>
+                @foreach ($this->businessCategories as $cat)
+                    <span
+                        class="badge rounded-pill {{ $selectedCategory == $cat->id ? 'text-bg-dark' : 'text-bg-light' }}  fs-6 p-3 m-1"
+                        role="button" tabindex="0"
+                        wire:click="changeCategory({{ $cat->id }})">{{ $cat->title }}</span>
                 @endforeach
             </div>
             <div class="col-md-3">
                 <div class="d-flex float-md-end mt-3">
                     <span class="text-end me-2">
                         <span class="d-block">Total work Added</span>
-                        <span class="d-block">{{count($this->allServices) }}</span>
+                        <span class="d-block">{{ count($this->allServices) }}</span>
                     </span>
                     <button class="btn btn-default rounded-5 bg-custom-secondary">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -152,63 +156,85 @@
                 </div>
             </div>
             <div class="col-12 mt-3 service-list">
-                @if(count($this->allServices) == 0)
-                    <div class="row mb-2">
+                @if (count($this->allServices) == 0)
+                    {{-- <div class="row mb-2">
                         <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 service-card" class="openSlider">
                             <a id="openSliderBtn">
-                                {{-- <img src="{{ asset('assets/image/add_product.png') }}"> --}}
                                 <div class="dashed-border ratio ratio-add-product">
                                     <span class="text-center p-4" style="padding-top: 30% !important;">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
+                                            role="button"></i>
                                         <div class="fs-5 fw-bold">Add Previous Work</div>
                                         <small>Adding more products improve your search rankings</small>
                                     </span>
                                 </div>
                             </a>
                         </div>
+                    </div> --}}
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
+                        <a id="openSliderBtn">
+                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                                style="height: 100%; min-height: 200px;">
+                                <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
+                                    role="button"></i>
+                                <div class="fs-4 fw-bold">Add Previous Work</div>
+                                <small>Adding more service improve your search rankings</small>
+                            </div>
+                        </a>
                     </div>
                 @endif
-                @foreach ($this->allServices as $categoryName => $services) 
+                @foreach ($this->allServices as $categoryName => $services)
                     <div class="mb-3">
-                        <h6 class="fw-bold">{{$categoryName}}</h6> 
+                        <h6 class="fw-bold">{{ $categoryName }}</h6>
                         <div class="row">
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 service-card">
                                 <a id="openSliderBtn">
                                     <div class="dashed-border ratio ratio-add-product">
                                         <span class="text-center p-4" style="padding-top: 30% !important;">
-                                            <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider" role="button"></i>
+                                            <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
+                                                role="button"></i>
                                             <div class="fs-5 fw-bold">Add Previous Work</div>
                                             <small>Adding more products improve your search rankings</small>
                                         </span>
                                     </div>
                                 </a>
-                            </div>   
+                            </div>
                             @foreach ($services as $service)
-                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 editService" data-id="{{ $service->id }}">
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 editService"
+                                    data-id="{{ $service->id }}">
                                     <div class="border rounded position-relative">
-                                        <div id="carouselService{{ $service->id }}" class="carousel slide" data-bs-ride="carousel">
+                                        <div id="carouselService{{ $service->id }}" class="carousel slide"
+                                            data-bs-ride="carousel">
                                             <div class="carousel-inner">
                                                 @foreach ($service->images as $key => $serviceImage)
-                                                    <div class="carousel-item @if($key == 0) active @endif ratio ratio-4x3">
-                                                        <img src="{{ asset('storage/' . $serviceImage->path) }}" class="d-block w-100" alt="Service Image">
+                                                    <div
+                                                        class="carousel-item @if ($key == 0) active @endif ratio ratio-4x3">
+                                                        <img src="{{ asset('storage/' . $serviceImage->path) }}"
+                                                            class="d-block w-100" alt="Service Image">
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="prev">
+                                            <button class="carousel-control-prev" type="button"
+                                                data-bs-target="#carouselService{{ $service->id }}"
+                                                data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Previous</span>
                                             </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselService{{ $service->id }}" data-bs-slide="next">
+                                            <button class="carousel-control-next" type="button"
+                                                data-bs-target="#carouselService{{ $service->id }}"
+                                                data-bs-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Next</span>
                                             </button>
                                         </div>
                                         <div class="ratio ratio ratio-16x9">
-                                            <div class="p-2 fw-bold"> {{ $this->limitText($service->work_brief) }}</div>
+                                            <div class="p-2 fw-bold"> {{ $this->limitText($service->work_brief) }}
+                                            </div>
                                         </div>
-                                        
+
                                         <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService" data-id="{{ $service->id }}"></i>
+                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService"
+                                                data-id="{{ $service->id }}"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -264,14 +290,26 @@
                 /* 75% width on medium and larger screens */
             }
         }
+
         .star-rating {
             font-size: 24px;
             cursor: pointer;
             color: #ccc;
         }
-        
+        @media (max-width: 767.98px) {
+            .w-mobile-50 {
+                width: 50% !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .w-mobile-50 {
+                width: 100% !important;
+            }
+        }
     </style>
 @endsection
+@push('scripts')
 <script>
     // Toggle slider form on button click
     //product slider
@@ -279,7 +317,7 @@
     const sliderForm = document.querySelector(".slider-form");
     const closeSliderBtn = document.getElementById("closeSliderBtn");
 
-    document.querySelector(".service-list").addEventListener("click", function (event) {
+    document.querySelector(".service-list").addEventListener("click", function(event) {
         if (event.target.classList.contains("service-card") || event.target.classList.contains("openSlider")) {
             sliderForm.classList.toggle("open");
         }
@@ -291,13 +329,13 @@
     });
 
     //review slider
-    const openReviewSliderBtn = document.getElementById("openReviewSliderBtn");
+    // const openReviewSliderBtn = document.getElementById("openReviewSliderBtn");
     const reviewSliderForm = document.getElementById("reviewSlider");
     const closeReviewSliderBtn = document.getElementById("closeReviewSliderBtn");
 
-    openReviewSliderBtn.addEventListener("click", function() {
-        reviewSliderForm.classList.toggle("open");
-    });
+    // openReviewSliderBtn.addEventListener("click", function() {
+    //     reviewSliderForm.classList.toggle("open");
+    // });
 
     closeReviewSliderBtn.addEventListener("click", function() {
         reviewSliderForm.classList.remove("open");
@@ -307,7 +345,7 @@
     const stars = document.querySelectorAll('.star-rating i');
 
     stars.forEach(star => {
-        star.addEventListener('click', function () {
+        star.addEventListener('click', function() {
             let value = this.getAttribute('data-value');
             // ratingValue.innerText = value;
 
@@ -325,11 +363,11 @@
     });
 
     document.addEventListener('click', function(event) {
-        let target = event.target.closest('.editService'); 
+        let target = event.target.closest('.editService');
         if (target) {
             event.stopPropagation();
             let serviceId = target.getAttribute('data-id');
-            
+
             @this.call('editService', serviceId).then(function() {
                 sliderForm.classList.toggle("open");
             });
@@ -360,4 +398,12 @@
 
         sliderForm.classList.remove("open");
     });
+
+    $('#tags').select2({
+        tags: true,
+        tokenSeparators: [',', ' '],
+        placeholder: 'Enter or select tags',
+        width: '100%'
+    });
 </script>
+@endpush

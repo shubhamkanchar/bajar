@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Service;
 
+use App\Models\BusinessCategory;
 use App\Models\BusinessTime;
 use App\Models\Category;
 use App\Models\Service;
@@ -78,7 +79,8 @@ class Profile extends Component
     #[Computed]
     public function categories()
     {
-        return Category::where('type', 'service')->get();
+        $businessCategories = BusinessCategory::where('user_id',Auth::user()->id)->pluck('category_id');
+        return Category::where('type', 'service')->whereIn('id',$businessCategories)->get();
     }
 
     #[Computed]

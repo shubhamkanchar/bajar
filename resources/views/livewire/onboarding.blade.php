@@ -8,11 +8,17 @@
                         <img class="mb-5 logo-img" src="{{ asset('assets/logo/logo.png') }}">
                     </div>
                     <div class="col-6 col-md-4 text-end">
-                        @if ($userType == 'individual')
-                            <img class="mb-5 w-100" src="{{ asset('assets/image/step_1.png') }}">
-                        @else
-                            <img class="mb-5 w-100" src="{{ asset('assets/image/business/step_1.png') }}">
-                        @endif
+                        <div class="d-flex justify-content-end align-items-center mb-2">
+                            @for ($i = 1; $i <= $totalSteps; $i++)
+                                <div class="ms-2" style="height: 8px; width: 32px; border-radius: 4px; background-color: {{ $step >= $i ? '#000' : '#dee2e6' }};"></div>
+                            @endfor
+                        </div>
+                    
+                        <div class="d-flex justify-content-end align-items-center mb-3">
+                            <span class="text-muted">
+                                Step <strong>{{ str_pad($step, 2, '0', STR_PAD_LEFT) }} of 0{{$totalSteps}}</strong>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <h6 class="text-muted fst-italic mb-2">Welcome to Bajar Bhaw!</h6>
@@ -27,7 +33,7 @@
                 <div class="row">
                     <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3 position-relative">
                         <button
-                            class="border rounded-4 py-5 px-md-5 px-3 position-relative text-center {{ $userType === 'individual' ? 'border-dark' : '' }} w-100 w-md-auto"
+                            class="border rounded-4 position-relative text-center {{ $userType === 'individual' ? 'border-dark' : '' }} w-100 w-md-auto h-180"
                             wire:click="selectUserType('individual')">
                             <svg width="60" height="60" viewBox="0 0 60 60" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +64,7 @@
                     </div>
                     <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3">
                         <button
-                            class="border rounded-4 py-5 px-md-5 px-3 position-relative text-center {{ $userType === 'business' ? 'border-dark' : '' }} w-100 w-md-auto"
+                            class="border rounded-4 h-180 position-relative text-center {{ $userType === 'business' ? 'border-dark' : '' }} w-100 w-md-auto"
                             wire:click="selectUserType('business')">
                             <svg width="60" height="60" viewBox="0 0 60 60" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +116,17 @@
                         <img class="mb-5 logo-img" src="{{ asset('assets/logo/logo.png') }}">
                     </div>
                     <div class="col-6 col-md-4 text-end">
-                        <img class="mb-5 w-100" src="{{ asset('assets/image/step_2.png') }}">
+                        <div class="d-flex justify-content-end align-items-center mb-2">
+                            @for ($i = 1; $i <= $totalSteps; $i++)
+                                <div class="ms-2" style="height: 8px; width: 32px; border-radius: 4px; background-color: {{ $step >= $i ? '#000' : '#dee2e6' }};"></div>
+                            @endfor
+                        </div>
+                    
+                        <div class="d-flex justify-content-end align-items-center mb-3">
+                            <span class="text-muted">
+                                Step <strong>{{ str_pad($step, 2, '0', STR_PAD_LEFT) }} of 0{{$totalSteps}}</strong>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <h6 class="text-muted fst-italic mb-3">"Great! Just a few details to tailor your experience."</h6>
@@ -209,7 +225,17 @@
                         <img class="mb-5 logo-img" src="{{ asset('assets/logo/logo.png') }}">
                     </div>
                     <div class="col-6 col-md-4 text-end">
-                        <img class="mb-5 w-100" src="{{ asset('assets/image/step_3.png') }}">
+                        <div class="d-flex justify-content-end align-items-center mb-2">
+                            @for ($i = 1; $i <= $totalSteps; $i++)
+                                <div class="ms-2" style="height: 8px; width: 32px; border-radius: 4px; background-color: {{ $step >= $i ? '#000' : '#dee2e6' }};"></div>
+                            @endfor
+                        </div>
+                    
+                        <div class="d-flex justify-content-end align-items-center mb-3">
+                            <span class="text-muted">
+                                Step <strong>{{ str_pad($step, 2, '0', STR_PAD_LEFT) }} of 0{{$totalSteps}}</strong>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -240,7 +266,17 @@
                         <img class="mb-5 logo-img" src="{{ asset('assets/logo/logo.png') }}">
                     </div>
                     <div class="col-6 col-md-4 text-end">
-                        <img class="mb-5 w-100" src="{{ asset('assets/image/business/step_2.png') }}">
+                        <div class="d-flex justify-content-end align-items-center mb-2">
+                            @for ($i = 1; $i <= $totalSteps; $i++)
+                                <div class="ms-2" style="height: 8px; width: 32px; border-radius: 4px; background-color: {{ $step >= $i ? '#000' : '#dee2e6' }};"></div>
+                            @endfor
+                        </div>
+                    
+                        <div class="d-flex justify-content-end align-items-center mb-3">
+                            <span class="text-muted">
+                                Step <strong>{{ str_pad($step, 2, '0', STR_PAD_LEFT) }} of 0{{$totalSteps}}</strong>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <h6 class="text-muted fst-italic mb-3">"Awesome! Share some quick info to get started."</h6>
@@ -383,7 +419,17 @@
                         <img class="mb-5 logo-img" src="{{ asset('assets/logo/logo.png') }}">
                     </div>
                     <div class="col-6 col-md-4 text-end">
-                        <img class="mb-5 w-100" src="{{ asset('assets/image/business/step_3.png') }}">
+                        <div class="d-flex justify-content-end align-items-center mb-2">
+                            @for ($i = 1; $i <= $totalSteps; $i++)
+                                <div class="ms-2" style="height: 8px; width: 32px; border-radius: 4px; background-color: {{ $step >= $i ? '#000' : '#dee2e6' }};"></div>
+                            @endfor
+                        </div>
+                    
+                        <div class="d-flex justify-content-end align-items-center mb-3">
+                            <span class="text-muted">
+                                Step <strong>{{ str_pad($step, 2, '0', STR_PAD_LEFT) }} of 0{{$totalSteps}}</strong>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <h6 class="text-muted fst-italic mb-3">"Great! Share some more about your business"</h6>
@@ -516,7 +562,17 @@
                         <img class="mb-5 logo-img" src="{{ asset('assets/logo/logo.png') }}">
                     </div>
                     <div class="col-6 col-md-4 text-end">
-                        <img class="mb-5 w-100" src="{{ asset('assets/image/business/step_4.png') }}">
+                        <div class="d-flex justify-content-end align-items-center mb-2">
+                            @for ($i = 1; $i <= $totalSteps; $i++)
+                                <div class="ms-2" style="height: 8px; width: 32px; border-radius: 4px; background-color: {{ $step >= $i ? '#000' : '#dee2e6' }};"></div>
+                            @endfor
+                        </div>
+                    
+                        <div class="d-flex justify-content-end align-items-center mb-3">
+                            <span class="text-muted">
+                                Step <strong>{{ str_pad($step, 2, '0', STR_PAD_LEFT) }} of 0{{$totalSteps}}</strong>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -549,3 +605,16 @@
         </div>
     </div>
 </div>
+@push('style')
+    <style>
+        .h-180 {
+           height: 180px !important;
+        }
+        .h-2{
+            height: 5px;
+        }
+        .w-6{
+            width: 15px;
+        }
+    </style>
+@endpush

@@ -70,7 +70,7 @@
                                         id="phoneDiv">
                                         <div class="form-floating">
                                             <input type="number" class="form-control rounded-4" id="phoneInput"
-                                                placeholder="" wire:model="phone">
+                                                placeholder="" wire:model.live="phone">
                                             <label for="phoneInput">Phone</label>
                                         </div>
                                         @error('phone')
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="row mb-0">
                                     <div class="col-md-12 ">
-                                        <button type="submit" class="btn btn-dark w-100">Proceed</button>
+                                        <button type="submit" class="btn w-100 @if($phone) btn-dark @else btn-secondary @endif">Proceed</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -137,7 +137,7 @@
                                             <input wire:model="five"
                                                 class="m-md-2 me-1 text-center form-control rounded" type="password"
                                                 id="fifth" maxlength="1" placeholder="-" />
-                                            <input wire:model="six"
+                                            <input wire:model.live="six"
                                                 class="m-md-2 me-1 text-center form-control rounded" type="password"
                                                 id="sixth" maxlength="1" placeholder="-" />
                                         </div>
@@ -183,7 +183,7 @@
                                 </div>
                                 <div class="row mb-0">
                                     <div class="col-md-12 ">
-                                        <button type="submit" class="btn btn-dark w-100">Sign Up</button>
+                                        <button type="submit" class="btn @if($six) btn-dark @else btn-secondary @endif w-100">Sign Up</button>
                                     </div>
                                 </div>
                                 <div class="row mt-2 text-center">

@@ -7,7 +7,10 @@
                 @elseif($this->user->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('assets/bg/bg_profile.png') }}">
+                    <picture>
+                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
+                        <img class="w-100 object-fit-cover rounded-4" src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                    </picture>
                 @endif
                 <input type="file" wire:model="bgImage" hidden id="bgImage">
                 <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
@@ -57,15 +60,15 @@
                     </svg>
                 </a>
             </div>
-            <div class="col-12">
+            <div class="col-12  mb-3 mt-2">
                 <div class="row">
-                    <div class="col-lg-2 col-md-3 mb-3 col-6 position-relative" style="margin-top:-70px">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative" style="margin-top:-70px">
                         @if ($profileImage)
-                            <img class="w-100 ps-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
+                            <img class="ps-md-4 ratio ratio-1x1" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif($this->user->profile_image)
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('storage/' . $this->user->profile_image) }}">
+                            <img class="ps-md-4 ratio ratio-1x1" src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ps-md-4 ratio ratio-1x1" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
                         <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4"
@@ -84,11 +87,11 @@
                             </svg>
                         </label>
                     </div>
-                    <div class="col-lg-5 col-md-4 p-3">
-                        <div class="d-lg-flex align-items-center ms-md-2">
-                            <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
+                    <div class="col-md-4 col-lg-5 col-xl-5 col-12">
+                        <div class="d-lg-flex align-items-center ms-lg-2">
+                            <span class="fw-bold fs-4 my-2">{{ $this->user->name }}</span>
                         </div>
-                        <div class="ms-md-3 mt-2 d-flex">
+                        <div class="ms-lg-3 mt-2 d-flex">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -108,8 +111,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-5 p-3">
-                        <div class="d-lg-flex justify-content-end align-items-end float-md-end order-1"
+                    <div class="col-md-4 col-lg-4 col-xl-5 col-12 text-md-end mt-2">
+                        {{-- <div class="d-lg-flex justify-content-end align-items-end float-md-end order-1"
                             style="height:100%">
                             <button class="btn btn-dark me-2">
 
@@ -135,7 +138,7 @@
 
                                 Call
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -650,6 +653,17 @@
             .slider-form {
                 width: 40%;
                 /* 75% width on medium and larger screens */
+            }
+        }
+        @media (max-width: 767.98px) {
+            .w-mobile-50 {
+                width: 50% !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .w-mobile-50 {
+                width: 100% !important;
             }
         }
     </style>
