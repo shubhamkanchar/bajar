@@ -23,7 +23,7 @@ class Profile extends Component
     public $editProductId;
     public $selectedCategory = 'all';
     public $user;
-    public $allTags = ['Laravel', 'Vue', 'Livewire'];
+    public $allTags = [];
 
     #[
         Validate(
@@ -211,6 +211,7 @@ class Profile extends Component
         $product->quantity = $this->quantity;
         $product->user_id = auth()->id();
         $product->business_id = 1;
+        $product->is_approved = 0;
         $product->save();
 
         if ($this->isEdit) {

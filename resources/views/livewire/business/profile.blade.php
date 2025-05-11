@@ -3,29 +3,36 @@
         <div class="row">
             <div class="col-12 mt-4">
                 @if ($this->user->bg_image)
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/' . $this->user->bg_image) }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4"
+                        src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
                     <picture>
-                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_0'.rand(1,8).'.png') }}">
+                        <source media="(max-width: 767px)"
+                            srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
                         <img class="w-100 h-250 object-fit-cover rounded-4"
-                            src="{{ asset('assets/image/desktop/banner_0'.rand(1,8).'.png') }}" alt="Banner">
+                            src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
             </div>
             <div class="col-12 mb-3 mt-2">
                 <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative" style="margin-top:-70px">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
+                        style="margin-top:-70px">
                         @if ($this->user->profile_image)
-                            <img class="ms-md-4 square-img-profile" src="{{ asset('storage/' . $this->user->profile_image) }}">
+                            <img class="ms-md-4 square-img-profile"
+                                src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 square-img-profile"  src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
                         <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                            <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number : </span>
-                                {{ $this->user->gst }}</span>
+                            @if ($this->user->gst)
+                                <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
+                                    </span>
+                                    {{ $this->user->gst }}</span>
+                            @endif
                         </div>
                         <div class="ms-xl-2 mt-2 d-flex">
                             <span class="me-2">
@@ -51,7 +58,7 @@
                         <div class="d-lg-flex float-md-end text-md-end">
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
-                            @if($this->user?->ratings?->total_score)
+                            @if ($this->user?->ratings?->total_score)
                                 <span
                                     class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                     <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -159,7 +166,7 @@
                 @if (count($this->allProducts) == 0)
                     <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                         <a id="openSliderBtn">
-                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider" role="button"
                                 style="height: 100%; min-height: 250px;">
                                 <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
                                     role="button"></i>
@@ -175,7 +182,7 @@
                         <div class="row mb-2">
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                                 <a id="openSliderBtn">
-                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider my-2" role="button"
                                         style="height: 100%; min-height: 200px;">
                                         <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
                                             role="button"></i>
@@ -187,7 +194,7 @@
                             @foreach ($products as $product)
                                 <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 editProduct"
                                     data-id="{{ $product->id }}">
-                                    <div class=" position-relative">
+                                    <div class=" position-relative my-2">
                                         <div id="carouselProduct{{ $product->id }}"
                                             class="border rounded carousel slide" data-bs-ride="carousel">
                                             <div class="carousel-inner">
@@ -226,10 +233,23 @@
                                                 <strong>Contact us for pricing</strong>
                                             @endif
                                         </div>
+                                        @if(!$product->is_approved)
                                         <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editProduct"
-                                                data-id="{{ $product->id }}"></i>
+                                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="30" height="30" rx="15"
+                                                    transform="matrix(-1 0 0 1 30 0)" fill="white"
+                                                    fill-opacity="0.8" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M23.4818 15.0026C23.4818 19.6859 19.6859 23.4818 15.0026 23.4818C10.3194 23.4818 6.52344 19.6859 6.52344 15.0026C6.52344 10.3194 10.3194 6.52344 15.0026 6.52344C19.6859 6.52344 23.4818 10.3194 23.4818 15.0026Z"
+                                                    stroke="#404040" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path d="M18.1511 17.7L14.6953 15.6384V11.1953" stroke="#404040"
+                                                    stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
                                         </a>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach

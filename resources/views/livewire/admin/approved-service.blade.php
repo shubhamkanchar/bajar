@@ -162,15 +162,15 @@
                 <div class="col-12">
                     <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
                         <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary"> {{ $product->name }} </span>
-                            <span class="d-block fs-5 fw-bold text-wrap"> {{ $product->description }} </span>
+                            <span class="text-secondary text-title"> {{ $product->work_brief }} </span>
+                            <span class="d-block fs-5 fw-bold text-wrap text-description"> {{ $product->description }} </span>
                         </div>
                         <div class="col-12 col-md-6 border-end border-secondary">
-                            <div class="d-flex">
+                            <div class="row">
                                 @foreach ($product->images as $image)
-                                    <div class="ratio ratio-1x1 m-2">
+                                    <div class="col-2">
                                         <img src="{{ asset('storage/' . $image->path) }}"
-                                            class="d-block w-100 rounded" alt="Service Image" loading="lazy">
+                                            class="d-block w-100 rounded ratio ratio-1x1" alt="Service Image" loading="lazy">
                                     </div>
                                 @endforeach
                             </div>

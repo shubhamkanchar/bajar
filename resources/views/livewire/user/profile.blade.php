@@ -117,7 +117,7 @@
                     @if ($this->products->count() > 0)
                         @foreach ($this->products as $product)
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 mb-4">
-                                <div class="border rounded product-card">
+                                <div class="border rounded product-card my-2">
                                     <i class="fa fa-trash text-danger remove-btn"
                                         wire:click="removeFromWishlist({{ $product->id }})"></i>
                                     <div id="carouselProduct{{ $product->id }}" class="carousel slide product-carousel"

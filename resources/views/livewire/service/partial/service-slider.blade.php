@@ -62,7 +62,7 @@
                 <div class="col-md-7">
                     <div class="row">
                         @foreach([2, 3, 4, 5, 6] as $index)
-                            <div class="col-md-4 mb-3 position-relative">
+                            <div class="col-md-4 mb-3 col-6 position-relative">
                                 @if ($service_images['service_image' . $index])
                                     <button type="button" style="z-index: 1" class="btn btn-danger position-absolute top-0 end-1 m-1" wire:click="removeImage('service_image{{ $index }}')" wire:key="remove-button-{{ $index }}" accept="image/*">
                                         <i class="fa fa-times"></i>
@@ -120,14 +120,13 @@
                 </div>
                 
                 <div class="col-md-6" wire:ignore>
-                    <div class="form-group mb-2 mt-2">
-                        <label for="tags">Product Tag/Product Group</label>
-                        <select class="form-select" id="tags" wire:model="service_tag_group_id" multiple="multiple">
-                            <option></option>
+                    <div class="form-floating my-2" wire:ignore>
+                        <select class="form-select" id="tagInput" multiple wire:model.live="service_tag">
+                            @foreach($allTags as $tag)
+                                <option {{in_array($tag, $service_tag) ? 'selected' : '' }} value="{{ $tag }}">{{ $tag }}</option>
+                            @endforeach
                         </select>
-                        @error('service_tag_group_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <label for="tagInput">Tags</label>
                     </div>
                 </div>
                 <div class="col-12">

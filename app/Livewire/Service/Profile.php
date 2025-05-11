@@ -23,6 +23,7 @@ class Profile extends Component
     public $editServiceId;
     public $selectedCategory = 'all';
     public $user;
+    public $allTags = [];
     
     #[
         Validate(
@@ -50,7 +51,7 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select category')]
     public $category;
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
-    public $service_tag_group_id;
+    public $service_tag = [];
 
     public function mount(){
         $this->user = Auth::user();
@@ -137,7 +138,7 @@ class Profile extends Component
     public function resetService() {
         $this->reset([
             'work_brief',
-            'service_tag_group_id',
+            'service_tag',
             'service_images',
             'description',
             'category',
@@ -151,7 +152,7 @@ class Profile extends Component
         $this->editServiceId = $id;
         $this->description = $service->description;
         $this->category = $service->category_id;
-        $this->service_tag_group_id = $service->service_tag_group_id;
+        $this->service_tag = explode(',', $service->service_tag);
         $this->work_brief = $service->work_brief;
     
         foreach ($service->images as $index => $image) {
@@ -175,16 +176,14 @@ class Profile extends Component
         $rules = [
             'description' => 'required',
             'category' => 'required',
-            'service_tag_group_id' => 'required',
+            'service_tag' => 'required',
             'work_brief' => 'required',
         ];
     
-        // If creating a new product, ensure images are uploaded
         if (!$this->isEdit) {
-            $rules['service_images.*'] = 'required|image|max:1024';
+            $rules['service_images.service_image1'] = 'required|image|max:1024';
         } else {
-            // If editing, allow either a file upload or an existing image string
-            $rules['service_images.*'] = 'required|max:2048';
+            $rules['service_images.service_image1'] = 'required|max:2048';
         }
         $this->validate($rules);
 
@@ -192,8 +191,9 @@ class Profile extends Component
         $service->work_brief = $this->work_brief;
         $service->category_id = $this->category;
         $service->description = $this->description;
-        $service->service_tag_group_id = $this->service_tag_group_id;
+        $service->service_tag = implode(',', $this->service_tag);
         $service->user_id = auth()->id();
+        $service->is_approved = 0;
         $service->save();
 
         if ($this->isEdit) {
@@ -204,26 +204,17 @@ class Profile extends Component
                 
                 if (!empty($this->service_images[$key])) {
                     $image = $this->service_images[$key];
-
-                    // Get new image path if uploaded, otherwise keep old path
                     $path = is_string($image) ? $image : $image->store('service', 'public');
-
-                    // Update only the path for existing images
                     $existingImage->update(['path' => $path]);
                 }
             }
         } else {
-            // Ensure exactly 6 images are created in order for new product
             foreach (range(1, 6) as $index) {
                 $key = 'service_image' . $index;
 
                 if (!empty($this->service_images[$key])) {
                     $image = $this->service_images[$key];
-
-                    // Store the image
                     $path = $image->store('products', 'public');
-
-                    // Create new image record with correct order
                     ServiceImage::create([
                         'service_id' => $service->id,
                         'order' => $index,

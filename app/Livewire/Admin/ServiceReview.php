@@ -43,7 +43,7 @@ class ServiceReview extends Component
             }
         }
 
-        $query->whereNull('is_approved');
+        $query->whereNull('is_approved')->orWhere('is_approved',0);
 
         $totalRecord = $query->count();
         $this->totalPage = ceil($totalRecord / $this->perPage);
@@ -68,7 +68,7 @@ class ServiceReview extends Component
     #[Computed()]
     public function pendingApproval()
     {
-        return Service::whereNull('is_approved')->count();
+        return Service::whereNull('is_approved')->orWhere('is_approved',0)->count();
     }
 
     #[Computed]

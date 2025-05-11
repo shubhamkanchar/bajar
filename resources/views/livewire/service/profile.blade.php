@@ -7,31 +7,34 @@
                         src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
                     <picture>
-                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_0'.rand(1,8).'.png') }}">
+                        <source media="(max-width: 767px)"
+                            srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
                         <img class="w-100 h-250 object-fit-cover rounded-4"
-                            src="{{ asset('assets/image/desktop/banner_0'.rand(1,8).'.png') }}" alt="Banner">
+                            src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
             </div>
             <div class="col-12 mb-3 mt-2">
                 <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-12 position-relative text-center"
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
                         @if ($this->user->profile_image)
-                            <img class="w-mobile-50 ps-md-4 ratio ratio-1x1"
+                            <img class="ms-md-4 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="w-mobile-50 ps-md-4 ratio ratio-1x1"
-                                src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
-                    <div class="col-md-4 col-lg-4 col-xl-5 col-12">
-                        <div class="d-lg-flex align-items-center ms-md-2 text-center">
-                            <span class="fw-bold fs-4 m-2">{{ $this->user->name }}</span>
-                            <span class="badge text-bg-light fs-6"><span class="fw-light">GST Number : </span>
-                                {{ $this->user->gst }}</span>
+                    <div class="col-md-4 col-lg-5 col-xl-5 col-12">
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                            @if ($this->user->gst)
+                                <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
+                                    </span>
+                                    {{ $this->user->gst }}</span>
+                            @endif
                         </div>
-                        <div class="ms-md-3 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -51,33 +54,36 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-4 col-lg-4 col-xl-5 col-12">
-                        <div class="d-lg-flex float-md-end">
+                    <div class="col-md-4 col-lg-4 col-xl-5 col-12 text-md-end">
+                        <div class="d-lg-flex float-md-end text-md-end">
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
-                            @if($this->user?->ratings?->total_score)
-                            <span
-                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
-                                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M15.9189 12.32C15.6599 12.571 15.5409 12.934 15.5999 13.29L16.4889 18.21C16.5639 18.627 16.3879 19.049 16.0389 19.29C15.6969 19.54 15.2419 19.57 14.8689 19.37L10.4399 17.06C10.2859 16.978 10.1149 16.934 9.93988 16.929H9.66888C9.57488 16.943 9.48288 16.973 9.39888 17.019L4.96888 19.34C4.74988 19.45 4.50188 19.489 4.25888 19.45C3.66688 19.338 3.27188 18.774 3.36888 18.179L4.25888 13.259C4.31788 12.9 4.19888 12.535 3.93988 12.28L0.328876 8.78C0.0268758 8.487 -0.0781242 8.047 0.0598758 7.65C0.193876 7.254 0.535876 6.965 0.948876 6.9L5.91888 6.179C6.29688 6.14 6.62888 5.91 6.79888 5.57L8.98888 1.08C9.04088 0.98 9.10788 0.888 9.18888 0.81L9.27888 0.74C9.32588 0.688 9.37988 0.645 9.43988 0.61L9.54888 0.57L9.71888 0.5H10.1399C10.5159 0.539 10.8469 0.764 11.0199 1.1L13.2389 5.57C13.3989 5.897 13.7099 6.124 14.0689 6.179L19.0389 6.9C19.4589 6.96 19.8099 7.25 19.9489 7.65C20.0799 8.051 19.9669 8.491 19.6589 8.78L15.9189 12.32Z"
-                                        fill="#22B14D" />
-                                </svg>
-                                {{$this->user?->ratings?->total_score}}
-                            </span>
+                            @if ($this->user?->ratings?->total_score)
+                                <span
+                                    class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
+                                    <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M15.9189 12.32C15.6599 12.571 15.5409 12.934 15.5999 13.29L16.4889 18.21C16.5639 18.627 16.3879 19.049 16.0389 19.29C15.6969 19.54 15.2419 19.57 14.8689 19.37L10.4399 17.06C10.2859 16.978 10.1149 16.934 9.93988 16.929H9.66888C9.57488 16.943 9.48288 16.973 9.39888 17.019L4.96888 19.34C4.74988 19.45 4.50188 19.489 4.25888 19.45C3.66688 19.338 3.27188 18.774 3.36888 18.179L4.25888 13.259C4.31788 12.9 4.19888 12.535 3.93988 12.28L0.328876 8.78C0.0268758 8.487 -0.0781242 8.047 0.0598758 7.65C0.193876 7.254 0.535876 6.965 0.948876 6.9L5.91888 6.179C6.29688 6.14 6.62888 5.91 6.79888 5.57L8.98888 1.08C9.04088 0.98 9.10788 0.888 9.18888 0.81L9.27888 0.74C9.32588 0.688 9.37988 0.645 9.43988 0.61L9.54888 0.57L9.71888 0.5H10.1399C10.5159 0.539 10.8469 0.764 11.0199 1.1L13.2389 5.57C13.3989 5.897 13.7099 6.124 14.0689 6.179L19.0389 6.9C19.4589 6.96 19.8099 7.25 19.9489 7.65C20.0799 8.051 19.9669 8.491 19.6589 8.78L15.9189 12.32Z"
+                                            fill="#22B14D" />
+                                    </svg>
+                                    {{ $this->user?->ratings?->total_score }}
+                                </span>
                             @endif
-                            <span
-                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
 
-                                <svg class="me-2" width="18" height="20" viewBox="0 0 18 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M8.7281 19.9137C8.83884 19.9715 8.96266 20.0009 9.08649 20C9.21032 19.999 9.33314 19.9686 9.44489 19.9097L13.0128 18.0025C14.0245 17.4631 14.8168 16.8601 15.435 16.1579C16.779 14.6282 17.5129 12.6758 17.4998 10.6626L17.4575 4.02198C17.4535 3.25711 16.9511 2.57461 16.2082 2.32652L9.57073 0.0995642C9.17106 -0.0357592 8.73313 -0.0328174 8.3405 0.106428L1.72824 2.41281C0.989299 2.67071 0.495998 3.35811 0.500024 4.12396L0.542307 10.7597C0.555395 12.7758 1.31448 14.7194 2.68062 16.2334C3.3048 16.9258 4.10415 17.52 5.12699 18.0505L8.7281 19.9137ZM7.78119 12.1106C7.93019 12.2538 8.12348 12.3244 8.31678 12.3225C8.51007 12.3215 8.70236 12.2489 8.84934 12.1038L12.7484 8.25981C13.0414 7.97053 13.0384 7.50572 12.7424 7.22037C12.4454 6.93501 11.9672 6.93697 11.6742 7.22625L8.3057 10.5466L6.92647 9.2208C6.62949 8.93545 6.15229 8.93839 5.85832 9.22767C5.56536 9.51694 5.56838 9.98175 5.86537 10.2671L7.78119 12.1106Z"
-                                        fill="#4285F4" />
-                                </svg>
-                                10
-                            </span>
+                            @if ($this->bussinessRatingsCount())
+                                <span
+                                    class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
+
+                                    <svg class="me-2" width="18" height="20" viewBox="0 0 18 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M8.7281 19.9137C8.83884 19.9715 8.96266 20.0009 9.08649 20C9.21032 19.999 9.33314 19.9686 9.44489 19.9097L13.0128 18.0025C14.0245 17.4631 14.8168 16.8601 15.435 16.1579C16.779 14.6282 17.5129 12.6758 17.4998 10.6626L17.4575 4.02198C17.4535 3.25711 16.9511 2.57461 16.2082 2.32652L9.57073 0.0995642C9.17106 -0.0357592 8.73313 -0.0328174 8.3405 0.106428L1.72824 2.41281C0.989299 2.67071 0.495998 3.35811 0.500024 4.12396L0.542307 10.7597C0.555395 12.7758 1.31448 14.7194 2.68062 16.2334C3.3048 16.9258 4.10415 17.52 5.12699 18.0505L8.7281 19.9137ZM7.78119 12.1106C7.93019 12.2538 8.12348 12.3244 8.31678 12.3225C8.51007 12.3215 8.70236 12.2489 8.84934 12.1038L12.7484 8.25981C13.0414 7.97053 13.0384 7.50572 12.7424 7.22037C12.4454 6.93501 11.9672 6.93697 11.6742 7.22625L8.3057 10.5466L6.92647 9.2208C6.62949 8.93545 6.15229 8.93839 5.85832 9.22767C5.56536 9.51694 5.56838 9.98175 5.86537 10.2671L7.78119 12.1106Z"
+                                            fill="#4285F4" />
+                                    </svg>
+                                    {{ $this->bussinessRatingsCount() }}
+                                </span>
+                            @endif
 
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
@@ -98,7 +104,7 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                {{ $this->bussinessTime() }}
+                                {{ $this->user->bussiness_time }}
                             </span>
                         </div>
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2"
@@ -156,28 +162,13 @@
                     </button>
                 </div>
             </div>
-            <div class="col-12 mt-3 service-list">
+            <div class="col-12 mt-3 mb-5 service-list">
                 @if (count($this->allServices) == 0)
-                    {{-- <div class="row mb-2">
-                        <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 service-card" class="openSlider">
-                            <a id="openSliderBtn">
-                                <div class="dashed-border ratio ratio-add-product">
-                                    <span class="text-center p-4" style="padding-top: 30% !important;">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
-                                            role="button"></i>
-                                        <div class="fs-5 fw-bold">Add Previous Work</div>
-                                        <small>Adding more products improve your search rankings</small>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div> --}}
                     <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                         <a id="openSliderBtn">
-                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
-                                style="height: 100%; min-height: 200px;">
-                                <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
-                                    role="button"></i>
+                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
+                                role="button" style="height: 100%; min-height: 250px;">
+                                <i class="fa-regular fa-square-plus fs-1 text-secondary " role="button"></i>
                                 <div class="fs-4 fw-bold">Add Previous Work</div>
                                 <small>Adding more service improve your search rankings</small>
                             </div>
@@ -188,55 +179,71 @@
                     <div class="mb-3">
                         <h6 class="fw-bold">{{ $categoryName }}</h6>
                         <div class="row">
-                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 service-card">
+                            <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 service-card">
                                 <a id="openSliderBtn">
-                                    <div class="dashed-border ratio ratio-add-product">
-                                        <span class="text-center p-4" style="padding-top: 30% !important;">
-                                            <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
-                                                role="button"></i>
-                                            <div class="fs-5 fw-bold">Add Previous Work</div>
-                                            <small>Adding more products improve your search rankings</small>
-                                        </span>
+                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
+                                        role="button" style="height: 100%; min-height: 200px;">
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
+                                            role="button"></i>
+                                        <div class="fs-4 fw-bold">Add Previous Work</div>
+                                        <small>Adding more products improve your search rankings</small>
                                     </div>
                                 </a>
                             </div>
                             @foreach ($services as $service)
-                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-12 editService"
+                                <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 editService" role="button"
                                     data-id="{{ $service->id }}">
-                                    <div class="border rounded position-relative">
-                                        <div id="carouselService{{ $service->id }}" class="carousel slide"
-                                            data-bs-ride="carousel">
+                                    <div class="position-relative my-2">
+                                        <div id="carouselProduct{{ $service->id }}"
+                                            class="border rounded carousel slide" data-bs-ride="carousel">
                                             <div class="carousel-inner">
                                                 @foreach ($service->images as $key => $serviceImage)
                                                     <div
                                                         class="carousel-item @if ($key == 0) active @endif ratio ratio-4x3">
                                                         <img src="{{ asset('storage/' . $serviceImage->path) }}"
-                                                            class="d-block w-100" alt="Service Image">
+                                                            class="d-block w-100" alt="Product Image">
                                                     </div>
                                                 @endforeach
                                             </div>
                                             <button class="carousel-control-prev" type="button"
-                                                data-bs-target="#carouselService{{ $service->id }}"
+                                                data-bs-target="#carouselProduct{{ $service->id }}"
                                                 data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Previous</span>
                                             </button>
                                             <button class="carousel-control-next" type="button"
-                                                data-bs-target="#carouselService{{ $service->id }}"
+                                                data-bs-target="#carouselProduct{{ $service->id }}"
                                                 data-bs-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Next</span>
                                             </button>
                                         </div>
-                                        <div class="ratio ratio ratio-16x9">
-                                            <div class="p-2 fw-bold"> {{ $this->limitText($service->work_brief) }}
-                                            </div>
+                                        <div class="">
+                                            <span class="text-description fw-bold">{{ $service->description }}</span>
                                         </div>
-
+                                        <div class="py-1">
+                                            <span class="text-title">{{ $service->work_brief }}</span>
+                                        </div>
+                                        <div class="py-1">
+                                            <strong>Contact us for pricing</strong>
+                                        </div>
+                                        @if(!$service->is_approved)
                                         <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                            <i class="fa-regular fa-pen-to-square fs-5 text-secondary editService"
-                                                data-id="{{ $service->id }}"></i>
+                                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="30" height="30" rx="15"
+                                                    transform="matrix(-1 0 0 1 30 0)" fill="white"
+                                                    fill-opacity="0.8" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M23.4818 15.0026C23.4818 19.6859 19.6859 23.4818 15.0026 23.4818C10.3194 23.4818 6.52344 19.6859 6.52344 15.0026C6.52344 10.3194 10.3194 6.52344 15.0026 6.52344C19.6859 6.52344 23.4818 10.3194 23.4818 15.0026Z"
+                                                    stroke="#404040" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path d="M18.1511 17.7L14.6953 15.6384V11.1953" stroke="#404040"
+                                                    stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
                                         </a>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
@@ -252,12 +259,10 @@
 
 @section('style')
     <style>
-        /* Initially set the slider to be hidden off-screen on the right */
         .slider-form {
             position: fixed;
             top: 0;
             right: -100%;
-            /* Hide off-screen initially */
             width: 100%;
             height: 100%;
             background-color: #f8f9fa;
@@ -267,36 +272,26 @@
             overflow: scroll;
         }
 
-        /* Show the slider when active (slide in from the right) */
         .slider-form.open {
             right: 0;
         }
 
-        /* Form content styling */
         .slider-content {
             padding: 30px;
         }
 
-        /* Adjust the width of the form based on screen size */
         @media (max-width: 767px) {
             .slider-form {
                 width: 100%;
-                /* Full width on small screens */
             }
         }
 
         @media (min-width: 768px) {
             .slider-form {
                 width: 75%;
-                /* 75% width on medium and larger screens */
             }
         }
 
-        .star-rating {
-            font-size: 24px;
-            cursor: pointer;
-            color: #ccc;
-        }
         @media (max-width: 767.98px) {
             .w-mobile-50 {
                 width: 50% !important;
@@ -308,103 +303,126 @@
                 width: 100% !important;
             }
         }
+
+        .select2-selection--multiple {
+            padding-top: 20px
+        }
+
+        .text-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .text-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 @endsection
 @push('scripts')
-<script>
-    // Toggle slider form on button click
-    //product slider
-    // const openSliderBtn = document.getElementById("openSliderBtn");
-    const sliderForm = document.querySelector(".slider-form");
-    const closeSliderBtn = document.getElementById("closeSliderBtn");
+    <script>
+        // Toggle slider form on button click
+        //product slider
+        // const openSliderBtn = document.getElementById("openSliderBtn");
+        const sliderForm = document.querySelector(".slider-form");
+        const closeSliderBtn = document.getElementById("closeSliderBtn");
 
-    document.querySelector(".service-list").addEventListener("click", function(event) {
-        if (event.target.classList.contains("service-card") || event.target.classList.contains("openSlider")) {
-            sliderForm.classList.toggle("open");
-        }
-    });
+        document.querySelector(".service-list").addEventListener("click", function(event) {
+            if (event.target.classList.contains("service-card") || event.target.classList.contains("openSlider")) {
+                sliderForm.classList.toggle("open");
+            }
+        });
 
-    closeSliderBtn.addEventListener("click", function() {
-        sliderForm.classList.remove("open");
-        @this.call('resetService')
-    });
+        closeSliderBtn.addEventListener("click", function() {
+            sliderForm.classList.remove("open");
+            @this.call('resetService')
+        });
 
-    //review slider
-    // const openReviewSliderBtn = document.getElementById("openReviewSliderBtn");
-    const reviewSliderForm = document.getElementById("reviewSlider");
-    const closeReviewSliderBtn = document.getElementById("closeReviewSliderBtn");
+        //review slider
+        // const openReviewSliderBtn = document.getElementById("openReviewSliderBtn");
+        const reviewSliderForm = document.getElementById("reviewSlider");
+        const closeReviewSliderBtn = document.getElementById("closeReviewSliderBtn");
 
-    // openReviewSliderBtn.addEventListener("click", function() {
-    //     reviewSliderForm.classList.toggle("open");
-    // });
+        // openReviewSliderBtn.addEventListener("click", function() {
+        //     reviewSliderForm.classList.toggle("open");
+        // });
 
-    closeReviewSliderBtn.addEventListener("click", function() {
-        reviewSliderForm.classList.remove("open");
-        @this.call('resetService');
-    });
+        closeReviewSliderBtn.addEventListener("click", function() {
+            reviewSliderForm.classList.remove("open");
+            @this.call('resetService');
+        });
 
-    const stars = document.querySelectorAll('.star-rating i');
+        const stars = document.querySelectorAll('.star-rating i');
 
-    stars.forEach(star => {
-        star.addEventListener('click', function() {
-            let value = this.getAttribute('data-value');
-            // ratingValue.innerText = value;
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                let value = this.getAttribute('data-value');
+                // ratingValue.innerText = value;
 
-            // Update star colors
-            stars.forEach((s, index) => {
-                if (index < value) {
-                    s.classList.add('text-success');
-                    // s.classList.remove('fa-star-o');
-                } else {
-                    // s.classList.add('fa-star-o');
-                    s.classList.remove('text-success');
-                }
+                // Update star colors
+                stars.forEach((s, index) => {
+                    if (index < value) {
+                        s.classList.add('text-success');
+                        // s.classList.remove('fa-star-o');
+                    } else {
+                        // s.classList.add('fa-star-o');
+                        s.classList.remove('text-success');
+                    }
+                });
             });
         });
-    });
 
-    document.addEventListener('click', function(event) {
-        let target = event.target.closest('.editService');
-        if (target) {
-            event.stopPropagation();
-            let serviceId = target.getAttribute('data-id');
+        document.addEventListener('click', function(event) {
+            let target = event.target.closest('.editService');
+            if (target) {
+                event.stopPropagation();
+                let serviceId = target.getAttribute('data-id');
 
-            @this.call('editService', serviceId).then(function() {
-                sliderForm.classList.toggle("open");
-            });
-        }
-    });
+                @this.call('editService', serviceId).then(function() {
+                    sliderForm.classList.toggle("open");
+                });
+            }
+        });
 
 
-    document.addEventListener('serviceUpdated', event => {
-        Toastify({
-            text: event.detail[0].message,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
-        }).showToast();
+        document.addEventListener('serviceUpdated', event => {
+            Toastify({
+                text: event.detail[0].message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+            }).showToast();
 
-        sliderForm.classList.remove("open");
-    });
+            sliderForm.classList.remove("open");
+        });
 
-    document.addEventListener('serviceDeleted', event => {
-        Toastify({
-            text: event.detail[0].message,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
-        }).showToast();
+        document.addEventListener('serviceDeleted', event => {
+            Toastify({
+                text: event.detail[0].message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
+            }).showToast();
 
-        sliderForm.classList.remove("open");
-    });
+            sliderForm.classList.remove("open");
+        });
 
-    $('#tags').select2({
-        tags: true,
-        tokenSeparators: [',', ' '],
-        placeholder: 'Enter or select tags',
-        width: '100%'
-    });
-</script>
+        $('#tagInput').select2({
+            tags: true,
+            tokenSeparators: [',', ' '],
+            placeholder: 'Enter or select tags',
+            width: '100%'
+        });
+        $('#tagInput').on('change', function() {
+            @this.set('service_tag', $(this).val());
+        });
+    </script>
 @endpush

@@ -54,7 +54,8 @@
                                 fill="#CCCCCC" />
                         </svg>
                         <input wire:model="productName" class="form-control border border-0 rounded-5 me-2 bg-white"
-                            type="text" placeholder="Search" @focus='focused = true' @blur="focused = false" wire:keyup="searchRestart()">
+                            type="text" placeholder="Search" @focus='focused = true' @blur="focused = false"
+                            wire:keyup="searchRestart()">
                         @if ($searchStarted)
                             <button type="button" class="btn btn-dark rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
                                 wire:click="clearSearch()">Clear</button>
@@ -74,7 +75,8 @@
                         area.</span>
                     <div class="row mt-5 text-md-start justify-content-center">
                         @foreach ($data as $item)
-                            <div class="col-md-3 col-lg-2 col-3 text-break" role="button" wire:click="searchProduct({{$item->id}})">
+                            <div class="col-md-3 col-lg-2 col-3 text-break" role="button"
+                                wire:click="searchProduct({{ $item->id }})">
                                 <img class="w-100 category-image"
                                     src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
                                 <p>{{ $item->title }}</p>
@@ -89,7 +91,8 @@
                         hassle-free</span>
                     <div class="row mt-5 text-md-start justify-content-center">
                         @foreach ($data as $item)
-                            <div class="col-md-3 col-lg-2 col-3 text-break">
+                            <div role="button" class="col-md-3 col-lg-2 col-3 text-break"
+                                wire:click="searchProduct({{ $item->id }})">
                                 <img class="w-100 category-image"
                                     src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
                                 <p>{{ $item->title }}</p>
@@ -110,22 +113,28 @@
                                 <div class="card h-100 shadow-sm">
                                     <div class="ratio ratio-21x9">
                                         @if ($seller->bg_image)
-                                            <img src="{{ asset('storage/' . $seller->bg_image) }}"
-                                                class="card-img-top" alt="{{ $seller['name'] }}">
+                                            <img src="{{ asset('storage/' . $seller->bg_image) }}" class="card-img-top h-100"
+                                                alt="{{ $seller['name'] }}">
                                         @else
                                             <picture>
                                                 <source media="(max-width: 767px)"
                                                     srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
-                                                <img class="card-img-top"
+                                                <img class="card-img-top h-100"
                                                     src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}"
                                                     alt="Banner">
                                             </picture>
                                         @endif
                                     </div>
                                     <div style="margin-top:-50px;z-index:5">
-                                        <img src="{{ asset('storage/' . $seller->profile_image) }}"
-                                            alt="{{ $seller['name'] }}" class="mx-auto d-block rounded"
-                                            style="height: 100px; width: 100px; object-fit: cover;">
+                                        @if ($seller->profile_image)
+                                            <img src="{{ asset('storage/' . $seller->profile_image) }}"
+                                                alt="{{ $seller['name'] }}" class="mx-auto d-block rounded"
+                                                style="height: 100px; width: 100px; object-fit: cover;">
+                                        @else
+                                            <img src="{{ asset('assets/image/profile.png') }}"
+                                                alt="{{ $seller['name'] }}" class="mx-auto d-block rounded"
+                                                style="height: 100px; width: 100px; object-fit: cover;">
+                                        @endif
                                     </div>
                                     <div class="card-body">
                                         <div class="text-center">

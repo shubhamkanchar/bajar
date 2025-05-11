@@ -19,7 +19,7 @@ class ProductReview extends Component
     public $currentPage = 1;
     public $perPage = 10;
     public $totalPage = 1;
-    public $allTags = ['Laravel', 'Vue', 'Livewire'];
+    public $allTags = [];
     public $product_tag = [];
 
     #[Computed()]
@@ -46,7 +46,7 @@ class ProductReview extends Component
             }
         }
 
-        $query->whereNull('is_approved');
+        $query->whereNull('is_approved')->orWhere('is_approved',0);
 
         $totalRecord = $query->count();
         $this->totalPage = ceil($totalRecord / $this->perPage);
@@ -71,7 +71,7 @@ class ProductReview extends Component
     #[Computed()]
     public function pendingApproval()
     {
-        return Product::whereNull('is_approved')->count();
+        return Product::whereNull('is_approved')->orWhere('is_approved',0)->count();
     }
 
     #[Computed]
