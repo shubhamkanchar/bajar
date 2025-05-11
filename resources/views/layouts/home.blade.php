@@ -91,8 +91,16 @@
             --bs-aspect-ratio: 130%;
         }
 
-        .h-250 {
-            height: 250px !important;
+        @media (max-width: 767.98px) {
+            .h-250 {
+                height: 130px !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .h-250 {
+                height: 250px !important;
+            }
         }
 
         .logo-img {
@@ -118,6 +126,14 @@
             /* Number of lines */
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+        .square-img-profile {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            border-radius: 15px;
         }
     </style>
 </head>

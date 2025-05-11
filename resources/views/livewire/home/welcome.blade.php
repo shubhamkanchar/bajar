@@ -54,7 +54,7 @@
                                 fill="#CCCCCC" />
                         </svg>
                         <input wire:model="productName" class="form-control border border-0 rounded-5 me-2 bg-white"
-                            type="text" placeholder="Search" @focus='focused = true' @blur="focused = false">
+                            type="text" placeholder="Search" @focus='focused = true' @blur="focused = false" wire:keyup="searchRestart()">
                         @if ($searchStarted)
                             <button type="button" class="btn btn-dark rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
                                 wire:click="clearSearch()">Clear</button>
@@ -68,15 +68,13 @@
             </div>
 
             @if (empty($sellers))
-                {{-- Top Material Categories --}}
                 <div class="col-md-12 text-center" wire:show="section == 'product'" x-transition.duration.500ms>
-                    {{-- <div class="text-warning mt-5 fw-bold fs-5">Material</div> --}}
                     <div class="h3 fw-bold mt-5">Top Material Categories</div>
                     <span>Your one-stop destination for premium building materials <br> from trusted sellers in your
                         area.</span>
                     <div class="row mt-5 text-md-start justify-content-center">
                         @foreach ($data as $item)
-                            <div class="col-md-3 col-lg-2 col-3 text-break">
+                            <div class="col-md-3 col-lg-2 col-3 text-break" role="button" wire:click="searchProduct({{$item->id}})">
                                 <img class="w-100 category-image"
                                     src="{{ asset('assets/material/' . strtolower(str_replace(' ', '_', $item->title)) . '.png') }}">
                                 <p>{{ $item->title }}</p>
@@ -85,9 +83,7 @@
                     </div>
                 </div>
 
-                {{-- Top Service Providers --}}
                 <div class="col-md-12 text-center" wire:show="section == 'service'" x-transition.duration.500ms>
-                    {{-- <div class="text-warning mt-5 fw-bold fs-5">Services</div> --}}
                     <div class="h3 fw-bold mt-5">Top Service Providers</div>
                     <span>Discover skilled experts and reliable services to make <br> your construction projects
                         hassle-free</span>
@@ -108,22 +104,27 @@
                     <h5 class="mb-4">
                         Top Sellers for <strong>{{ $productName }}</strong>
                     </h5>
-
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
                         @foreach ($sellers as $seller)
                             <div class="col">
                                 <div class="card h-100 shadow-sm">
                                     <div class="ratio ratio-21x9">
-                                        @if ($seller->profile_image)
-                                            <img src="{{ $seller->profile_image }}" class="card-img-top"
-                                                alt="{{ $seller['name'] }}">
+                                        @if ($seller->bg_image)
+                                            <img src="{{ asset('storage/' . $seller->bg_image) }}"
+                                                class="card-img-top" alt="{{ $seller['name'] }}">
                                         @else
-                                            <img class="card-img-top" src="{{ asset('assets/bg/bg_profile.png') }}">
+                                            <picture>
+                                                <source media="(max-width: 767px)"
+                                                    srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
+                                                <img class="card-img-top"
+                                                    src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}"
+                                                    alt="Banner">
+                                            </picture>
                                         @endif
                                     </div>
                                     <div style="margin-top:-50px;z-index:5">
-                                        <img src="{{ asset('assets/image/profile.png') }}" alt="{{ $seller['name'] }}"
-                                            class="mx-auto d-block rounded"
+                                        <img src="{{ asset('storage/' . $seller->profile_image) }}"
+                                            alt="{{ $seller['name'] }}" class="mx-auto d-block rounded"
                                             style="height: 100px; width: 100px; object-fit: cover;">
                                     </div>
                                     <div class="card-body">
@@ -132,11 +133,42 @@
                                         </div>
 
                                         <div class="d-flex align-items-center mb-2">
-                                            <span class="badge bg-success me-2"><i class="bi bi-star-fill"></i>
-                                                {{ $seller['rating'] }}</span>
-                                            <span class="me-2"><i class="bi bi-people-fill"></i>
-                                                {{ $seller['visitors'] }}</span>
-                                            <span><i class="bi bi-clock-fill"></i> {{ $seller['timing'] }}</span>
+                                            @if ($seller?->ratings?->total_score)
+                                                <span
+                                                    class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
+                                                    <svg class="me-2" width="20" height="20"
+                                                        viewBox="0 0 20 20" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.9189 12.32C15.6599 12.571 15.5409 12.934 15.5999 13.29L16.4889 18.21C16.5639 18.627 16.3879 19.049 16.0389 19.29C15.6969 19.54 15.2419 19.57 14.8689 19.37L10.4399 17.06C10.2859 16.978 10.1149 16.934 9.93988 16.929H9.66888C9.57488 16.943 9.48288 16.973 9.39888 17.019L4.96888 19.34C4.74988 19.45 4.50188 19.489 4.25888 19.45C3.66688 19.338 3.27188 18.774 3.36888 18.179L4.25888 13.259C4.31788 12.9 4.19888 12.535 3.93988 12.28L0.328876 8.78C0.0268758 8.487 -0.0781242 8.047 0.0598758 7.65C0.193876 7.254 0.535876 6.965 0.948876 6.9L5.91888 6.179C6.29688 6.14 6.62888 5.91 6.79888 5.57L8.98888 1.08C9.04088 0.98 9.10788 0.888 9.18888 0.81L9.27888 0.74C9.32588 0.688 9.37988 0.645 9.43988 0.61L9.54888 0.57L9.71888 0.5H10.1399C10.5159 0.539 10.8469 0.764 11.0199 1.1L13.2389 5.57C13.3989 5.897 13.7099 6.124 14.0689 6.179L19.0389 6.9C19.4589 6.96 19.8099 7.25 19.9489 7.65C20.0799 8.051 19.9669 8.491 19.6589 8.78L15.9189 12.32Z"
+                                                            fill="#22B14D" />
+                                                    </svg>
+                                                    {{ $seller->ratings->total_score }}
+                                                </span>
+                                            @endif
+
+                                            <span
+                                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
+
+                                                <svg class="me-2" width="20" height="20"
+                                                    viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_287_3784)">
+                                                        <path
+                                                            d="M10.0026 0.828125C8.18961 0.828125 6.41733 1.36574 4.90988 2.37299C3.40243 3.38023 2.22752 4.81187 1.53371 6.48686C0.839909 8.16185 0.658379 10.005 1.01208 11.7831C1.36577 13.5613 2.23881 15.1946 3.5208 16.4766C4.80278 17.7586 6.43612 18.6316 8.21428 18.9853C9.99244 19.339 11.8356 19.1575 13.5105 18.4637C15.1855 17.7699 16.6172 16.595 17.6244 15.0875C18.6317 13.5801 19.1693 11.8078 19.1693 9.99479C19.1664 7.56452 18.1997 5.23461 16.4813 3.51615C14.7628 1.79768 12.4329 0.830992 10.0026 0.828125ZM10.0026 17.4948C8.51925 17.4948 7.0692 17.0549 5.83583 16.2308C4.60246 15.4067 3.64117 14.2354 3.07351 12.8649C2.50585 11.4945 2.35733 9.98647 2.64672 8.53161C2.93611 7.07676 3.65041 5.74038 4.69931 4.69149C5.7482 3.6426 7.08457 2.92829 8.53943 2.6389C9.99429 2.34951 11.5023 2.49804 12.8727 3.0657C14.2432 3.63335 15.4145 4.59465 16.2386 5.82801C17.0627 7.06138 17.5026 8.51143 17.5026 9.99479C17.5002 11.9832 16.7092 13.8894 15.3032 15.2954C13.8972 16.7014 11.991 17.4924 10.0026 17.4948Z"
+                                                            fill="#808080" />
+                                                        <path
+                                                            d="M10.8307 9.66021V5.00521C10.8307 4.78419 10.7429 4.57223 10.5867 4.41595C10.4304 4.25967 10.2184 4.17188 9.9974 4.17188C9.77638 4.17188 9.56442 4.25967 9.40814 4.41595C9.25186 4.57223 9.16406 4.78419 9.16406 5.00521V10.0052C9.16411 10.2262 9.25194 10.4381 9.40823 10.5944L11.9082 13.0944C12.0654 13.2462 12.2759 13.3302 12.4944 13.3283C12.7129 13.3264 12.9219 13.2387 13.0764 13.0842C13.2309 12.9297 13.3186 12.7207 13.3205 12.5022C13.3224 12.2837 13.2384 12.0732 13.0866 11.916L10.8307 9.66021Z"
+                                                            fill="#808080" />
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_287_3784">
+                                                            <rect width="20" height="20" fill="white" />
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                                {{ $seller->bussiness_time }}
+                                            </span>
                                         </div>
 
                                         <p class="mb-1 small text-muted border-bottom">GST Number:
@@ -156,21 +188,31 @@
                                     </div>
 
                                     <div class="p-2 d-flex justify-content-between">
-                                        <a class="btn btn-outline-dark w-100 me-1" href="{{ route('view-shop', $seller->uuid)}}">
+                                        <a class="btn btn-outline-dark w-100 me-1"
+                                            href="{{ route('view-shop', $seller->uuid) }}">
                                             <i class="bi bi-shop me-1"></i> View Shop
                                         </a>
                                         <div class="d-flex">
                                             @if ($seller->address && $seller->address->map_link)
-                                                <a href="{{ $seller->address->map_link }}" target="_blank" class="btn btn-dark me-1 text-white text-decoration-none">
-                                                    <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M16.4922 9.01524L10.5302 15.0408L3.74941 10.7997C2.77786 10.1918 2.97996 8.71608 4.07888 8.39471L20.1784 3.67997C21.1846 3.38503 22.1172 4.32587 21.8183 5.33541L17.0553 21.4237C16.729 22.5242 15.2617 22.7208 14.6596 21.7451L10.5271 15.0419" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <a href="{{ $seller->address->map_link }}" target="_blank"
+                                                    class="btn btn-dark me-1 text-white text-decoration-none">
+                                                    <svg width="25" height="26" viewBox="0 0 25 26"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M16.4922 9.01524L10.5302 15.0408L3.74941 10.7997C2.77786 10.1918 2.97996 8.71608 4.07888 8.39471L20.1784 3.67997C21.1846 3.38503 22.1172 4.32587 21.8183 5.33541L17.0553 21.4237C16.729 22.5242 15.2617 22.7208 14.6596 21.7451L10.5271 15.0419"
+                                                            stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
                                                     </svg>
                                                 </a>
                                             @endif
-                                            <a href="tel:{{ $seller->phone }}" class="btn btn-dark me-1"> 
-                                                <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0096 13.4895C16.1649 17.6436 17.1076 12.8377 19.7533 15.4816C22.3039 18.0315 23.7699 18.5424 20.5383 21.7731C20.1335 22.0985 17.5616 26.0122 8.52302 16.9762C-0.516644 7.93906 3.39488 5.36453 3.72028 4.95984C6.95976 1.72015 7.46184 3.19467 10.0125 5.74461C12.6582 8.38958 7.85433 9.33533 12.0096 13.4895Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg> 
+                                            <a href="tel:{{ $seller->phone }}" class="btn btn-dark me-1">
+                                                <svg width="25" height="26" viewBox="0 0 25 26"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12.0096 13.4895C16.1649 17.6436 17.1076 12.8377 19.7533 15.4816C22.3039 18.0315 23.7699 18.5424 20.5383 21.7731C20.1335 22.0985 17.5616 26.0122 8.52302 16.9762C-0.516644 7.93906 3.39488 5.36453 3.72028 4.95984C6.95976 1.72015 7.46184 3.19467 10.0125 5.74461C12.6582 8.38958 7.85433 9.33533 12.0096 13.4895Z"
+                                                        stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
                                             </a>
                                         </div>
                                     </div>
@@ -189,65 +231,50 @@
                 @endif
             @endif
 
-            @if(count($ads) > 0)
-            {{-- Ads --}}
-            <div class="col-md-12 text-center justify-content-center">
-                {{-- <div class="text-warning mt-5 fw-bold fs-5">Brands</div> --}}
-                <div class="h3 fw-bold mt-5">Trusted by professionals</div>
-            </div>
-            <div wire:ignore>
-                <div class="splide">
-                    <div class="splide__track">
-                        <ul class="splide__list">
-                            @foreach($ads as $ad)
-                            <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('storage/'.$ad->image) }}">
-                            </li>
-                            @endforeach
-                            {{-- <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li>
-                            <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li>
-                            <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li>
-                            <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li>
-                            <li class=" splide__slide p-2">
-                                <img class="w-100" src="{{ asset('assets/material/cement.png') }}">
-                            </li> --}}
-                        </ul>
+            @if (count($ads) > 0)
+                {{-- Ads --}}
+                <div class="col-md-12 text-center justify-content-center">
+                    {{-- <div class="text-warning mt-5 fw-bold fs-5">Brands</div> --}}
+                    <div class="h3 fw-bold mt-5">Trusted by professionals</div>
+                </div>
+                <div wire:ignore>
+                    <div class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                @foreach ($ads as $ad)
+                                    <li class=" splide__slide p-2">
+                                        <img class="w-100" src="{{ asset('storage/' . $ad->image) }}">
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endif
 
             @if (empty($sellers) && count($blogs) > 0)
-                {{-- Blogs --}}
                 <div class="col-md-12 text-center justify-content-center">
-                    {{-- <div class="text-warning mt-5 fw-bold fs-5">Blogs</div> --}}
                     <div class="h3 fw-bold mt-5">Ideas that shape the future</div>
                     <div>Stay ahead with expert advice, innovative ideas, and <br> the latest updates from the world of
                         construction</div>
                     <a href="{{ route('blogs') }}" class="btn btn-dark rounded-5 m-4">Read more</a>
                     <div class="row mt-5 text-start justify-content-center">
-                        @foreach($blogs as $data)
-                        <div class="col-md-3 col-lg-2 col-6" wire:click="viewBlog('{{$data->slug}}')">
-                            <div class="border rounded position-relative rounded-3">
-                                <div class="ratio ratio-16x9">
-                                    <img src="{{ asset('storage/' . $data->blog_image) }}" class="d-block w-100 rounded-3" alt="Product Image">
-                                </div>
-                                <div style="height: 140px">
-                                    <div class="p-1 fw-bold text-title"> {{ $data->title }}</div>
-                                    <div class="p-1 text-secondary text-description"> {!! $data->description !!}
+                        @foreach ($blogs as $data)
+                            <div class="col-md-3 col-lg-2 col-6" wire:click="viewBlog('{{ $data->slug }}')">
+                                <div class="border rounded position-relative rounded-3">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="{{ asset('storage/' . $data->blog_image) }}"
+                                            class="d-block w-100 rounded-3" alt="Product Image">
                                     </div>
-                                    <small class="p-1 text-secondary position-absolute bottom-0">{{ $data->created_at->format('F j, Y') }}</small>
+                                    <div style="height: 140px">
+                                        <div class="p-1 fw-bold text-title"> {{ $data->title }}</div>
+                                        <div class="p-1 text-secondary text-description"> {!! $data->description !!}
+                                        </div>
+                                        <small
+                                            class="p-1 text-secondary position-absolute bottom-0">{{ $data->created_at->format('F j, Y') }}</small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -298,6 +325,7 @@
                 width: 100%;
             }
         }
+
         .ratio-21x9 {
             --bs-aspect-ratio: 28.857143%;
         }
@@ -309,7 +337,8 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .text-title{
+
+        .text-title {
             display: -webkit-box;
             -webkit-line-clamp: 1;
             /* Number of lines */

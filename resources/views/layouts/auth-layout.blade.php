@@ -30,8 +30,16 @@
             padding-left: 32px;
         }
 
-        .h-250 {
-            height: 250px !important;
+        @media (max-width: 767.98px) {
+            .h-250 {
+                height: 130px !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .h-250 {
+                height: 250px !important;
+            }
         }
 
         .logo-img {
@@ -57,6 +65,14 @@
             outline: 0;
             box-shadow: none;
             border: 2px solid black;
+        }
+        .square-img-profile {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            border-radius: 15px;
         }
     </style>
 </head>

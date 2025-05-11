@@ -4,6 +4,7 @@ namespace App\Livewire\Home;
 
 use App\Models\Advertisement;
 use App\Models\Blog;
+use App\Models\BusinessCategory;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Product;
@@ -49,11 +50,24 @@ class Welcome extends Component
             ->toArray();
     }
 
-    public function searchProduct()
+    public function searchProduct($id=NULL)
     {
-        if ($this->selectedCity) {
+        if($id){
             $this->searchStarted = true;
-            $this->sellers = User::with(['address', 'category'])
+            $this->sellers = User::with(['address','ratings'])
+                // ->whereHas('address', function ($query) {
+                //     $query->where('addresses.city', $this->selectedCity);
+                // })
+                ->whereHas('categories',function($query) use ($id){
+                    $query->where('categories.id', $id);
+                })
+                ->whereNotIn('role', ['superadmin', 'admin'])
+                ->where('offering', $this->section)
+                ->get();
+        }
+        elseif ($this->selectedCity) {
+            $this->searchStarted = true;
+            $this->sellers = User::with(['address', 'categories','ratings'])
                 ->whereHas('address', function ($query) {
                     $query->where('addresses.city', $this->selectedCity);
                 })
@@ -76,6 +90,9 @@ class Welcome extends Component
         $this->sellers = [];
     }
 
+    public function searchRestart(){            
+        $this->searchStarted = false;
+    }
 
     public function selectCity($city)
     {

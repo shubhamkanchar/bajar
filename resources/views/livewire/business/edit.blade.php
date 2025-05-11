@@ -5,11 +5,14 @@
                 @if ($bgImage)
                     <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ $bgImage->temporaryUrl() }}">
                 @elseif($this->user->bg_image)
-                    <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ asset('storage/' . $this->user->bg_image) }}">
+                    <img class="w-100 h-250 object-fit-cover rounded-4"
+                        src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
                     <picture>
-                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
-                        <img class="w-100 object-fit-cover rounded-4" src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                        <source media="(max-width: 767px)"
+                            srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
+                        <img class="w-100 h-250 object-fit-cover rounded-4"
+                            src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
                 <input type="file" wire:model="bgImage" hidden id="bgImage">
@@ -60,18 +63,20 @@
                     </svg>
                 </a>
             </div>
-            <div class="col-12  mb-3 mt-2">
+            <div class="col-12 mb-3 mt-2">
                 <div class="row">
-                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative" style="margin-top:-70px">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
+                        style="margin-top:-70px">
                         @if ($profileImage)
-                            <img class="ps-md-4 ratio ratio-1x1" src="{{ $profileImage->temporaryUrl() }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif($this->user->profile_image)
-                            <img class="ps-md-4 ratio ratio-1x1" src="{{ asset('storage/' . $this->user->profile_image) }}">
+                            <img class="ms-md-4 square-img-profile"
+                                src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ps-md-4 ratio ratio-1x1" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
-                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4"
+                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4 pe-md-0"
                             style="z-index: 1">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -88,10 +93,12 @@
                         </label>
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
-                        <div class="d-lg-flex align-items-center ms-lg-2">
-                            <span class="fw-bold fs-4 my-2">{{ $this->user->name }}</span>
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                            <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number : </span>
+                                {{ $this->user->gst }}</span>
                         </div>
-                        <div class="ms-lg-3 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -106,8 +113,8 @@
                                 </svg>
                             </span>
                             <span>
-                                {{ $this->user->address?->address }}, {{ $this->user->address?->city }},
-                                {{ $this->user->address?->state }}
+                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                {{ $this->user->address->state }}
                             </span>
                         </div>
                     </div>
@@ -353,13 +360,14 @@
                     </div>
                     @if ($offering == 'service')
                         <div class="col-12">
-                            <h4 class="fw-bold mt-3">Service i provide ({{str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT)}}/03)</h4>
+                            <h4 class="fw-bold mt-3">Service i provide
+                                ({{ str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT) }}/03)</h4>
                             @foreach ($serviceCategories as $category)
                                 @if (in_array($category->id, $categoryIds))
-                                    <span role="button" wire:click="removeCategory({{$category->id}})"
+                                    <span role="button" wire:click="removeCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1 border-dark bg-secondary-subtle">{{ $category->title }}</span>
                                 @else
-                                    <span role="button" wire:click="addCategory({{$category->id}})"
+                                    <span role="button" wire:click="addCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">{{ $category->title }}</span>
                                 @endif
                             @endforeach
@@ -367,13 +375,14 @@
                     @endif
                     @if ($offering == 'product')
                         <div class="col-12">
-                            <h4 class="fw-bold mt-3">Categories i deal in ({{str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT)}}/03)</h4>
+                            <h4 class="fw-bold mt-3">Categories i deal in
+                                ({{ str_pad(count($categoryIds), 2, '0', STR_PAD_LEFT) }}/03)</h4>
                             @foreach ($productCategories as $category)
                                 @if (in_array($category->id, $categoryIds))
-                                    <span role="button" wire:click="removeCategory({{$category->id}})"
+                                    <span role="button" wire:click="removeCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1 border-dark bg-secondary-subtle">{{ $category->title }}</span>
                                 @else
-                                    <span role="button" wire:click="addCategory({{$category->id}})"
+                                    <span role="button" wire:click="addCategory({{ $category->id }})"
                                         class="badge rounded-pill text-dark border border-2 fs-6 p-3 m-1">{{ $category->title }}</span>
                                 @endif
                             @endforeach
@@ -389,7 +398,7 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="mb-3 form-floating">
-                                        <select class="form-select" id="plan" >
+                                        <select class="form-select" id="plan">
                                             <option value="">Select Plan</option>
                                             <option value=""></option>
                                         </select>
@@ -508,7 +517,7 @@
                 @if (Auth::user()->is_admin)
                     <div class="col-md-12 mt-4 mb-5">
                         <button type="button" class="btn bg-secondary-subtle btn-lg" wire:click="deleteUser"
-                        wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE">
+                            wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -524,7 +533,7 @@
                             </svg>
                             Delete User
                         </button>
-                        <button type="button" class="btn bg-secondary-subtle btn-lg" >
+                        <button type="button" class="btn bg-secondary-subtle btn-lg">
                             <i class="bi bi-plus-square"></i>
                             Add Work for this user
                         </button>
@@ -655,6 +664,7 @@
                 /* 75% width on medium and larger screens */
             }
         }
+
         @media (max-width: 767.98px) {
             .w-mobile-50 {
                 width: 50% !important;

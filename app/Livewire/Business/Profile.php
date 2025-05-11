@@ -7,7 +7,9 @@ use App\Models\BusinessTime;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductSellerReview;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -83,6 +85,31 @@ class Profile extends Component
             return date("g:i A", strtotime($time['open_time'])) . ' - ' . date("g:i A", strtotime($time['close_time']));
         }
         return 'Closed';
+    }
+
+    #[Computed]
+    public function bussinessStar()
+    {
+        $data = ProductSellerReview::where([
+            'seller_id' => $this->user->id,
+        ])
+        ->select('seller_id',DB::raw('SUM(communication_and_professionalism + quality_or_service + recommendation) as total_score'))
+        ->groupBy('seller_id')
+        ->get();
+        $count = 0;
+        foreach($data as $item){
+            $count = $count + $item->total_score;
+        }
+        return $count;
+    }
+    #[Computed]
+    public function bussinessRatingsCount()
+    {
+        $data = ProductSellerReview::where([
+            'seller_id' => $this->user->id,
+        ])
+        ->count();
+        return $data;
     }
 
     public function editProduct($id)

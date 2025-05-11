@@ -5,9 +5,11 @@ namespace App\Livewire\Service;
 use App\Models\BusinessCategory;
 use App\Models\BusinessTime;
 use App\Models\Category;
+use App\Models\ProductSellerReview;
 use App\Models\Service;
 use App\Models\ServiceImage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -81,6 +83,17 @@ class Profile extends Component
     {
         $businessCategories = BusinessCategory::where('user_id',Auth::user()->id)->pluck('category_id');
         return Category::where('type', 'service')->whereIn('id',$businessCategories)->get();
+    }
+
+    
+    #[Computed]
+    public function bussinessRatingsCount()
+    {
+        $data = ProductSellerReview::where([
+            'seller_id' => $this->user->id,
+        ])
+        ->count();
+        return $data;
     }
 
     #[Computed]

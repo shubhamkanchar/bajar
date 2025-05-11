@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 
@@ -52,29 +54,32 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function address(){
-        return $this->hasOne(Address::class,'user_id','id');
+    public function address()
+    {
+        return $this->hasOne(Address::class, 'user_id', 'id');
     }
 
-    public function product(){
-        return $this->hasMany(Product::class,'user_id','id');
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'user_id', 'id');
     }
 
-    public function category(){
-        return $this->hasMany(BusinessCategory::class,'user_id','id');
+    public function category()
+    {
+        return $this->hasMany(BusinessCategory::class, 'user_id', 'id');
     }
 
     public function categories()
-{
-    return $this->hasManyThrough(
-        Category::class,         // Final model
-        BusinessCategory::class, // Intermediate model
-        'user_id',               // Foreign key on BusinessCategory table
-        'id',                    // Foreign key on Category table (referenced by BusinessCategory)
-        'id',                    // Local key on User
-        'category_id'            // Local key on BusinessCategory pointing to Category
-    );
-}
+    {
+        return $this->hasManyThrough(
+            Category::class,         // Final model
+            BusinessCategory::class, // Intermediate model
+            'user_id',               // Foreign key on BusinessCategory table
+            'id',                    // Foreign key on Category table (referenced by BusinessCategory)
+            'id',                    // Local key on User
+            'category_id'            // Local key on BusinessCategory pointing to Category
+        );
+    }
 
     protected static function boot()
     {
@@ -94,4 +99,20 @@ class User extends Authenticatable
         return $this->hasMany(Wishlist::class);
     }
 
+    public function ratings(){
+        return  $this->hasOne(ProductSellerReview::class,'seller_id','id')->select('seller_id',DB::raw('SUM(communication_and_professionalism + quality_or_service + recommendation) as total_score'))
+        ->groupBy('seller_id');
+    }
+
+    public function getBussinessTimeAttribute()
+    {
+        $time = BusinessTime::where([
+            'user_id' => $this->id,
+            'day' => date("l")
+        ])->first();
+        if ($time && $time['open_time'] && $time['close_time']) {
+            return date("g:i A", strtotime($time['open_time'])) . ' - ' . date("g:i A", strtotime($time['close_time']));
+        }
+        return 'Closed';
+    }
 }

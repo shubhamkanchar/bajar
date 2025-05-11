@@ -15,6 +15,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\ProductSellerReview;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ViewBusinessProfile extends Component
@@ -88,6 +89,16 @@ class ViewBusinessProfile extends Component
             return date("g:i A", strtotime($time['open_time'])).' - '.date("g:i A", strtotime($time['close_time']));
         }
         return 'Closed';
+    }
+
+    #[Computed]
+    public function bussinessRatingsCount()
+    {
+        $data = ProductSellerReview::where([
+            'seller_id' => $this->user->id,
+        ])
+        ->count();
+        return $data;
     }
     
     public function editProduct($id)

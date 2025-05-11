@@ -46,7 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/business-profile', Profile::class)->name('business.profile');
     Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
     Route::get('/service-profile', ServiceProfile::class)->name('service.profile');
-    Route::get('/service-edit/{uuid}', ServiceEdit::class)->name('service.edit');
     Route::get('/user-profile', UserProfile::class)->name('user.profile');
     Route::get('/user-edit', UserEdit::class)->name('user.edit');
     Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
