@@ -70,7 +70,7 @@ class Onboarding extends Component
 
         if($this->step == 2 && $this->userType == 'business'){
             $rules['address'] = 'required';
-            $rules['gst_number'] = 'required|min:15|max:15';
+            $rules['gst_number'] = 'nullable|min:15|max:15';
             $rules['google_map_link'] = 'required|url';
         }
         return $rules;

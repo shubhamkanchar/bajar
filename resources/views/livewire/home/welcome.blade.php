@@ -291,6 +291,36 @@
         </div>
     </div>
 </div>
+<script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    }
+
+    async function success(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+        const data = await response.json();
+        const city = data.address.city || data.address.town || data.address.village || "Unknown city";
+        const state = data.address.state || "Unknown state";
+        console.log(`City: ${city}, State: ${state}`);
+      } catch (err) {
+        console.log("Failed to fetch location details.");
+      }
+    }
+
+    function error() {
+      console.log("Permission denied or unable to get location.");
+    }
+
+    getLocation();
+  </script>
 @push('style')
     <style>
         .form-control:focus {

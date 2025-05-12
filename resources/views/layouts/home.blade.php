@@ -112,6 +112,7 @@
                 border-bottom: none !important;
             }
         }
+
         .text-description {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -127,6 +128,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .square-img-profile {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -157,20 +159,22 @@
     @yield('scripts')
     @include('layouts.partials.notify')
     <script>
-        const splide = new Splide('.splide', {
-            type: 'loop',
-            drag: 'free',
-            focus: 'center',
-            perPage: 3,
-            breakpoints: {
-                768: {
-                    perPage: 1,
-                },
-            },
-            autoScroll: {
-                speed: 0.7,
-            },
-        }).mount(window.splide.Extensions);
+        // const splide = new Splide('.splide', {
+        //     type: 'loop',
+        //     drag: 'free',
+        //     focus: 'center',
+        //     perPage: 3,
+        //     breakpoints: {
+        //         768: {
+        //             perPage: 1,
+        //         },
+        //     },
+        //     autoScroll: {
+        //         speed: 0.7,
+        //     },
+        // }).mount(window.splide.Extensions);
+
+        
     </script>
 </body>
 

@@ -281,7 +281,7 @@
                 </div>
                 <h6 class="text-muted fst-italic mb-3">"Awesome! Share some quick info to get started."</h6>
                 <h5 class="fw-bold mb-4">Business Details</h5>
-                <div class="row mb-3">
+                <div class="row">
                     <!-- Business Name -->
                     <div class="col-12 col-md-6 mb-3 ">
                         <div class="form-floating">
@@ -297,7 +297,7 @@
                     <!-- GST Number -->
                     <div class="col-12 col-md-6 mb-3">
                         <div class="form-floating">
-                            <input type="number" id="gst_number" class="form-control" wire:model="gst_number"
+                            <input type="text" id="gst_number" class="form-control" wire:model="gst_number"
                                 placeholder="Please enter your GST number">
                             <label for="gst_number">GST Number</label>
                         </div>
@@ -307,7 +307,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-5">
+                <div class="row mb-3">
                     <!-- Phone Number -->
                     <div class="col-12 col-md-6 mb-3">
                         <div class="form-floating">
@@ -575,9 +575,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="offset-md-4 offset-lg-3 col-lg-6 col-12 col-md-4 text-center">
-                        <img class="mb-5 w-100" src="{{ asset('assets/image/final.png') }}">
+                <div class="row justify-content-center">
+                    <div class="col-xl-7 col-lg-8 col-12 col-md-12">
+                        <img class="mb-5 mt-5 w-100" src="{{ asset('assets/image/final.png') }}">
                     </div>
                 </div>
                 <!-- Navigation Buttons -->

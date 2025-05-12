@@ -58,11 +58,12 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select category')]
     public $category;
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
-    public $product_tag = [];
+    public $product_tag = '';
 
     public function mount()
     {
         $this->user = Auth::user();
+        $this->allTags = Product::where('user_id',Auth::user()->id)->pluck('product_tag');
     }
 
     public function messages()
@@ -121,7 +122,7 @@ class Profile extends Component
         $this->description = $product->description;
         $this->category = $product->category_id;
         $this->showPrice = $product->show_price;
-        $this->product_tag = explode(',', $product->product_tag);
+        $this->product_tag = $product->product_tag;
         $this->price = $product->price;
         $this->quantity = $product->quantity;
 
@@ -206,7 +207,7 @@ class Profile extends Component
         $product->description = $this->description;
         $product->category_id = $this->category;
         $product->show_price = $this->showPrice;
-        $product->product_tag = implode(',', $this->product_tag);
+        $product->product_tag = $this->product_tag;
         $product->price = $this->price;
         $product->quantity = $this->quantity;
         $product->user_id = auth()->id();

@@ -73,7 +73,7 @@
                             <img class="ms-md-4 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
                         <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4 pe-md-0"
@@ -243,7 +243,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6">
-                        <div class="mb-3 form-floating">
+                        <div class="form-floating mb-2 mt-2">
                             <select class="form-select" id="state" wire:model="state">
                                 <option value="">Select State</option>
                                 @foreach ($stateOptions as $stateOption)
@@ -259,7 +259,7 @@
 
                     <!-- City Dropdown -->
                     <div class="col-12 col-md-6">
-                        <div class="mb-3 form-floating">
+                        <div class="form-floating mb-2 mt-2">
                             <select class="form-select" id="city" wire:model="city" wire:click="setCity()">
                                 <option value="">Select City</option>
                                 @foreach ($cityOptions as $cityOption)
@@ -504,7 +504,7 @@
                                 <div class="form-floating mb-2 mt-2">
                                     <input type="time" class="form-control"
                                         wire:model="storeHours.{{ $day }}.close">
-                                    <label for="name">Open From</label>
+                                    <label for="name">Open Till</label>
                                 </div>
                             </div>
                         </div>

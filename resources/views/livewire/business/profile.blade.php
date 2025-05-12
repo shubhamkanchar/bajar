@@ -1,7 +1,7 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-4">
+            <div class="col-12 mt-4 position-relative">
                 @if ($this->user->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . $this->user->bg_image) }}">
@@ -13,6 +13,27 @@
                             src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
+                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    wire:target="bgImage" for="bgImage">
+
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="30" rx="15" transform="matrix(-1 0 0 1 30 0)"
+                            fill="white" fill-opacity="0.8" />
+                        <g clip-path="url(#clip0_1372_7414)">
+                            <path
+                                d="M19.2227 16.9219C18.3543 16.9219 17.589 17.3491 17.1084 17.9987L12.9528 15.8708C13.0218 15.6357 13.0703 15.3919 13.0703 15.1348C13.0703 14.786 12.9988 14.4543 12.8753 14.1493L17.2242 11.5323C17.7082 12.1003 18.4196 12.4688 19.2227 12.4688C20.6766 12.4688 21.8594 11.286 21.8594 9.83203C21.8594 8.37806 20.6766 7.19531 19.2227 7.19531C17.7687 7.19531 16.5859 8.37806 16.5859 9.83203C16.5859 10.1671 16.6549 10.4849 16.7694 10.78L12.4075 13.4047C11.9239 12.8536 11.2228 12.498 10.4336 12.498C8.97962 12.498 7.79688 13.6808 7.79688 15.1348C7.79688 16.5887 8.97962 17.7715 10.4336 17.7715C11.3163 17.7715 12.0945 17.3318 12.5733 16.6639L16.7152 18.7848C16.6389 19.0311 16.5859 19.2876 16.5859 19.5586C16.5859 21.0126 17.7687 22.1953 19.2227 22.1953C20.6766 22.1953 21.8594 21.0126 21.8594 19.5586C21.8594 18.1046 20.6766 16.9219 19.2227 16.9219Z"
+                                fill="black" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_1372_7414">
+                                <rect width="15" height="15" fill="white"
+                                    transform="translate(7.19531 7.19531)" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                </label>
             </div>
             <div class="col-12 mb-3 mt-2">
                 <div class="row">
@@ -22,7 +43,8 @@
                             <img class="ms-md-4 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile"
+                                src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
@@ -109,9 +131,10 @@
                         </div>
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2"
                             style="height:60%">
-                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid]) }}" class="btn btn-dark">
-                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid]) }}"
+                                class="btn btn-dark">
+                                <svg class="me-2" width="21" height="21" viewBox="0 0 21 21"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.3203 19.7912H19.8751" stroke="white" stroke-width="1.5"
                                         stroke-linecap="round" stroke-linejoin="round" />
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -166,8 +189,8 @@
                 @if (count($this->allProducts) == 0)
                     <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                         <a id="openSliderBtn">
-                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider" role="button"
-                                style="height: 100%; min-height: 250px;">
+                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
+                                role="button" style="height: 100%; min-height: 250px;">
                                 <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
                                     role="button"></i>
                                 <div class="fs-4 fw-bold">Add Product</div>
@@ -182,8 +205,8 @@
                         <div class="row mb-2">
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                                 <a id="openSliderBtn">
-                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider my-2" role="button"
-                                        style="height: 100%; min-height: 200px;">
+                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider my-2"
+                                        role="button" style="height: 100%; min-height: 200px;">
                                         <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
                                             role="button"></i>
                                         <div class="fs-4 fw-bold">Add Product</div>
@@ -228,27 +251,27 @@
                                         <div class="py-1">
                                             @if ($product->show_price)
                                                 <span><strong>RS.{{ $product->price }}</strong> per
-                                                    <strong>Unit</strong></span>
+                                                    <strong>{{ $product->quantity }}</strong></span>
                                             @else
                                                 <strong>Contact us for pricing</strong>
                                             @endif
                                         </div>
-                                        @if(!$product->is_approved)
-                                        <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
-                                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <rect width="30" height="30" rx="15"
-                                                    transform="matrix(-1 0 0 1 30 0)" fill="white"
-                                                    fill-opacity="0.8" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M23.4818 15.0026C23.4818 19.6859 19.6859 23.4818 15.0026 23.4818C10.3194 23.4818 6.52344 19.6859 6.52344 15.0026C6.52344 10.3194 10.3194 6.52344 15.0026 6.52344C19.6859 6.52344 23.4818 10.3194 23.4818 15.0026Z"
-                                                    stroke="#404040" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path d="M18.1511 17.7L14.6953 15.6384V11.1953" stroke="#404040"
-                                                    stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                        </a>
+                                        @if (!$product->is_approved)
+                                            <a class="position-absolute top-0 end-0 p-2" style="z-index: 1">
+                                                <svg width="30" height="30" viewBox="0 0 30 30"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="30" height="30" rx="15"
+                                                        transform="matrix(-1 0 0 1 30 0)" fill="white"
+                                                        fill-opacity="0.8" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M23.4818 15.0026C23.4818 19.6859 19.6859 23.4818 15.0026 23.4818C10.3194 23.4818 6.52344 19.6859 6.52344 15.0026C6.52344 10.3194 10.3194 6.52344 15.0026 6.52344C19.6859 6.52344 23.4818 10.3194 23.4818 15.0026Z"
+                                                        stroke="#404040" stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M18.1511 17.7L14.6953 15.6384V11.1953" stroke="#404040"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
@@ -315,8 +338,10 @@
             }
         }
 
-        .select2-selection--multiple {
-            padding-top: 20px
+        .select2-selection--single {
+            padding-top: 27px;
+            padding-bottom: 27px;
+            padding-left: 5px;
         }
 
         .text-description {
@@ -394,7 +419,6 @@
 
         $('#tagInput').select2({
             tags: true,
-            tokenSeparators: [',', ' '],
             placeholder: 'Enter or select tags',
             width: '100%'
         });

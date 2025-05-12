@@ -51,10 +51,11 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select category')]
     public $category;
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
-    public $service_tag = [];
+    public $service_tag = '';
 
     public function mount(){
         $this->user = Auth::user();
+        $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag');
     }
 
     #[Computed]
@@ -152,7 +153,7 @@ class Profile extends Component
         $this->editServiceId = $id;
         $this->description = $service->description;
         $this->category = $service->category_id;
-        $this->service_tag = explode(',', $service->service_tag);
+        $this->service_tag = $service->service_tag;
         $this->work_brief = $service->work_brief;
     
         foreach ($service->images as $index => $image) {
@@ -191,7 +192,7 @@ class Profile extends Component
         $service->work_brief = $this->work_brief;
         $service->category_id = $this->category;
         $service->description = $this->description;
-        $service->service_tag = implode(',', $this->service_tag);
+        $service->service_tag = $this->service_tag;
         $service->user_id = auth()->id();
         $service->is_approved = 0;
         $service->save();
