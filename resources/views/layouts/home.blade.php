@@ -159,22 +159,22 @@
     @yield('scripts')
     @include('layouts.partials.notify')
     <script>
-        // const splide = new Splide('.splide', {
-        //     type: 'loop',
-        //     drag: 'free',
-        //     focus: 'center',
-        //     perPage: 3,
-        //     breakpoints: {
-        //         768: {
-        //             perPage: 1,
-        //         },
-        //     },
-        //     autoScroll: {
-        //         speed: 0.7,
-        //     },
-        // }).mount(window.splide.Extensions);
-
-        
+        if (document.querySelectorAll('.splide').length > 0) {
+            const splide = new Splide('.splide', {
+                type: 'loop',
+                drag: 'free',
+                focus: 'center',
+                perPage: 3,
+                breakpoints: {
+                    768: {
+                        perPage: 1,
+                    },
+                },
+                autoScroll: {
+                    speed: 0.7,
+                },
+            }).mount(window.splide.Extensions);
+        }
     </script>
 </body>
 
