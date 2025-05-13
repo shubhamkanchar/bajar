@@ -13,10 +13,19 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             if(Schema::hasColumn('services','service_tag_group_id')){
-                $table->dropColumn('service_tag_group_id');
+                $table->dropColumn('service_tag');
             }
             if(!Schema::hasColumn('services','service_tag')){
                 $table->string('service_tag')->after('category_id')->nullable();
+            }
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            if(Schema::hasColumn('products','product_tag_group_id')){
+                $table->dropColumn('product_tag_group_id');
+            }
+            if(!Schema::hasColumn('products','product_tag')){
+                $table->string('product_tag')->after('category_id')->nullable();
             }
         });
     }
@@ -30,8 +39,17 @@ return new class extends Migration
             if(!Schema::hasColumn('services','service_tag_group_id')){
                 $table->string('service_tag_group_id')->after('category_id')->nullable();
             }
-            if(!Schema::hasColumn('services','service_tag')){
+            if(Schema::hasColumn('services','service_tag')){
                 $table->dropColumn('service_tag');
+            }
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            if(!Schema::hasColumn('products','product_tag_group_id')){
+                $table->string('product_tag_group_id')->after('category_id')->nullable();
+            }
+            if(Schema::hasColumn('products','product_tag')){
+                $table->dropColumn('product_tag');
             }
         });
     }
