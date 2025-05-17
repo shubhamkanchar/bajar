@@ -53,7 +53,7 @@
 
                         </label>
                     @endif
-                    <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;aspect-ratio: 1 / 1" for="serviceImage1">
+                    <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="serviceImage1">
                         @if ($isEdit && gettype($service_images['service_image1']) == 'string')
                             <img src="{{ asset('storage/' . $service_images['service_image1']) }}" class="img-fluid">
                         @elseif ($service_images['service_image1'])
@@ -79,7 +79,7 @@
                     @error('service_images.service_image1') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-7">
-                    <div class="row">
+                    <div class="row" style="height: 100%;">
                         @foreach([2, 3, 4, 5, 6] as $index)
                             <div class="col-md-4 mb-3 col-6 position-relative">
                                 @if ($service_images['service_image' . $index])
@@ -108,7 +108,7 @@
 
                                     </label>
                                 @endif
-                                <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;aspect-ratio: 1 / 1" for="serviceImage{{$index}}">
+                                <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="serviceImage{{$index}}">
                                     @if ($isEdit && gettype($service_images['service_image'. $index]) == 'string')
                                         <img src="{{ asset('storage/' . $service_images['service_image'. $index]) }}" class="img-fluid">
                                     @elseif($service_images['service_image' . $index])
@@ -160,8 +160,9 @@
                 </div>
                 
                 <div class="col-md-6" wire:ignore>
-                    <div class="form-floating my-2" wire:ignore>
+                    <div class="form-floating my-2">
                         <select class="form-control" id="tagInput" wire:model="product_tag">
+                            <option value="">Service Tag/Service Group</option>
                             @foreach($allTags as $tag)
                                 <option {{ $tag == $product_tag ? 'selected' : '' }} value="{{ $tag }}">{{ $tag }}</option>
                             @endforeach

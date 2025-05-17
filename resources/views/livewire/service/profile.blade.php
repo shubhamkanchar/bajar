@@ -14,9 +14,9 @@
                     </picture>
                 @endif
                 <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
-                    wire:target="bgImage" for="bgImage">
+                    onclick="copyCurrentUrl()">
 
-                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                    <svg width="40" height="40" viewBox="0 0 30 30" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <rect width="30" height="30" rx="15" transform="matrix(-1 0 0 1 30 0)"
                             fill="white" fill-opacity="0.8" />
@@ -191,7 +191,7 @@
                     <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                         <a id="openSliderBtn">
                             <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
-                                role="button" style="height: 100%; min-height: 250px;">
+                                role="button" style="height: 95%;">
                                 <i class="fa-regular fa-square-plus fs-1 text-secondary " role="button"></i>
                                 <div class="fs-4 fw-bold">Add Previous Work</div>
                                 <small>Adding more service improve your search rankings</small>
@@ -206,7 +206,7 @@
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 service-card">
                                 <a id="openSliderBtn">
                                     <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
-                                        role="button" style="height: 100%; min-height: 200px;">
+                                        role="button" style="height: 95%;">
                                         <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
                                             role="button"></i>
                                         <div class="fs-4 fw-bold">Add Previous Work</div>
@@ -223,9 +223,10 @@
                                             <div class="carousel-inner">
                                                 @foreach ($service->images as $key => $serviceImage)
                                                     <div
-                                                        class="carousel-item @if ($key == 0) active @endif ratio ratio-4x3">
+                                                        class="carousel-item @if ($key == 0) active @endif ratio ratio-1x1">
                                                         <img src="{{ asset('storage/' . $serviceImage->path) }}"
-                                                            class="d-block w-100" alt="Product Image">
+                                                            class="d-block w-100 object-fit-cover"
+                                                            alt="Product Image">
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -279,6 +280,7 @@
     </div>
     @include('livewire.service.partial.service-slider')
     @include('livewire.service.partial.review-slider')
+    <input type="hidden" value="{{route("view-shop",["uuid"=>$this->user->uuid])}}" id="businessLink">
 </div>
 
 @section('style')
@@ -443,12 +445,34 @@
 
         $('#tagInput').select2({
             tags: true,
-            tokenSeparators: [',', ' '],
+            allowClear: true,
             placeholder: 'Enter or select tags',
             width: '100%'
         });
         $('#tagInput').on('change', function() {
             @this.set('service_tag', $(this).val());
         });
+
+        function copyCurrentUrl() {
+            const url = $('#businessLink').val();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url)
+                    .then(() => alert("URL copied!"))
+                    .catch(err => console.error("Failed to copy with clipboard API:", err));
+            } else {
+                // Fallback method for unsupported browsers
+                const textarea = document.createElement("textarea");
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand("copy");
+                    alert("URL copied!");
+                } catch (err) {
+                    console.error("Fallback copy failed", err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
     </script>
 @endpush

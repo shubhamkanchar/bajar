@@ -24,6 +24,7 @@ class Profile extends Component
     public $selectedCategory = 'all';
     public $user;
     public $allTags = [];
+    public $sliderStatus = '';
 
     #[
         Validate(
@@ -64,6 +65,15 @@ class Profile extends Component
     {
         $this->user = Auth::user();
         $this->allTags = Product::where('user_id',Auth::user()->id)->pluck('product_tag');
+    }
+
+    public function openSlider(){
+        $this->sliderStatus = 'open';
+    }
+
+    public function closeSlider(){
+        $this->sliderStatus = 'close';
+        $this->resetProduct();
     }
 
     public function messages()

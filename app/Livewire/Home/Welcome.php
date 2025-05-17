@@ -8,9 +8,11 @@ use App\Models\BusinessCategory;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Product;
+use App\Models\State;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Welcome extends Component
@@ -22,11 +24,24 @@ class Welcome extends Component
     public $isOpen = false;
     public $cities = [];
     public $selectedCity = '';
+    public $selectedState = '';
     public $productName;
     public $sellers = [];
     public $blogs = [];
     public $searchStarted = false;
 
+
+    #[On('selectedCityfun')]
+    public function selectedCityfun($value)
+    {
+        $this->selectedCity = $value;  // Set property from JS
+    }
+
+    #[On('selectedStatefun')]
+    public function selectedStatefun($value)
+    {
+        $this->selectedState = $value;  // Set property from JS
+    }
 
     public function mount()
     {
@@ -43,31 +58,35 @@ class Welcome extends Component
 
     public function updatedSearch()
     {
+        if ($this->selectedState) {
+            $stateId = State::where('title', 'like', '%' . $this->selectedState . '%')->value('id');
+        }
         $this->isOpen = true;
-        $this->cities = City::where('title', 'like', '%' . $this->search . '%')
-            ->limit(50)
-            ->pluck('title')
-            ->toArray();
+        $query = City::where('title', 'like', '%' . $this->search . '%')
+            ->limit(50);
+        if (isset($stateId)) {
+            $query->where('state_id', $stateId);
+        }
+        $this->cities = $query->pluck('title')->toArray();
     }
 
-    public function searchProduct($id=NULL)
+    public function searchProduct($id = NULL)
     {
-        if($id){
+        if ($id) {
             $this->searchStarted = true;
-            $this->sellers = User::with(['address','ratings'])
+            $this->sellers = User::with(['address', 'ratings'])
                 // ->whereHas('address', function ($query) {
                 //     $query->where('addresses.city', $this->selectedCity);
                 // })
-                ->whereHas('categories',function($query) use ($id){
+                ->whereHas('categories', function ($query) use ($id) {
                     $query->where('categories.id', $id);
                 })
                 ->whereNotIn('role', ['superadmin', 'admin'])
                 ->where('offering', $this->section)
                 ->get();
-        }
-        elseif ($this->selectedCity) {
+        } elseif ($this->selectedCity) {
             $this->searchStarted = true;
-            $this->sellers = User::with(['address', 'categories','ratings'])
+            $this->sellers = User::with(['address', 'categories', 'ratings'])
                 ->whereHas('address', function ($query) {
                     $query->where('addresses.city', $this->selectedCity);
                 })
@@ -90,7 +109,8 @@ class Welcome extends Component
         $this->sellers = [];
     }
 
-    public function searchRestart(){            
+    public function searchRestart()
+    {
         $this->searchStarted = false;
     }
 

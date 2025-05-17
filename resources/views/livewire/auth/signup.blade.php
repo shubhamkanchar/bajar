@@ -32,7 +32,7 @@
                                     <div class="col-md-12">
                                         <img class=" logo-img" src="{{ asset('assets/logo/logo.png') }}">
                                         <h3 class="mt-2">Sign Up</h3>
-                                        <p>Great to have you back!</p>
+                                        <p>Join the club of smart business owners!</p>
                                     </div>
                                 </div>
                                 <div class="row">

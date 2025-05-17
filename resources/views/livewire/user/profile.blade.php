@@ -43,27 +43,51 @@
 <div>
     <div class="container" x-data="{ tab: @entangle('tab') }">
         <div class="row">
-            <div class="col-12 mt-4">
+            <div class="col-12 mt-4 position-relative">
                 @if (auth()->user()->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . auth()->user()->bg_image) }}">
                 @else
                     <picture>
-                        <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
-                        <img class="w-100 object-fit-cover rounded-4"
-                            src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
+                        <source media="(max-width: 767px)"
+                            srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
+                        <img class="w-100 h-250 object-fit-cover rounded-4"
+                            src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
+                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    wire:target="bgImage" for="bgImage">
+
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="30" rx="15" transform="matrix(-1 0 0 1 30 0)"
+                            fill="white" fill-opacity="0.8" />
+                        <g clip-path="url(#clip0_1372_7414)">
+                            <path
+                                d="M19.2227 16.9219C18.3543 16.9219 17.589 17.3491 17.1084 17.9987L12.9528 15.8708C13.0218 15.6357 13.0703 15.3919 13.0703 15.1348C13.0703 14.786 12.9988 14.4543 12.8753 14.1493L17.2242 11.5323C17.7082 12.1003 18.4196 12.4688 19.2227 12.4688C20.6766 12.4688 21.8594 11.286 21.8594 9.83203C21.8594 8.37806 20.6766 7.19531 19.2227 7.19531C17.7687 7.19531 16.5859 8.37806 16.5859 9.83203C16.5859 10.1671 16.6549 10.4849 16.7694 10.78L12.4075 13.4047C11.9239 12.8536 11.2228 12.498 10.4336 12.498C8.97962 12.498 7.79688 13.6808 7.79688 15.1348C7.79688 16.5887 8.97962 17.7715 10.4336 17.7715C11.3163 17.7715 12.0945 17.3318 12.5733 16.6639L16.7152 18.7848C16.6389 19.0311 16.5859 19.2876 16.5859 19.5586C16.5859 21.0126 17.7687 22.1953 19.2227 22.1953C20.6766 22.1953 21.8594 21.0126 21.8594 19.5586C21.8594 18.1046 20.6766 16.9219 19.2227 16.9219Z"
+                                fill="black" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_1372_7414">
+                                <rect width="15" height="15" fill="white"
+                                    transform="translate(7.19531 7.19531)" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                </label>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mb-3">
                 <div class="row">
-                    <div class="col-lg-2 col-md-3 mb-3 col-6 position-relative" style="margin-top:-70px">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
+                        style="margin-top:-70px">
                         @if (auth()->user()->profile_image)
-                            <img class="w-100 ms-md-4 h-100"
+                            <img class="ms-md-4 square-img-profile"
                                 src="{{ asset('storage/' . auth()->user()->profile_image) }}">
                         @else
-                            <img class="w-100 ms-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile"
+                                src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                     </div>
 
@@ -71,7 +95,7 @@
                         <div class="d-lg-flex align-items-center ms-md-2">
                             <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
                         </div>
-                        <div class="ms-md-3 mt-2">
+                        <div class="ms-md-3 m-2">
                             Individual
                         </div>
                     </div>

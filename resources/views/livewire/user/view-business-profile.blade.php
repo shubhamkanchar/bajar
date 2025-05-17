@@ -27,9 +27,10 @@
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
                         <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                            @if($this->user->gst)
-                            <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number : </span>
-                                {{ $this->user->gst }}</span>
+                            @if ($this->user->gst)
+                                <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
+                                    </span>
+                                    {{ $this->user->gst }}</span>
                             @endif
                         </div>
                         <div class="ms-xl-2 mt-2 d-flex">
@@ -59,7 +60,8 @@
                                 Free
                             </span>
                             @if ($this->user?->ratings?->total_score)
-                                <span class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
+                                <span
+                                    class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                     <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -71,7 +73,8 @@
                             @endif
 
                             @if ($this->bussinessRatingsCount())
-                                <span class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
+                                <span
+                                    class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                     <svg class="me-2" width="18" height="20" viewBox="0 0 18 20" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -216,13 +219,13 @@
                                         @php
                                             $inWishlist = in_array($product->id, $this->wishlistIds);
                                         @endphp
-                                        @if(auth()->user()->role == 'individual')
-                                        <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
-                                            style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"
-                                            wire:click.prevent="toggleWishlist({{ $product->id }})">
-                                            <i
-                                                class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"></i>
-                                        </a>
+                                        @if (auth()->user()->role == 'individual')
+                                            <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
+                                                style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"
+                                                wire:click.prevent="toggleWishlist({{ $product->id }})">
+                                                <i
+                                                    class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"></i>
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
@@ -280,13 +283,13 @@
                                         @php
                                             $inWishlist = in_array($service->id, $this->wishlistIds);
                                         @endphp
-                                        @if(auth()->user()->role == 'individual')
-                                        <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
-                                            style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"
-                                            wire:click.prevent="toggleWishlist({{ $service->id }})">
-                                            <i
-                                                class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"></i>
-                                        </a>
+                                        @if (auth()->user()->role == 'individual')
+                                            <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
+                                                style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"
+                                                wire:click.prevent="toggleWishlist({{ $service->id }})">
+                                                <i
+                                                    class="fs-5 {{ $inWishlist ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-dark' }}"></i>
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
@@ -600,6 +603,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" value="{{route("view-shop",["uuid"=>$this->user->uuid])}}" id="businessLink">
 </div>
 @section('style')
     <style>
@@ -745,4 +749,26 @@
             @this.set('isLoaded', true);
         }, 500);
     });
+
+    function copyCurrentUrl() {
+        const url = $('#businessLink').val();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url)
+                .then(() => alert("URL copied!"))
+                .catch(err => console.error("Failed to copy with clipboard API:", err));
+        } else {
+            // Fallback method for unsupported browsers
+            const textarea = document.createElement("textarea");
+            textarea.value = url;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand("copy");
+                alert("URL copied!");
+            } catch (err) {
+                console.error("Fallback copy failed", err);
+            }
+            document.body.removeChild(textarea);
+        }
+    }
 </script>

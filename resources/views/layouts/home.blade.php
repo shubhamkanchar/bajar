@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
         integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    @livewireStyles
     @stack('style')
     @yield('style')
     <style>
@@ -138,6 +137,7 @@
             border-radius: 15px;
         }
     </style>
+    @livewireStyles
 </head>
 
 <body>
@@ -175,6 +175,7 @@
                 },
             }).mount(window.splide.Extensions);
         }
+        console.log(window.livewire);
     </script>
 </body>
 

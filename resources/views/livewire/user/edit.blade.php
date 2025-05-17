@@ -102,14 +102,15 @@
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-lg-2 col-md-3 mb-3 col-6 position-relative" style="margin-top:-70px">
+                    <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
+                        style="margin-top:-70px">
                         @if ($profileImage)
-                            <img class="w-100 ps-md-4 h-100" src="{{ $profileImage->temporaryUrl() }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif(auth()->user()->profile_image)
-                            <img class="w-100 ps-md-4 h-100"
+                            <img class="ms-md-4 square-img-profile"
                                 src="{{ asset('storage/' . auth()->user()->profile_image) }}">
                         @else
-                            <img class="w-100 ps-md-4 h-100" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
                         <label for="profileImage" role="button" class="position-absolute top-0 end-0 pt-2 pe-4"
@@ -132,7 +133,7 @@
                         <div class="d-lg-flex align-items-center ms-md-2">
                             <span class="fw-bold fs-4 m-2">{{ auth()->user()->name }}</span>
                         </div>
-                        <div class="ms-md-3 mt-2 d-flex">
+                        <div class="ms-md-3 m-2 d-flex">
                             Individual
                         </div>
                     </div>

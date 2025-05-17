@@ -7,7 +7,7 @@
                 <h5 class="mt-2">{{ env('APP_NAME') }}</h5>
                 <p>Find the Best Construction Materials and Trusted Professionals</p>
                 <div class="gap-4 d-flex py-4 border-bottom-only-mobile border-bottom border-secondary pb-md-0 pb-5">
-                    <span>
+                    <a target="_blank" href="https://www.instagram.com/bajarbhaw?igsh=dzE4Z2lnMm16eDFy">
                         <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -39,7 +39,7 @@
                                 </linearGradient>
                             </defs>
                         </svg>
-                    </span>
+                    </a>
                     <span>
 
                         <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
@@ -53,7 +53,7 @@
                         </svg>
 
                     </span>
-                    <span class="mt-1">
+                    <a href="https://youtube.com/@bajarbhaw?si=CgklZWR1CJxUZ-IB" target="_blank" class="mt-1">
 
                         <svg width="30" height="22" viewBox="0 0 30 22" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +62,7 @@
                                 fill="#F61C0D" />
                         </svg>
 
-                    </span>
+                    </a>
                     <span>
                         <img src="{{ asset('assets/image/fi_174883.png') }}">
                     </span>

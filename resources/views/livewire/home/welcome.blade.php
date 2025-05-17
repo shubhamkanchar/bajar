@@ -19,7 +19,7 @@
                 <div class="d-md-flex position-relative justify-content-center mb-4">
                     <div class="bg-white rounded-5 p-2 border me-2" x-data="{ focused: false }"
                         :class="{ 'border-2 border-dark': focused }">
-                        <input class="form-control rounded-5 mt-1 border border-0 bg-white" name="city"
+                        <input class="form-select rounded-5 mt-1 border border-0 bg-white" name="city"
                             placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle"
                             wire:model="selectedCity" readonly />
                     </div>
@@ -291,6 +291,7 @@
         </div>
     </div>
 </div>
+@push('scripts')
 <script>
     function getLocation() {
       if (navigator.geolocation) {
@@ -310,6 +311,8 @@
         const city = data.address.city || data.address.town || data.address.village || "Unknown city";
         const state = data.address.state || "Unknown state";
         console.log(`City: ${city}, State: ${state}`);
+        Livewire.dispatch('selectedCityfun', {'value':city});
+        Livewire.dispatch('selectedStatefun', {'value':state});
       } catch (err) {
         console.log("Failed to fetch location details.");
       }
@@ -321,9 +324,17 @@
 
     getLocation();
   </script>
+@endpush
 @push('style')
     <style>
         .form-control:focus {
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+            border-color: rgb(0, 0, 0);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(255, 255, 255);
+        }
+        .form-select:focus {
             color: var(--bs-body-color);
             background-color: var(--bs-body-bg);
             border-color: rgb(0, 0, 0);

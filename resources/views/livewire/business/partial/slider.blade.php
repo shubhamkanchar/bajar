@@ -1,4 +1,4 @@
-<div class="slider-form" wire:ignore.self>
+<div class="slider-form {{$sliderStatus}}">
     <div class="slider-content">
         <div class="row">
             <div class="col-md-8">
@@ -20,7 +20,7 @@
                     </svg>
                     Bulk Upload
                 </span>
-                <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" id="closeSliderBtn">
+                <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" wire:click="closeSlider()">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
             </div>
@@ -50,7 +50,7 @@
 
                         </label>
                     @endif
-                    <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;aspect-ratio: 1 / 1" for="productImage1">
+                    <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="productImage1">
                         @if ($isEdit && gettype($product_images['product_image1']) == 'string')
                             <img src="{{ asset('storage/' . $product_images['product_image1']) }}" class="img-fluid">
                         @elseif ($product_images['product_image1'])
@@ -60,9 +60,9 @@
                                 wire:target="product_images.product_image1">
                                 <input type="file" wire:model.blur="product_images.product_image1" id="productImage1"
                                     hidden accept="image/*">
-                                <label>
+                                <span>
                                     <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                </label>
+                                </span>
                             </span>
                         @endif
 
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="col-md-7">
-                    <div class="row">
+                    <div class="row" style="height: 100%;">
                         @foreach ([2, 3, 4, 5, 6] as $index)
                             <div class="col-md-4 mb-3 col-6 position-relative">
                                 @if ($product_images['product_image' . $index])
@@ -113,7 +113,7 @@
 
                                     </label>
                                 @endif
-                                <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;aspect-ratio: 1 / 1" for="productImage{{ $index }}">
+                                <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="productImage{{ $index }}">
                                     @if ($isEdit && gettype($product_images['product_image' . $index]) == 'string')
                                         <img src="{{ asset('storage/' . $product_images['product_image' . $index]) }}"
                                             class="img-fluid">
@@ -126,10 +126,9 @@
                                             <input type="file"
                                                 wire:model.blur="product_images.product_image{{ $index }}"
                                                 id="productImage{{ $index }}" hidden>
-                                            <label >
-                                                <i
-                                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                            </label>
+                                            <span>
+                                                <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
+                                            </span>
                                         </span>
                                     @endif
 
@@ -185,15 +184,19 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" wire:ignore>
                     <div class="form-floating my-2" wire:ignore>
-                        <select class="form-control" id="tagInput" wire:model="product_tag">
+                        <select class="form-control select2" id="tagInput" wire:ignore>
+                            <option value="">Service Tag/Service Group</option>
                             @foreach ($allTags as $tag)
                                 <option {{ $tag == $product_tag ? 'selected' : '' }} value="{{ $tag }}">
                                     {{ $tag }}</option>
                             @endforeach
                         </select>
-                        <label for="tagInput">Product Tag/Product Group</label>
+                        {{-- <label for="tagInput">Product Tag/Product Group</label>
+                        @error('product_tag')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror --}}
                     </div>
                 </div>
                 <div class="col-md-6 d-flex align-items-center justify-content-center">
@@ -220,13 +223,6 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    {{-- <div class="form-floating mb-2 mt-2 w-100">
-                        <input type="number" min="0" class="form-control" placeholder="Qty" id="floatingSelect" wire:model="quantity">
-                        <label for="floatingSelect">Qty</label>
-                        @error('quantity')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div> --}}
                 </div>
                 <div class="col-md-6" x-data="{ showPrice: @entangle('showPrice') }">
                     <div class="mt-2 d-flex justify-content-between bg-white rounded-5 p-2 border">
@@ -246,7 +242,7 @@
                 </div>
                 <div class="col-12">
                     <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5" wire:model="description"></textarea>
-                    @error('decription')
+                    @error('description')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
 
@@ -255,7 +251,7 @@
                     <p>*Your product will be under review for the initial 24 hours before it’s live</p>
                     <div class="row">
                         <div class="col-md-5 mt-2 mb-2">
-                            <button class="btn btn-dark w-100"
+                            <button type="button" class="btn btn-dark w-100"
                                 wire:click.prevent="saveProduct">{{ $isEdit ? 'Update Product' : 'Add Product' }}</button>
                         </div>
                         <div class="col-md-5 mt-2 mb-2">
