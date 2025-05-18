@@ -118,6 +118,7 @@ class Profile extends Component
     {
         $data = ProductSellerReview::where([
             'seller_id' => $this->user->id,
+            'is_expert' => 1
         ])
         ->count();
         return $data;

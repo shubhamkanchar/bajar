@@ -16,6 +16,7 @@ class ProductSellerReview extends Model
         'communication_and_professionalism',
         'quality_or_service',
         'recommendation',
+        'is_expert'
     ];
 
     public function customer()

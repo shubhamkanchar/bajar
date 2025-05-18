@@ -96,9 +96,14 @@ class ViewBusinessProfile extends Component
     {
         $data = ProductSellerReview::where([
             'seller_id' => $this->user->id,
+            'is_expert' => 1
         ])
         ->count();
         return $data;
+    }
+
+    public function openReviewSlider(){
+        $this->showReviewForm = true;
     }
     
     public function editProduct($id)
@@ -262,6 +267,7 @@ class ViewBusinessProfile extends Component
                 'is_location_accurate' => $this->is_location_accurate,
                 'communication_and_professionalism' => $this->communication_and_professionalism,
                 'quality_or_service' => $this->quality_or_service,
+                'is_expert' => Auth::user()->is_reviewer,
                 'recommendation' => $this->recommendation,
             ]
         );

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('communication_and_professionalism');
             $table->unsignedTinyInteger('quality_or_service');
             $table->unsignedTinyInteger('recommendation');
+            $table->unsignedTinyInteger('is_expert')->default(0);
             $table->timestamps();
         });
     }

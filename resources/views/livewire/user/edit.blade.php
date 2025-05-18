@@ -100,7 +100,7 @@
                     </svg>
                 </a>
             </div>
-            <div class="col-12">
+            <div class="col-12 mb-3 mt-2">
                 <div class="row">
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
@@ -113,7 +113,7 @@
                             <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
-                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 pt-2 pe-4"
+                        <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4 pe-md-0"
                             style="z-index: 1">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -141,7 +141,7 @@
                 </div>
             </div>
             <hr>
-            <form>
+            <form class="mb-5">
                 <div class="alert bg-custom-secondary fw-bold" role="alert">
                     Personal Details
                 </div>

@@ -24,6 +24,7 @@ class Profile extends Component
     public $selectedCategory = 'all';
     public $user;
     public $allTags = [];
+    public $sliderStatus = '';
     
     #[
         Validate(
@@ -56,6 +57,15 @@ class Profile extends Component
     public function mount(){
         $this->user = Auth::user();
         $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag');
+    }
+
+    public function openSlider(){
+        $this->sliderStatus = 'open';
+    }
+
+    public function closeSlider(){
+        $this->sliderStatus = 'close';
+        $this->resetService();
     }
 
     #[Computed]
@@ -93,6 +103,7 @@ class Profile extends Component
     {
         $data = ProductSellerReview::where([
             'seller_id' => $this->user->id,
+            'is_expert' => 1
         ])
         ->count();
         return $data;

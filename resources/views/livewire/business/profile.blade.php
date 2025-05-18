@@ -48,7 +48,7 @@
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
-                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
                             @if ($this->user->gst)
                                 <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
@@ -56,7 +56,7 @@
                                     {{ $this->user->gst }}</span>
                             @endif
                         </div>
-                        <div class="ms-xl-2 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex p-md-2">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -190,7 +190,7 @@
                     <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
                         <a wire:click="openSlider()">
                             <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center "
-                                role="button" style="height: 95%;">
+                                role="button" style="height: 95%;min-height:250px">
                                 <i class="fa-regular fa-square-plus fs-1 text-secondary " role="button"></i>
                                 <div class="fs-4 fw-bold">Add Product</div>
                                 <small>Adding more products improve your search rankings</small>
@@ -302,6 +302,31 @@
         }
 
         /* Show the slider when active (slide in from the right) */
+        .slider-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* dark semi-transparent overlay */
+            z-index: 1049;
+            /* just below the slider */
+            display: none;
+            /* hidden by default */
+            /* transition: opacity 0.3s ease; */
+        }
+
+        .slider-overlay.open {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .slider-overlay {
+                width: 25%;
+                /* overlay only the non-slider portion on desktop */
+            }
+        }
         .slider-form.open {
             right: 0;
         }
@@ -373,7 +398,7 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
 
-            sliderForm.classList.remove("open");
+            // sliderForm.classList.remove("open");
         });
 
         document.addEventListener('productDeleted', event => {
@@ -385,16 +410,38 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
 
-            sliderForm.classList.remove("open");
+            // sliderForm.classList.remove("open");
         });
 
-        $('#tagInput').select2({
-            tags: true,
-            allowClear: true,
-            placeholder: 'Enter or select tags',
-            width: '100%',
-            dropdownParent: $('#tagInput').parent()
+        function initTagInput() {
+            const $tagInput = $('#tagInput');
+
+            // Prevent reinitialization if already applied
+            if ($tagInput.hasClass('select2-hidden-accessible')) {
+                $tagInput.select2('destroy');
+            }
+
+            $tagInput.select2({
+                tags: true,
+                placeholder: 'Select or type tags',
+                width: '100%',
+                allowClear: true
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTagInput();
+
+            // Livewire v3 hook to reinitialize after DOM updates
+            window.Livewire.hook('commit', ({ succeed }) => {
+                succeed(() => {
+                    setTimeout(() => {
+                        initTagInput();
+                    }, 0);
+                });
+            });
         });
+
         $('#tagInput').on('change', function() {
             @this.set('product_tag', $(this).val());
         });

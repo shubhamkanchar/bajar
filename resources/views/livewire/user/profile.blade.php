@@ -55,7 +55,7 @@
                             src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
-                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                {{-- <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
                     wire:target="bgImage" for="bgImage">
 
                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
@@ -75,7 +75,7 @@
                         </defs>
                     </svg>
 
-                </label>
+                </label> --}}
             </div>
 
             <div class="col-12 mb-3">
@@ -87,7 +87,7 @@
                                 src="{{ asset('storage/' . auth()->user()->profile_image) }}">
                         @else
                             <img class="ms-md-4 square-img-profile"
-                                src="{{ asset('assets/image/business_profile.png') }}">
+                                src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
 
@@ -149,9 +149,9 @@
                                         <div class="carousel-inner">
                                             @foreach ($product->images as $key => $productImage)
                                                 <div
-                                                    class="carousel-item @if ($key == 0) active @endif">
+                                                    class="carousel-item @if ($key == 0) active @endif ratio ratio-1x1">
                                                     <img src="{{ asset('storage/' . $productImage->path) }}"
-                                                        class="d-block w-100" alt="Product Image">
+                                                        class="d-block object-fit-cover w-100" alt="Product Image">
                                                 </div>
                                             @endforeach
                                         </div>

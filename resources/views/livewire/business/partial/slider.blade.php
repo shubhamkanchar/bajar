@@ -1,3 +1,4 @@
+<div class="slider-overlay {{$sliderStatus}}" wire:click="closeSlider()"></div>
 <div class="slider-form {{$sliderStatus}}">
     <div class="slider-content">
         <div class="row">
@@ -187,12 +188,13 @@
                 <div class="col-md-6" wire:ignore>
                     <div class="form-floating my-2" wire:ignore>
                         <select class="form-control select2" id="tagInput" wire:ignore>
-                            <option value="">Service Tag/Service Group</option>
+                            <option disabled value="" selected>Service Tag/Service Group</option>
                             @foreach ($allTags as $tag)
                                 <option {{ $tag == $product_tag ? 'selected' : '' }} value="{{ $tag }}">
                                     {{ $tag }}</option>
                             @endforeach
                         </select>
+                        <label for="tagInput">Service Tag/Service Group</label>
                         {{-- <label for="tagInput">Product Tag/Product Group</label>
                         @error('product_tag')
                             <span class="text-danger">{{ $message }}</span>

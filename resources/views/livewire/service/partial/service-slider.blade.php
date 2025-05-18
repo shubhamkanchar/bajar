@@ -1,4 +1,5 @@
-<div class="slider-form" wire:ignore.self>
+<div class="slider-overlay {{$sliderStatus}}" wire:click="closeSlider()"></div>
+<div class="slider-form {{$sliderStatus}}">
     <div class="slider-content">
         <div class="row">
             <div class="col-md-8">
@@ -20,7 +21,7 @@
                     </svg>
                     Bulk Upload
                 </span>
-                <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" id="closeSliderBtn">
+                <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" wire:click="closeSlider()">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
             </div>
@@ -161,10 +162,10 @@
                 
                 <div class="col-md-6" wire:ignore>
                     <div class="form-floating my-2">
-                        <select class="form-control" id="tagInput" wire:model="product_tag">
-                            <option value="">Service Tag/Service Group</option>
+                        <select class="form-control" id="tagInput" wire:model="service_tag">
+                            <option disabled value="" selected>Service Tag/Service Group</option>
                             @foreach($allTags as $tag)
-                                <option {{ $tag == $product_tag ? 'selected' : '' }} value="{{ $tag }}">{{ $tag }}</option>
+                                <option {{ $tag == $service_tag ? 'selected' : '' }} value="{{ $tag }}">{{ $tag }}</option>
                             @endforeach
                         </select>
                         <label for="tagInput">Service Tag/Service Group</label>

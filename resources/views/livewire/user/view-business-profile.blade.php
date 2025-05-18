@@ -25,7 +25,7 @@
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
-                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
                             @if ($this->user->gst)
                                 <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
@@ -33,7 +33,7 @@
                                     {{ $this->user->gst }}</span>
                             @endif
                         </div>
-                        <div class="ms-xl-2 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex p-md-2">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -174,9 +174,10 @@
                                             <div class="carousel-inner">
                                                 @foreach ($product->images as $key => $productImage)
                                                     <div
-                                                        class="carousel-item @if ($key == 0) active @endif ratio ratio-4x3">
+                                                        class="carousel-item @if ($key == 0) active @endif ratio ratio-1x1">
                                                         <img src="{{ asset('storage/' . $productImage->path) }}"
-                                                            class="d-block w-100" alt="Product Image">
+                                                            class="d-block object-fit-cover rounded w-100"
+                                                            alt="Product Image">
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -301,6 +302,8 @@
         </div>
     </div>
 
+    <div class="slider-overlay @if($showDetailSlider || $showReviewForm) open @endif" 
+    x-on:click="showReviewForm = false; $wire.set('showReviewForm', false);showDetailSlider = false;$wire.set('showDetailSlider', false)"></div>
     <div class="slider-form" wire:ignore.self x-cloak x-data="{ showDetailSlider: @entangle('showDetailSlider') }" x-show="showDetailSlider"
         x-on:click.away="showDetailSlider = false; $wire.set('showDetailSlider', false)">
         <div class="slider-content">
@@ -603,7 +606,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" value="{{route("view-shop",["uuid"=>$this->user->uuid])}}" id="businessLink">
+    <input type="hidden" value="{{ route('view-shop', ['uuid' => $this->user->uuid]) }}" id="businessLink">
 </div>
 @section('style')
     <style>
@@ -634,6 +637,32 @@
             z-index: 1050;
             box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
             overflow: scroll;
+        }
+
+        .slider-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* dark semi-transparent overlay */
+            z-index: 1049;
+            /* just below the slider */
+            display: none;
+            /* hidden by default */
+            /* transition: opacity 0.3s ease; */
+        }
+
+        .slider-overlay.open {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .slider-overlay {
+                width: 25%;
+                /* overlay only the non-slider portion on desktop */
+            }
         }
 
         /* Show the slider when active (slide in from the right) */
@@ -748,7 +777,13 @@
         setTimeout(function() {
             @this.set('isLoaded', true);
         }, 500);
+
+        setTimeout(() => {
+            @this.set('showReviewForm', true);
+        }, 15000);
     });
+
+
 
     function copyCurrentUrl() {
         const url = $('#businessLink').val();

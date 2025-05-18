@@ -49,7 +49,7 @@
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
-                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
                             @if ($this->user->gst)
                                 <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
@@ -57,7 +57,7 @@
                                     {{ $this->user->gst }}</span>
                             @endif
                         </div>
-                        <div class="ms-xl-2 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex p-md-2">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -189,9 +189,9 @@
             <div class="col-12 mt-3 mb-5 service-list">
                 @if (count($this->allServices) == 0)
                     <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 product-card">
-                        <a id="openSliderBtn">
-                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
-                                role="button" style="height: 95%;">
+                        <a wire:click="openSlider()">
+                            <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                                role="button" style="height: 95%;min-height:250px">
                                 <i class="fa-regular fa-square-plus fs-1 text-secondary " role="button"></i>
                                 <div class="fs-4 fw-bold">Add Previous Work</div>
                                 <small>Adding more service improve your search rankings</small>
@@ -204,11 +204,10 @@
                         <h6 class="fw-bold">{{ $categoryName }}</h6>
                         <div class="row">
                             <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 service-card">
-                                <a id="openSliderBtn">
-                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center openSlider"
+                                <a wire:click="openSlider()">
+                                    <div class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
                                         role="button" style="height: 95%;">
-                                        <i class="fa-regular fa-square-plus fs-1 text-secondary openSlider"
-                                            role="button"></i>
+                                        <i class="fa-regular fa-square-plus fs-1 text-secondary" role="button"></i>
                                         <div class="fs-4 fw-bold">Add Previous Work</div>
                                         <small>Adding more products improve your search rankings</small>
                                     </div>
@@ -217,7 +216,7 @@
                             @foreach ($services as $service)
                                 <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 editService" role="button"
                                     data-id="{{ $service->id }}">
-                                    <div class="position-relative my-2">
+                                    <div class="position-relative my-2" wire:click="openSlider()">
                                         <div id="carouselProduct{{ $service->id }}"
                                             class="border rounded carousel slide" data-bs-ride="carousel">
                                             <div class="carousel-inner">
@@ -225,7 +224,7 @@
                                                     <div
                                                         class="carousel-item @if ($key == 0) active @endif ratio ratio-1x1">
                                                         <img src="{{ asset('storage/' . $serviceImage->path) }}"
-                                                            class="d-block w-100 object-fit-cover"
+                                                            class="d-block w-100 object-fit-cover rounded"
                                                             alt="Product Image">
                                                     </div>
                                                 @endforeach
@@ -280,7 +279,7 @@
     </div>
     @include('livewire.service.partial.service-slider')
     @include('livewire.service.partial.review-slider')
-    <input type="hidden" value="{{route("view-shop",["uuid"=>$this->user->uuid])}}" id="businessLink">
+    <input type="hidden" value="{{ route('view-shop', ['uuid' => $this->user->uuid]) }}" id="businessLink">
 </div>
 
 @section('style')
@@ -296,6 +295,32 @@
             z-index: 1050;
             box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
             overflow: scroll;
+        }
+
+        .slider-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* dark semi-transparent overlay */
+            z-index: 1049;
+            /* just below the slider */
+            display: none;
+            /* hidden by default */
+            /* transition: opacity 0.3s ease; */
+        }
+
+        .slider-overlay.open {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .slider-overlay {
+                width: 25%;
+                /* overlay only the non-slider portion on desktop */
+            }
         }
 
         .slider-form.open {
@@ -355,37 +380,6 @@
 @endsection
 @push('scripts')
     <script>
-        // Toggle slider form on button click
-        //product slider
-        // const openSliderBtn = document.getElementById("openSliderBtn");
-        const sliderForm = document.querySelector(".slider-form");
-        const closeSliderBtn = document.getElementById("closeSliderBtn");
-
-        document.querySelector(".service-list").addEventListener("click", function(event) {
-            if (event.target.classList.contains("service-card") || event.target.classList.contains("openSlider")) {
-                sliderForm.classList.toggle("open");
-            }
-        });
-
-        closeSliderBtn.addEventListener("click", function() {
-            sliderForm.classList.remove("open");
-            @this.call('resetService')
-        });
-
-        //review slider
-        // const openReviewSliderBtn = document.getElementById("openReviewSliderBtn");
-        const reviewSliderForm = document.getElementById("reviewSlider");
-        const closeReviewSliderBtn = document.getElementById("closeReviewSliderBtn");
-
-        // openReviewSliderBtn.addEventListener("click", function() {
-        //     reviewSliderForm.classList.toggle("open");
-        // });
-
-        closeReviewSliderBtn.addEventListener("click", function() {
-            reviewSliderForm.classList.remove("open");
-            @this.call('resetService');
-        });
-
         const stars = document.querySelectorAll('.star-rating i');
 
         stars.forEach(star => {
@@ -413,7 +407,7 @@
                 let serviceId = target.getAttribute('data-id');
 
                 @this.call('editService', serviceId).then(function() {
-                    sliderForm.classList.toggle("open");
+                    // sliderForm.classList.toggle("open");
                 });
             }
         });
@@ -428,7 +422,7 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
 
-            sliderForm.classList.remove("open");
+            // sliderForm.classList.remove("open");
         });
 
         document.addEventListener('serviceDeleted', event => {
@@ -440,15 +434,38 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
 
-            sliderForm.classList.remove("open");
+            // sliderForm.classList.remove("open");
         });
 
-        $('#tagInput').select2({
-            tags: true,
-            allowClear: true,
-            placeholder: 'Enter or select tags',
-            width: '100%'
+        function initTagInput() {
+            const $tagInput = $('#tagInput');
+
+            // Prevent reinitialization if already applied
+            if ($tagInput.hasClass('select2-hidden-accessible')) {
+                $tagInput.select2('destroy');
+            }
+
+            $tagInput.select2({
+                tags: true,
+                placeholder: 'Select or type tags',
+                width: '100%',
+                allowClear: true
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTagInput();
+
+            // Livewire v3 hook to reinitialize after DOM updates
+            window.Livewire.hook('commit', ({ succeed }) => {
+                succeed(() => {
+                    setTimeout(() => {
+                        initTagInput();
+                    }, 0);
+                });
+            });
         });
+
         $('#tagInput').on('change', function() {
             @this.set('service_tag', $(this).val());
         });

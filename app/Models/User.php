@@ -99,8 +99,13 @@ class User extends Authenticatable
         return $this->hasMany(Wishlist::class);
     }
 
+    // public function ratings(){
+    //     return  $this->hasOne(ProductSellerReview::class,'seller_id','id')->select('seller_id',DB::raw('SUM(communication_and_professionalism + quality_or_service + recommendation) as total_score'))
+    //     ->groupBy('seller_id');
+    // }
+
     public function ratings(){
-        return  $this->hasOne(ProductSellerReview::class,'seller_id','id')->select('seller_id',DB::raw('SUM(communication_and_professionalism + quality_or_service + recommendation) as total_score'))
+        return  $this->hasOne(ProductSellerReview::class,'seller_id','id')->select('seller_id',DB::raw('count(communication_and_professionalism) as total_score'))
         ->groupBy('seller_id');
     }
 

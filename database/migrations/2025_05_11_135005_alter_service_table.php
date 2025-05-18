@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             if(Schema::hasColumn('services','service_tag_group_id')){
-                $table->dropColumn('service_tag');
+                $table->dropColumn('service_tag_group_id');
             }
             if(!Schema::hasColumn('services','service_tag')){
                 $table->string('service_tag')->after('category_id')->nullable();
