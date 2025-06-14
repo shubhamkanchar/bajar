@@ -55,10 +55,10 @@
                     </div>
                     <div class="col-md-4 col-lg-4 col-xl-5 col-12 text-md-end">
                         <div class="d-lg-flex float-md-end text-md-end w-100 justify-content-md-end">
-                            <span
+                            {{-- <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">
                                 Free
-                            </span>
+                            </span> --}}
                             @if ($this->user?->ratings?->total_score)
                                 <span
                                     class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">

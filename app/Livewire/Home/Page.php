@@ -13,8 +13,10 @@ class Page extends Component
     {
         if ($slug == 'terms-and-conditions') {
             $this->post = ModelsPage::where('page','tc')->first();
-        } else {
-            $this->post = ModelsPage::where('page','tc')->first();
+        } else if($slug == 'privacy-policy') {
+            $this->post = ModelsPage::where('page','pp')->first();
+        }else if($slug == 'refund-policy'){
+            $this->post = ModelsPage::where('page','rp')->first();
         }
     }
 

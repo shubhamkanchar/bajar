@@ -97,7 +97,10 @@
             display: block;
             border-radius: 15px;
         }
-        
+        .img-fluid{
+            max-width: 100% !important;
+            max-height: 100% !important
+        }
     </style>
     @stack('style')
     @yield('style')

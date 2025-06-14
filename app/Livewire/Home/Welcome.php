@@ -75,9 +75,9 @@ class Welcome extends Component
         if ($id) {
             $this->searchStarted = true;
             $this->sellers = User::with(['address', 'ratings'])
-                // ->whereHas('address', function ($query) {
-                //     $query->where('addresses.city', $this->selectedCity);
-                // })
+                ->whereHas('address', function ($query) {
+                    $query->where('addresses.city', $this->selectedCity);
+                })
                 ->whereHas('categories', function ($query) use ($id) {
                     $query->where('categories.id', $id);
                 })

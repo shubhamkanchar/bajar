@@ -1,4 +1,4 @@
-<div class="card rounded-4 shadow">
+<div class="{{ $deviceWidth < 768 ? '' : 'card rounded-4 shadow' }}">
 
     <div class="row p-4">
         <div class="offset-xl-2 offset-lg-1 col-xl-5 col-lg-7 col-md-6 col-sm-12 p-4">
@@ -617,4 +617,12 @@
             width: 15px;
         }
     </style>
+@endpush
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const width = window.innerWidth;
+        @this.set('deviceWidth', width);
+    });
+</script>
 @endpush

@@ -79,6 +79,8 @@ class Edit extends Component
                 'close' => optional($existingHours->where('day', $day)->first())->close_time ?? ''
             ];
         }
+        
+
     }
 
     public function setOffering($offering)

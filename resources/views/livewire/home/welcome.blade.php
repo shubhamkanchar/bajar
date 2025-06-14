@@ -1,9 +1,9 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-4 text-center rounded-4"
+            <div class="col-12 mt-4 text-center rounded-4 position-relative"
                 style="background-image: url({{ asset('assets/bg/grey_bar.png') }});background-repeat: no-repeat; background-size: cover">
-                <div class="pt-3">
+                <div class="p-3">
                     I am looking for
                 </div>
                 <div class="d-flex justify-content-center mb-4">
@@ -19,9 +19,7 @@
                 <div class="d-md-flex position-relative justify-content-center mb-4">
                     <div class="bg-white rounded-5 p-2 border me-2" x-data="{ focused: false }"
                         :class="{ 'border-2 border-dark': focused }">
-                        <input class="form-select rounded-5 mt-1 border border-0 bg-white" name="city"
-                            placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle"
-                            wire:model="selectedCity" readonly />
+                        <input class="form-select rounded-5 mt-1 border border-0 bg-white" name="city" placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle" wire:model="selectedCity" />
                     </div>
                     @if ($isOpen)
                         <div class="position-absolute mt-2 w-sp shadow bg-white border rounded-4 p-3"
@@ -53,19 +51,23 @@
                                 d="M7.39687 14.7937C5.32954 14.7937 3.5799 14.0778 2.14794 12.6458C0.715979 11.2138 0 9.4642 0 7.39687C0 5.32954 0.715979 3.5799 2.14794 2.14794C3.5799 0.715979 5.32954 0 7.39687 0C9.4642 0 11.2138 0.715979 12.6458 2.14794C14.0778 3.5799 14.7937 5.32954 14.7937 7.39687C14.7937 8.23139 14.661 9.01849 14.3954 9.75818C14.1299 10.4979 13.7696 11.1522 13.3144 11.7212L19.6871 18.0939C19.8957 18.3025 20 18.568 20 18.8905C20 19.2129 19.8957 19.4784 19.6871 19.6871C19.4784 19.8957 19.2129 20 18.8905 20C18.568 20 18.3025 19.8957 18.0939 19.6871L11.7212 13.3144C11.1522 13.7696 10.4979 14.1299 9.75818 14.3954C9.01849 14.661 8.23139 14.7937 7.39687 14.7937ZM7.39687 12.5178C8.81935 12.5178 10.0284 12.0199 11.0242 11.0242C12.0199 10.0284 12.5178 8.81935 12.5178 7.39687C12.5178 5.9744 12.0199 4.76529 11.0242 3.76956C10.0284 2.77383 8.81935 2.27596 7.39687 2.27596C5.9744 2.27596 4.76529 2.77383 3.76956 3.76956C2.77383 4.76529 2.27596 5.9744 2.27596 7.39687C2.27596 8.81935 2.77383 10.0284 3.76956 11.0242C4.76529 12.0199 5.9744 12.5178 7.39687 12.5178Z"
                                 fill="#CCCCCC" />
                         </svg>
-                        <input wire:model="productName" class="form-control border border-0 rounded-5 me-2 bg-white"
-                            type="text" placeholder="Search" @focus='focused = true' @blur="focused = false"
-                            wire:keyup="searchRestart()">
-                        @if ($searchStarted)
-                            <button type="button" class="btn btn-dark rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
-                                wire:click="clearSearch()">Clear</button>
-                        @else
-                            <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4"
-                                :class="{ 'btn-dark': focused, 'btn-secondary': !focused }"
-                                wire:click="searchProduct()">Search</button>
-                        @endif
+                        <input wire:model="productName" class="form-control border border-0 rounded-5 me-2 bg-white" type="text" placeholder="Search" @focus='focused = true' @blur="focused = false" wire:keyup="searchRestart()">
+                        <button type="button" class="btn rounded-5 email-toggle-btn pt-2 pb-2 ps-4 pe-4" :class="{ 'btn-dark': focused, 'btn-secondary': !focused }" wire:click="searchProduct()">Search</button>
                     </div>
                 </div>
+                @if ($searchStarted)
+                <a href="{{ route('home') }}" role="button" class="position-absolute top-0 start-0 p-2 ps-2"
+                    style="z-index: 1">
+                    <svg width="40" height="40" viewBox="0 0 50 50" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect x="-1" y="1" width="47" height="47" rx="24"
+                            transform="matrix(-1 0 0 1 48 0)" fill="white" stroke="black" stroke-width="2" />
+                        <path
+                            d="M20.9123 25.0026L29.3342 16.5807C29.6206 16.2943 29.7591 15.9553 29.7495 15.5638C29.74 15.1723 29.592 14.8333 29.3055 14.5469C29.0191 14.2604 28.6801 14.1172 28.2886 14.1172C27.8971 14.1172 27.5581 14.2604 27.2717 14.5469L18.4774 23.3698C18.2482 23.599 18.0764 23.8568 17.9618 24.1432C17.8472 24.4297 17.7899 24.7161 17.7899 25.0026C17.7899 25.2891 17.8472 25.5755 17.9618 25.862C18.0764 26.1484 18.2482 26.4063 18.4774 26.6354L27.3003 35.4583C27.5868 35.7448 27.921 35.8832 28.3029 35.8737C28.6849 35.8642 29.0191 35.7161 29.3055 35.4297C29.592 35.1432 29.7352 34.8043 29.7352 34.4128C29.7352 34.0213 29.592 33.6823 29.3055 33.3958L20.9123 25.0026Z"
+                            fill="black" />
+                    </svg>
+                </a>
+                @endif
             </div>
 
             @if (empty($sellers))
@@ -323,6 +325,8 @@
     }
 
     getLocation();
+
+    
   </script>
 @endpush
 @push('style')

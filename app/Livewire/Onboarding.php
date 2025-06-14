@@ -31,6 +31,7 @@ class Onboarding extends Component
     public $cityOptions = [];
     public $gst_number;
     public $google_map_link;
+    public $deviceWidth;
 
     public function mount()
     {

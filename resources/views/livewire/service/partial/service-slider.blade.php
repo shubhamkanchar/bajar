@@ -62,9 +62,9 @@
                         @else
                             <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="service_images.service_image1">
                                 <input type="file" wire:model.blur="service_images.service_image1" id="serviceImage1" hidden accept="image/*">
-                                <label >
+                                <span >
                                     <i class="fa-regular fa-square-plus fs-1 text-secondary"></i>
-                                </label>
+                                </span>
                             </span>
                         @endif
                 
@@ -117,9 +117,9 @@
                                     @else
                                         <span class="text-center" style="top: 35%;" wire:loading.remove wire:target="service_images.service_image{{$index}}">
                                             <input type="file" wire:model.blur="service_images.service_image{{$index}}" id="serviceImage{{$index}}" hidden>
-                                            <label >
+                                            <span >
                                                 <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
-                                            </label>
+                                            </span>
                                         </span>
                                     @endif
                 

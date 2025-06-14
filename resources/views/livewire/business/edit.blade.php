@@ -430,18 +430,18 @@
                             </div>
                         </div>
                     @endif
+                    @if($user->activeSubscription)
                     <div class="col-md-3">
                         <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
-                            <span class="d-block text-primary fw-bold">Premium</span>
-                            <span>Valid Till : 24 Oct 2025</span>
+                            <span class="d-block text-primary fw-bold">{{$user->activeSubscription->plan_name}}</span>
+                            <span>Valid Till : {{ \Carbon\Carbon::parse($user->activeSubscription->end_at)->format('d M Y');}}</span>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
-                            <span class="d-block text-primary fw-bold">Premium</span>
-                            <span>Valid Till : 24 Oct 2025</span>
+                    @elseif (!Auth::user()->is_admin)
+                        <div class="col-md-12">
+                            <livewire:subscription-form :user="$user"/>
                         </div>
-                    </div>
+                    @endif
                     @if (Auth::user()->is_admin)
                         <div class="col-md-3 border-start border-2" wire:click="setReviewer()">
                             <button type="button"
@@ -480,11 +480,7 @@
                             </button>
                         </div>
                     @endif
-                    @if (!Auth::user()->is_admin)
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-dark mt-3 w-100">View Plans</button>
-                        </div>
-                    @endif
+                    
                 </div>
                 <div class="row">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">

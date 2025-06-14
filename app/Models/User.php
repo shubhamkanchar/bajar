@@ -120,4 +120,17 @@ class User extends Authenticatable
         }
         return 'Closed';
     }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(Subscription::class)
+            ->where('status', 'active')
+            ->latest(); // Optional: gets the most recent one
+    } 
+
+    public function latestSubscription()
+    {
+        return $this->hasOne(Subscription::class)
+            ->latest(); // Optional: gets the most recent one
+    } 
 }

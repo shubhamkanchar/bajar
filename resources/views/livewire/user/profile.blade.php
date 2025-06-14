@@ -126,12 +126,12 @@
             <div class="col-md-12">
                 <button x-on:click="tab = 'product'; $wire.set('tab', 'product')"
                     :class="tab === 'product' ? 'text-bg-dark' : 'text-bg-light'"
-                    class="badge rounded-pill fs-6 p-3 m-1">
+                    class="btn rounded-pill fs-6 py-2 px-3 m-1">
                     Product Wishlist
                 </button>
                 <button x-on:click="tab = 'service'; $wire.set('tab', 'service')"
                     :class="tab === 'service' ? 'text-bg-dark' : 'text-bg-light'"
-                    class="badge rounded-pill fs-6 p-3 m-1">
+                    class="btn rounded-pill fs-6 py-2 px-3 m-1">
                     Service Wishlist
                 </button>
             </div>
