@@ -71,16 +71,19 @@
                                 </svg>
                             </span>
                             <span>
-                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
-                                {{ $this->user->address->state }}
+                                {{ $user->address->address }}, {{ $user->address->city }},
+                                {{ $user->address->state }}
                             </span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 col-xl-5 col-12 text-md-end">
                         <div class="d-lg-flex float-md-end text-md-end">
-                            <span
-                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
-                            @if ($this->user?->ratings?->total_score)
+                            @if($user->activeSubscription)
+                                <span class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">{{$user->activeSubscription->plan_name}}</span>
+                            @else
+                                <span class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
+                            @endif
+                            @if ($user?->ratings?->total_score)
                                 <span
                                     class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                     <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"

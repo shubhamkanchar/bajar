@@ -480,7 +480,6 @@
                             </button>
                         </div>
                     @endif
-                    
                 </div>
                 <div class="row">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">

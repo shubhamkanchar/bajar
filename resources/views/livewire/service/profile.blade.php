@@ -2,9 +2,9 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-4 position-relative">
-                @if ($this->user->bg_image)
+                @if ($user->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4"
-                        src="{{ asset('storage/' . $this->user->bg_image) }}">
+                        src="{{ asset('storage/' . $user->bg_image) }}">
                 @else
                     <picture>
                         <source media="(max-width: 767px)"
@@ -40,9 +40,9 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
-                        @if ($this->user->profile_image)
+                        @if ($user->profile_image)
                             <img class="ms-md-4 square-img-profile"
-                                src="{{ asset('storage/' . $this->user->profile_image) }}">
+                                src="{{ asset('storage/' . $user->profile_image) }}">
                         @else
                             <img class="ms-md-4 square-img-profile"
                                 src="{{ asset('assets/image/business_profile.png') }}">
@@ -50,11 +50,11 @@
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
                         <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
-                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                            @if ($this->user->gst)
+                            <span class="fw-bold fs-4">{{ $user->name }}</span>
+                            @if ($user->gst)
                                 <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
                                     </span>
-                                    {{ $this->user->gst }}</span>
+                                    {{ $user->gst }}</span>
                             @endif
                         </div>
                         <div class="ms-xl-2 mt-2 d-flex p-md-2">
@@ -72,16 +72,19 @@
                                 </svg>
                             </span>
                             <span>
-                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
-                                {{ $this->user->address->state }}
+                                {{ $user->address->address }}, {{ $user->address->city }},
+                                {{ $user->address->state }}
                             </span>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 col-xl-5 col-12 text-md-end">
                         <div class="d-lg-flex float-md-end text-md-end">
-                            <span
-                                class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
-                            @if ($this->user?->ratings?->total_score)
+                            @if($user->activeSubscription)
+                                <span class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">{{$user->activeSubscription->plan_name}}</span>
+                            @else
+                                <span class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2 me-2">Free</span>
+                            @endif
+                            @if ($user?->ratings?->total_score)
                                 <span
                                     class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
                                     <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -90,7 +93,7 @@
                                             d="M15.9189 12.32C15.6599 12.571 15.5409 12.934 15.5999 13.29L16.4889 18.21C16.5639 18.627 16.3879 19.049 16.0389 19.29C15.6969 19.54 15.2419 19.57 14.8689 19.37L10.4399 17.06C10.2859 16.978 10.1149 16.934 9.93988 16.929H9.66888C9.57488 16.943 9.48288 16.973 9.39888 17.019L4.96888 19.34C4.74988 19.45 4.50188 19.489 4.25888 19.45C3.66688 19.338 3.27188 18.774 3.36888 18.179L4.25888 13.259C4.31788 12.9 4.19888 12.535 3.93988 12.28L0.328876 8.78C0.0268758 8.487 -0.0781242 8.047 0.0598758 7.65C0.193876 7.254 0.535876 6.965 0.948876 6.9L5.91888 6.179C6.29688 6.14 6.62888 5.91 6.79888 5.57L8.98888 1.08C9.04088 0.98 9.10788 0.888 9.18888 0.81L9.27888 0.74C9.32588 0.688 9.37988 0.645 9.43988 0.61L9.54888 0.57L9.71888 0.5H10.1399C10.5159 0.539 10.8469 0.764 11.0199 1.1L13.2389 5.57C13.3989 5.897 13.7099 6.124 14.0689 6.179L19.0389 6.9C19.4589 6.96 19.8099 7.25 19.9489 7.65C20.0799 8.051 19.9669 8.491 19.6589 8.78L15.9189 12.32Z"
                                             fill="#22B14D" />
                                     </svg>
-                                    {{ $this->user?->ratings?->total_score }}
+                                    {{ $user?->ratings?->total_score }}
                                 </span>
                             @endif
 
@@ -127,12 +130,12 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                {{ $this->user->bussiness_time }}
+                                {{ $user->bussiness_time }}
                             </span>
                         </div>
                         <div class="d-lg-flex justify-content-end align-items-end float-md-end w-100  pb-2"
                             style="height:60%">
-                            <a href="{{ route('business.edit', ['uuid' => $this->user->uuid]) }}"
+                            <a href="{{ route('business.edit', ['uuid' => $user->uuid]) }}"
                                 class="btn btn-dark">
                                 <svg class="me-2" width="21" height="21" viewBox="0 0 21 21"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -279,7 +282,7 @@
     </div>
     @include('livewire.service.partial.service-slider')
     @include('livewire.service.partial.review-slider')
-    <input type="hidden" value="{{ route('view-shop', ['uuid' => $this->user->uuid]) }}" id="businessLink">
+    <input type="hidden" value="{{ route('view-shop', ['uuid' => $user->uuid]) }}" id="businessLink">
 </div>
 
 @section('style')
