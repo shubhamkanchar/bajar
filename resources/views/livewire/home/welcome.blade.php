@@ -313,7 +313,9 @@
         const city = data.address.city || data.address.town || data.address.village || "Unknown city";
         const state = data.address.state || "Unknown state";
         console.log(`City: ${city}, State: ${state}`);
-        Livewire.dispatch('selectedCityfun', {'value':city});
+        if(city != 'Unknown city'){
+            Livewire.dispatch('selectedCityfun', {'value':city});
+        }
         Livewire.dispatch('selectedStatefun', {'value':state});
       } catch (err) {
         console.log("Failed to fetch location details.");

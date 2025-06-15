@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->enum('page',['tc','pp']);
+            $table->enum('page',['tc','pp','rp']);
             $table->longText('description')->nullable();
             $table->timestamps();
         });

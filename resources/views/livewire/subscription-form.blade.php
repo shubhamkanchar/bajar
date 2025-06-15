@@ -1,23 +1,25 @@
 <div>
     @if($planName)
-        <div class="row mt-2">
-            <div class="col-md-12">
-                <small>You don't have active subscription. Please subscribe to activate account</small>
-            </div>
-            <div class="col-md-3">
-                <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
-                    <span class="d-block text-primary fw-bold">{{$planName}}</span>
-                    <span>{{$amount/100}} / {{$interval}}</span>
+        @if($user->latestSubscription?->status == 'paid')
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <small>You don't have active subscription. Please subscribe to activate account</small>
+                </div>
+                <div class="col-md-3">
+                    <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
+                        <span class="d-block text-primary fw-bold">{{$planName}}</span>
+                        <span>{{$amount/100}} / {{$interval}}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <button type="button" class="btn btn-dark mt-3 w-100" wire:click="createSubscription">
-                    Subscribe Now
-                </button>
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-dark mt-3 w-100" wire:click="createSubscription">
+                        Subscribe Now
+                    </button>
+                </div>
             </div>
-        </div>
+        @endif
         @if($user->latestSubscription)
             <div class="row">
                 <div class="col-md-12 mt-3">

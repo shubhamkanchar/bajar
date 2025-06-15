@@ -78,7 +78,7 @@ class SubscriptionForm extends Component
         if($subscription->start_at){
             Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
             ->update([
-                'status' => $subscription->status,
+                'status' => 'paid',
                 'payment_id' => $paymentId,
                 'start_at' => $subscription->current_start ? Carbon::createFromTimestamp($subscription->current_start) : NULL,
                 'end_at' => $subscription->current_end ? Carbon::createFromTimestamp($subscription->current_end) : NULL,
