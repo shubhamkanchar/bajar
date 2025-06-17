@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-2 text-end">
                     @if ($index > 0)
-                        <button type="button" class="btn btn-outline-danger" wire:click="removeAdmin({{ $index }})">
+                        <button type="button" class="btn btn-outline-danger" wire:click="removeAdmin({{ $index }},{{$admin['id']}})">
                             <i class="bi bi-trash"></i>
                         </button>
                     @endif
@@ -37,9 +37,15 @@
             </div>
         @endforeach
 
+        
         <button type="button" class="btn btn-outline-secondary mt-2" wire:click="addAdmin">
             <i class="bi bi-plus-circle me-1"></i> Add New
         </button>
+        @if(count($admins) > 0)
+            <button type="button" class="btn btn-dark mt-2" wire:click="saveAdmin">
+                <i class="bi bi-plus-circle me-1"></i> Save
+            </button>
+        @endif
     </div>
 
 </div>

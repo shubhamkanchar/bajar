@@ -8,12 +8,15 @@ use App\Models\Category;
 use App\Models\ProductSellerReview;
 use App\Models\Service;
 use App\Models\ServiceImage;
+use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Razorpay\Api\Api;
 
 class Profile extends Component
 {
@@ -57,6 +60,20 @@ class Profile extends Component
     public function mount(){
         $this->user = Auth::user();
         $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag');
+
+        $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
+        if($razorpaySubscriptionId){
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+            $subscription = $api->subscription->fetch($razorpaySubscriptionId);
+            if($subscription->start_at){
+                Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
+                ->update([
+                    'status' => $subscription->status,
+                    'start_at' => Carbon::createFromTimestamp($subscription->current_start),
+                    'end_at' => Carbon::createFromTimestamp($subscription->current_end),
+                ]);
+            }
+        }
     }
 
     public function openSlider(){

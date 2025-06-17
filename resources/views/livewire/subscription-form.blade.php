@@ -1,6 +1,6 @@
 <div>
     @if($planName)
-        @if($user->latestSubscription?->status == 'paid')
+        @if($user->latestSubscription?->status != 'paid')
             <div class="row mt-2">
                 <div class="col-md-12">
                     <small>You don't have active subscription. Please subscribe to activate account</small>
@@ -15,12 +15,15 @@
             <div class="row">
                 <div class="col-md-3">
                     <button type="button" class="btn btn-dark mt-3 w-100" wire:click="createSubscription">
+                        <div wire:loading wire:target="createSubscription" class="spinner-border text-light me-1" style="width: 15px;height:15px" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                         Subscribe Now
                     </button>
                 </div>
             </div>
         @endif
-        @if($user->latestSubscription)
+        @if($user->latestSubscription?->status == 'paid')
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <small>If you already purchased subscription. then use refresh button to update status</small>

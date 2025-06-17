@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\BusinessCategory;
 use App\Models\BusinessTime;
 use App\Models\Category;
+use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Razorpay\Api\Api;
 
 class Edit extends Component
 {
@@ -80,6 +82,19 @@ class Edit extends Component
             ];
         }
         
+        $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
+        if($razorpaySubscriptionId){
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+            $subscription = $api->subscription->fetch($razorpaySubscriptionId);
+            if($subscription->start_at){
+                Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
+                ->update([
+                    'status' => $subscription->status,
+                    'start_at' => Carbon::createFromTimestamp($subscription->current_start),
+                    'end_at' => Carbon::createFromTimestamp($subscription->current_end),
+                ]);
+            }
+        }
 
     }
 

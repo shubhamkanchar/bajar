@@ -431,13 +431,13 @@
                         </div>
                     @endif
                     @if($user->activeSubscription)
-                    <div class="col-md-3">
-                        <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
-                            <span class="d-block text-primary fw-bold">{{$user->activeSubscription->plan_name}}</span>
-                            <span>Valid Till : {{ \Carbon\Carbon::parse($user->activeSubscription->end_at)->format('d M Y');}}</span>
+                        <div class="col-md-3">
+                            <div class="border border-2 border-primary p-3 rounded-3 bg-primary bg-opacity-10">
+                                <span class="d-block text-primary fw-bold">{{$user->activeSubscription->plan_name}}</span>
+                                <span>Valid Till : {{ \Carbon\Carbon::parse($user->activeSubscription->end_at)->format('d M Y');}}</span>
+                            </div>
                         </div>
-                    </div>
-                    @elseif (!Auth::user()->is_admin)
+                    @else
                         <div class="col-md-12">
                             <livewire:subscription-form :user="$user"/>
                         </div>

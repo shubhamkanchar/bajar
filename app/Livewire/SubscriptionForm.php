@@ -13,7 +13,7 @@ class SubscriptionForm extends Component
 {
     public $planId = 'plan_Qh6fmlB7qj7uIT'; // Replace with your Razorpay plan_id
     public $subscriptionId,$planName,$amount,$interval;
-    public $user;
+    public $user,$loader = false;
     protected $listeners = ['paymentSuccess'];
 
     public function mount($user){
@@ -52,7 +52,6 @@ class SubscriptionForm extends Component
             'plan_name' => $this->planName,
             'status' => 'created',
         ]);
-
         $this->dispatch('subscriptionReady', $this->subscriptionId);
     }
 

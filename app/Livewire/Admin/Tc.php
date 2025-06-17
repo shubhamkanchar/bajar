@@ -7,17 +7,18 @@ use Livewire\Component;
 
 class Tc extends Component
 {
-    public $sliderStatus, $title, $description,$page,$state,$ppDate,$tcDate;
+    public $sliderStatus, $title, $description,$page,$state,$ppDate,$rpDate,$tcDate;
 
     public function mount(){
         $this->tcDate = Page::where('page','tc')->value('updated_at');
         $this->ppDate = Page::where('page','pp')->value('updated_at');
+        $this->rpDate = Page::where('page','rp')->value('updated_at');
     }
 
     public function openSlider($state)
     {
         $this->reset(['description']);
-        $this->title = $state == 'tc' ? 'Terms and conditions' : 'Privacy Policy' ;
+        $this->title = $state == 'tc' ? 'Terms and conditions' :($state == 'rp' ? 'Refund Policy' : 'Privacy Policy' );
         $this->page = Page::where('page',$state)->first();
         $this->state = $state;
         if($this->page){
