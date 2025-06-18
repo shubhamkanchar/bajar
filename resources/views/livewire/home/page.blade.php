@@ -18,7 +18,7 @@
                                 </a>
                             </div>
                             <div class="col-12 text-center pb-4">
-                                <h1>{{ $post->page == 'tc' ? 'Terms and conditions' : 'Privacy policy' }}</h1>
+                                <h1>{{ $post->page == 'tc' ? 'Terms and Conditions' : ($post->page == 'rp' ? 'Refund Policy' :'Privacy Policy') }}</h1>
                                 <p class=" mb-0 text-secondary ">Updated on : {{ $post->created_at->format('F d, Y') }}
                                 </p>
                             </div>

@@ -104,7 +104,8 @@ class ProductReview extends Component
 
     public function rejectProduct($id)
     {
-        Product::where('id', $id)->update(['is_approved' => 0]);
+        // Product::where('id', $id)->update(['is_approved' => 0]);
+        Product::where('id', $id)->delete();
         $this->dispatch('productStatusChanged', [
             'type' => 'success',
             'message' => 'Product rejected '

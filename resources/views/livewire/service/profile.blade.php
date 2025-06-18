@@ -425,7 +425,7 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
 
-            // sliderForm.classList.remove("open");
+            window.location.reload();
         });
 
         document.addEventListener('serviceDeleted', event => {

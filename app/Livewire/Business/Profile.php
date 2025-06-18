@@ -165,9 +165,27 @@ class Profile extends Component
     public function allProducts()
     {
         if ($this->selectedCategory == 'all') {
-            return Product::with(['images', 'category'])->where('user_id', auth()->id())->get()->groupBy('category.title');
+            // return Product::select('*',DB::raw('category.title:product_tag'))->with(['images', 'category'])->where('user_id', auth()->id())->get()->groupBy('category.title');
+            return Product::select(
+                'products.*',
+                DB::raw("CONCAT(categories.title, ' : ', products.product_tag) as category_tag")
+            )
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->where('products.user_id', auth()->id())
+            ->with(['images']) // you can still eager load other relations like images
+            ->get()
+            ->groupBy('category_tag');
         }
-        return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
+        // return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
+        return Product::with(['images', 'category'])
+            ->where([
+                'user_id' => auth()->id(),
+                'category_id' => $this->selectedCategory,
+            ])
+            ->get()
+            ->groupBy(function ($product) {
+                return $product->category?->title . ' : ' . $product->product_tag;
+            });
     }
 
     #[Computed]

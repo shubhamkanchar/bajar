@@ -1,11 +1,11 @@
 <nav class="topbar navbar-light bg-white sticky-top">
-    <div class="ps-md-5 ps-2" onclick="toggleMobileSidebar()">
+    <div class="ps-md-5 ps-2" >
         <a href="{{ route('home') }}">
             <img class="logo-img" src="{{ asset('assets/logo/logo.png') }}">
         </a>
     </div>
     @if(str_contains(request()->path(), 'admin'))
-    <div class="page-title">Admin Dashboard</div>
+    <div class="page-title" onclick="toggleMobileSidebar()">Admin Dashboard</div>
     @endif
     <div class="dropdown pe-md-5 pe-2">
         @guest

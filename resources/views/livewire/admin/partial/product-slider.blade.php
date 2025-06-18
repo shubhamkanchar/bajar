@@ -59,11 +59,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating my-2" wire:ignore>
-                            <select class="form-select" id="tagInput" multiple wire:model.live="product_tag">
-                                @foreach($allTags as $tag)
-                                    <option {{in_array($tag, $product_tag) ? 'selected' : '' }} value="{{ $tag }}">{{ $tag }}</option>
-                                @endforeach
-                            </select>
+                            <input class="form-control" id="tagInput" value="{{$selectedProduct->product_tag}}">
+                                
                             <label for="tagInput">Tags</label>
                         </div>
                     </div>
@@ -75,7 +72,7 @@
                         </div>
                         <span class="m-2">Per</span>
                         <div class="form-floating mb-2 mt-2 w-100">
-                            <input type="number" min="0" class="form-control" placeholder="Qty" id="floatingSelect"  value="{{ $selectedProduct->quantity }}">
+                            <input type="text" min="0" class="form-control" placeholder="Qty" id="floatingSelect"  value="{{ $selectedProduct->quantity }}">
                             <label for="floatingSelect">Qty</label>
                         </div>
                     </div>
@@ -92,10 +89,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5">
-                            {{ $selectedProduct->description}}
-                        </textarea>
-
+                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5">{{ $selectedProduct->description}}</textarea>
                     </div>
                     <div class="row">
                         <div class="text-secondary-subtle">Added by <a>{{$selectedProduct->user->name}}</a></div>
