@@ -89,9 +89,24 @@ class Profile extends Component
     public function allServices()
     {
         if ($this->selectedCategory == 'all') {
-            return Service::with('images')->where('user_id', auth()->id())->get()->groupBy('category.title');
+            // return Service::with('images')->where('user_id', auth()->id())->get()->groupBy('category.title');
+           return Service::with(['images', 'category'])
+                ->where('user_id', auth()->id())
+                ->get()
+                ->groupBy(function ($service) {
+                    return $service->category?->title . ' : ' . $service->service_tag;
+                });
         }
-        return Service::with('images')->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
+        // return Service::with('images')->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
+        return Service::with(['images', 'category']) // eager-load relationships
+                ->where([
+                    'user_id' => auth()->id(),
+                    'category_id' => $this->selectedCategory,
+                ])
+                ->get()
+                ->groupBy(function ($service) {
+                    return $service->category?->title . ' : ' . $service->service_tag;
+                });
     }
 
     #[Computed]

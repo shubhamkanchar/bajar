@@ -1,6 +1,15 @@
 <div>
     <div class="container">
         <div class="row">
+            @if(!$user->activeSubscription)
+                <div class="col-12">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Attention!</strong> Your account is inactive Please subscribe to activate account.
+                        <a href="{{ route('business.edit', ['uuid' => $user->uuid]) }}#subcriptionSection" class="btn btn-dark">Subscribe</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endif
             <div class="col-12 mt-4 position-relative">
                 @if ($user->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4"

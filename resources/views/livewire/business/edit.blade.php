@@ -4,9 +4,9 @@
             <div class="col-12 mt-4 position-relative">
                 @if ($bgImage)
                     <img class="w-100 h-250 object-fit-cover rounded-4" src="{{ $bgImage->temporaryUrl() }}">
-                @elseif($this->user->bg_image)
+                @elseif($user->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4"
-                        src="{{ asset('storage/' . $this->user->bg_image) }}">
+                        src="{{ asset('storage/' . $user->bg_image) }}">
                 @else
                     <picture>
                         <source media="(max-width: 767px)"
@@ -32,7 +32,7 @@
                     </svg>
                 </label>
                 @php
-                    $user = Auth::user();
+                    // $user = Auth::user();
                     if ($user->onboard_completed) {
                         if ($user->role == 'individual') {
                             $route = route('user.profile');
@@ -69,9 +69,9 @@
                         style="margin-top:-70px">
                         @if ($profileImage)
                             <img class="ms-md-4 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
-                        @elseif($this->user->profile_image)
+                        @elseif($user->profile_image)
                             <img class="ms-md-4 square-img-profile"
-                                src="{{ asset('storage/' . $this->user->profile_image) }}">
+                                src="{{ asset('storage/' . $user->profile_image) }}">
                         @else
                             <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
@@ -94,9 +94,9 @@
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
                         <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
-                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                            <span class="fw-bold fs-4">{{ $user->name }}</span>
                             <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number : </span>
-                                {{ $this->user->gst }}</span>
+                                {{ $user->gst }}</span>
                         </div>
                         <div class="ms-xl-2 mt-2 d-flex">
                             <span class="me-2">
@@ -113,8 +113,8 @@
                                 </svg>
                             </span>
                             <span>
-                                {{ $this->user->address->address }}, {{ $this->user->address->city }},
-                                {{ $this->user->address->state }}
+                                {{ $user->address->address }}, {{ $user->address->city }},
+                                {{ $user->address->state }}
                             </span>
                         </div>
                     </div>
@@ -389,11 +389,11 @@
                         </div>
                     @endif
                 </div>
-                <div class="row">
+                <div class="row" id="subcriptionSection">
                     <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Subscription Details
                     </div>
-                    @if (Auth::user()->is_admin)
+                    @if (in_array(Auth::user()->role,['admin','superadmin']) && !$user->activeSubscription)
                         <div class="col-12 mb-3">
                             <div class="row">
                                 <div class="col-md-2">
@@ -437,12 +437,12 @@
                                 <span>Valid Till : {{ \Carbon\Carbon::parse($user->activeSubscription->end_at)->format('d M Y');}}</span>
                             </div>
                         </div>
-                    @else
+                    @elseif(!in_array(Auth::user()->role,['admin','superadmin']))
                         <div class="col-md-12">
                             <livewire:subscription-form :user="$user"/>
                         </div>
                     @endif
-                    @if (Auth::user()->is_admin)
+                    @if (in_array(Auth::user()->role,['admin','superadmin']))
                         <div class="col-md-3 border-start border-2" wire:click="setReviewer()">
                             <button type="button"
                                 class="row width-100 border border-2 rounded-2 p-3 me-1 ms-1 align-items-center w-100">
@@ -453,14 +453,13 @@
                                             d="M8.7281 19.9137C8.83884 19.9715 8.96266 20.0009 9.08649 20C9.21032 19.999 9.33314 19.9686 9.44489 19.9097L13.0128 18.0025C14.0245 17.4631 14.8168 16.8601 15.435 16.1579C16.779 14.6282 17.5129 12.6758 17.4998 10.6626L17.4575 4.02198C17.4535 3.25711 16.9511 2.57461 16.2082 2.32652L9.57073 0.0995642C9.17106 -0.0357592 8.73313 -0.0328174 8.3405 0.106428L1.72824 2.41281C0.989299 2.67071 0.495998 3.35811 0.500024 4.12396L0.542307 10.7597C0.555395 12.7758 1.31448 14.7194 2.68062 16.2334C3.3048 16.9258 4.10415 17.52 5.12699 18.0505L8.7281 19.9137ZM7.78119 12.1106C7.93019 12.2538 8.12348 12.3244 8.31678 12.3225C8.51007 12.3215 8.70236 12.2489 8.84934 12.1038L12.7484 8.25981C13.0414 7.97053 13.0384 7.50572 12.7424 7.22037C12.4454 6.93501 11.9672 6.93697 11.6742 7.22625L8.3057 10.5466L6.92647 9.2208C6.62949 8.93545 6.15229 8.93839 5.85832 9.22767C5.56536 9.51694 5.56838 9.98175 5.86537 10.2671L7.78119 12.1106Z"
                                             fill="black" />
                                     </svg>
-
                                 </span>
                                 <span class="col-8 text-start">
                                     <small>Mark this user,</small><br>
                                     <span class="fw-bold fs-6">Expert Reviewer</span>
                                 </span>
                                 <span class="float-end col-2">
-                                    @if ($this->user->is_reviewer)
+                                    @if ($user->is_reviewer)
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_737_3347)">
@@ -509,7 +508,7 @@
                 <div class="col-md-12 mt-4 mb-5">
                     <button type="button" class="btn btn-dark btn-lg" wire:click="update">Update</button>
                 </div>
-                @if (Auth::user()->is_admin)
+                @if (in_array(Auth::user()->role,['admin','superadmin']))
                     <div class="col-md-12 mt-4 mb-5">
                         <button type="button" class="btn bg-secondary-subtle btn-lg" wire:click="deleteUser"
                             wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE">
@@ -528,11 +527,11 @@
                             </svg>
                             Delete User
                         </button>
-                        <button type="button" class="btn bg-secondary-subtle btn-lg">
+                        {{-- <button type="button" class="btn bg-secondary-subtle btn-lg">
                             <i class="bi bi-plus-square"></i>
                             Add Work for this user
                         </button>
-                        <button type="button" class="btn bg-secondary-subtle btn-lg">View Public Profile</button>
+                        <button type="button" class="btn bg-secondary-subtle btn-lg">View Public Profile</button> --}}
                     </div>
                 @endif
             </form>

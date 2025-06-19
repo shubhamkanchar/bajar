@@ -12,7 +12,6 @@ use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -112,11 +111,11 @@ class Edit extends Component
                 'string',
                 'min:10',
                 'max:15',
-                Rule::unique('users', 'phone')->ignore(auth()->id()),
+                Rule::unique('users', 'phone')->ignore($this->user->id()),
             ],
             'email' => [
                 'email',
-                Rule::unique('users', 'email')->ignore(auth()->id()),
+                Rule::unique('users', 'email')->ignore($this->user->id()),
             ],
             'state' => 'string',
             'city' => 'string',
