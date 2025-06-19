@@ -74,14 +74,16 @@ class Welcome extends Component
     {
         if ($id) {
             $this->searchStarted = true;
-            $this->sellers = User::with(['address', 'ratings'])
-                ->whereHas('address', function ($query) {
-                    $query->where('addresses.city', $this->selectedCity);
-                })
+                $query = User::with(['address', 'ratings']);
+                if($this->selectedCity){
+                    $query->whereHas('address', function ($query) {
+                        $query->where('addresses.city', $this->selectedCity);
+                    });
+                }
+                $this->sellers = $query->whereHas('activeSubscription')
                 ->whereHas('categories', function ($query) use ($id) {
                     $query->where('categories.id', $id);
-                })
-                ->whereNotIn('role', ['superadmin', 'admin'])
+                })->whereNotIn('role', ['superadmin', 'admin'])
                 ->where('offering', $this->section)
                 ->get();
         } elseif ($this->selectedCity) {
@@ -90,6 +92,7 @@ class Welcome extends Component
                 ->whereHas('address', function ($query) {
                     $query->where('addresses.city', $this->selectedCity);
                 })
+                ->whereHas('activeSubscription')
                 ->whereNotIn('role', ['superadmin', 'admin'])
                 ->where('offering', $this->section)
                 ->get();
@@ -149,6 +152,7 @@ class Welcome extends Component
     {
         $this->section = $test;
         $this->data = Category::where('type', $this->section)->get();
+        $this->clearSearch();
     }
 
     public function render()

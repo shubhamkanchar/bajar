@@ -47,7 +47,7 @@
                         $route = route('onboarding');
                     }
 
-                    if ($user->role == 'admin' || $user->role == 'superadmin') {
+                    if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin') {
                         $route = route('admin.dashboard', ['tab' => 'product-sellers']);
                     }
                 @endphp
@@ -530,8 +530,8 @@
                         {{-- <button type="button" class="btn bg-secondary-subtle btn-lg">
                             <i class="bi bi-plus-square"></i>
                             Add Work for this user
-                        </button>
-                        <button type="button" class="btn bg-secondary-subtle btn-lg">View Public Profile</button> --}}
+                        </button> --}}
+                        <a href="{{route('view-shop',['uuid'=>$user->uuid])}}" type="button" class="btn bg-secondary-subtle btn-lg" >View Public Profile</a>
                     </div>
                 @endif
             </form>

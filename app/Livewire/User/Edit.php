@@ -7,6 +7,7 @@ use App\Mail\OtpMail;
 use App\Models\Address;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
@@ -21,24 +22,25 @@ class Edit extends Component
     public $phone, $state, $city, $sliderStatus, $emailVerifiedAt, $phoneVerifiedAt;
     public $name, $cityOptions = [], $stateOptions = [];
     public $one, $two, $three, $four, $five, $six;
-    public $profileImage,$bgImage;
+    public $profileImage,$bgImage,$user;
     
-    public function mount()
+    public function mount(Request $request)
     {
-        if (Auth::user()->email) {
-            $this->email = Auth::user()->email;
+        $this->user = User::where('uuid', $request->uuid)->first();
+        if ($this->user->email) {
+            $this->email = $this->user->email;
         }
-        if (Auth::user()->phone) {
-            $this->phone = Auth::user()->phone;
+        if ($this->user->phone) {
+            $this->phone = $this->user->phone;
         }
-        if (Auth::user()->name) {
-            $this->name = Auth::user()->name;
+        if ($this->user->name) {
+            $this->name = $this->user->name;
         }
-        if (Auth::user()->address) {
-            $this->city = Auth::user()->address->city;
+        if ($this->user->address) {
+            $this->city = $this->user->address->city;
         }
-        if (Auth::user()->address) {
-            $this->state = Auth::user()->address->state;
+        if ($this->user->address) {
+            $this->state = $this->user->address->state;
         }
         
         $this->setState();
@@ -53,11 +55,11 @@ class Edit extends Component
                 'string',
                 'min:10',
                 'max:15',
-                Rule::unique('users', 'phone')->ignore(auth()->id()),
+                Rule::unique('users', 'phone')->ignore($this->user->id),
             ],
             'email' => [
                 'email',
-                Rule::unique('users', 'email')->ignore(auth()->id()),
+                Rule::unique('users', 'email')->ignore($this->user->id),
             ],
             'state' => 'string',
             'city' => 'string',
@@ -98,7 +100,7 @@ class Edit extends Component
         $this->model = $model;
         if ($model == 'email') {
             $otp = rand(000000, 999999);
-            $user = Auth::user();
+            $user = $this->user;
             $user->email_otp = $otp;
             $user->save();
             Mail::to($user->email)->send(new OtpMail($otp, $user));
@@ -106,7 +108,7 @@ class Edit extends Component
 
         if ($model == 'phone') {
             $otp = rand(000000, 999999);
-            $user = Auth::user();
+            $user = $this->user;
             $user->phone_otp = $otp;
             $user->save();
             GlobalHelper::sendOtp($this->phone, $otp);
@@ -126,7 +128,7 @@ class Edit extends Component
             $profilePath = $this->profileImage->store('images', 'public'); 
         }
 
-        $user = Auth::user();
+        $user = $this->user;
         $user->name = $this->name;
         if(isset($imagePath)){
             $user->bg_image = $imagePath;
@@ -134,11 +136,11 @@ class Edit extends Component
         if(isset($profilePath)){
             $user->profile_image = $profilePath;
         }
-        if(Auth::user()->phone != $this->phone){
+        if($this->user->phone != $this->phone){
             $user->phone = $this->phone;
             $user->phone_verified_at = NULL;
         }
-        if(Auth::user()->email != $this->email){
+        if($this->user->email != $this->email){
             $user->email = $this->email;
             $user->email_verified_at = NULL;
         }
@@ -174,7 +176,7 @@ class Edit extends Component
         ]);
 
         $otp = $this->one . $this->two . $this->three . $this->four . $this->five . $this->six;
-        $user = Auth::user();
+        $user = $this->user;
         if ($this->model == 'email') {
             if ($user->email_otp == $otp) {
                 $user->update([
@@ -193,6 +195,16 @@ class Edit extends Component
         $this->sliderStatus = '';
     }
 
+    public function setReviewer()
+    {
+        $this->user->is_reviewer = $this->user->is_reviewer ? 0 : 1;
+        $this->user->save();
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => $this->user->is_reviewer ? 'User set as reviewer successfully' : 'User unset as reviewer successfully'
+        ]);
+    }
+
     public function closeVerifySlider()
     {
         $this->sliderStatus = '';
@@ -200,8 +212,8 @@ class Edit extends Component
 
     public function render()
     {
-        $this->emailVerifiedAt = Auth::user()->email_verified_at;
-        $this->phoneVerifiedAt = Auth::user()->phone_verified_at;
+        $this->emailVerifiedAt = $this->user->email_verified_at;
+        $this->phoneVerifiedAt = $this->user->phone_verified_at;
         return view('livewire.user.edit')->extends('layouts.profile-layout');
     }
 }

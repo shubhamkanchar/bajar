@@ -211,10 +211,17 @@
                             </div>
                             <div class="col-12 col-md-1 text-end">
                                 <div class="d-flex">
+                                    @if($type == 'individual')
+                                    <a href="{{ route('user.edit', ['uuid' => $seller->uuid]) }}">
+                                        <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
+                                            role="button"></i>
+                                    </a>
+                                    @else
                                     <a href="{{ route('business.edit', ['uuid' => $seller->uuid]) }}">
                                         <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
                                             role="button"></i>
                                     </a>
+                                    @endif
                                     <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
                                         role="button" wire:click="deleteProductSeller('{{ $seller->uuid }}')"
                                         wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE"></i>
