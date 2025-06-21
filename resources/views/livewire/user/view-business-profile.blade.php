@@ -1,7 +1,20 @@
+@push('meta')
+    <meta property="og:title" content="{{ env('APP_NAME') }}" />
+    <meta property="og:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta property="og:image" content="{{ asset('storage/' . $user->profile_image) }}" />
+    <meta property="og:url" content="{{ route('view-shop', ['uuid' => $user->uuid]) }}" />
+    <meta property="og:type" content="website" />
+
+    <!-- Optional Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ env('APP_NAME') }}" />
+    <meta name="twitter:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta name="twitter:image" content="{{ asset('storage/' . $user->profile_image) }}" />
+@endpush
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-4">
+            <div class="col-12 mt-4 position-relative">
                 @if ($this->user->bg_image)
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . $this->user->bg_image) }}">
@@ -12,22 +25,48 @@
                             src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">
                     </picture>
                 @endif
+                @php
+                    $profileLink = route('view-shop', ['uuid' => $user->uuid]);
+                    $message = $profileLink;
+                @endphp
+                {{-- <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    onclick="copyCurrentUrl()"> --}}
+                <a role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1" href="https://wa.me/?text={{ urlencode($message) }}" target="_blank" rel="noopener noreferrer">
+
+                    <svg width="40" height="40" viewBox="0 0 30 30" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="30" rx="15" transform="matrix(-1 0 0 1 30 0)"
+                            fill="white" fill-opacity="0.8" />
+                        <g clip-path="url(#clip0_1372_7414)">
+                            <path
+                                d="M19.2227 16.9219C18.3543 16.9219 17.589 17.3491 17.1084 17.9987L12.9528 15.8708C13.0218 15.6357 13.0703 15.3919 13.0703 15.1348C13.0703 14.786 12.9988 14.4543 12.8753 14.1493L17.2242 11.5323C17.7082 12.1003 18.4196 12.4688 19.2227 12.4688C20.6766 12.4688 21.8594 11.286 21.8594 9.83203C21.8594 8.37806 20.6766 7.19531 19.2227 7.19531C17.7687 7.19531 16.5859 8.37806 16.5859 9.83203C16.5859 10.1671 16.6549 10.4849 16.7694 10.78L12.4075 13.4047C11.9239 12.8536 11.2228 12.498 10.4336 12.498C8.97962 12.498 7.79688 13.6808 7.79688 15.1348C7.79688 16.5887 8.97962 17.7715 10.4336 17.7715C11.3163 17.7715 12.0945 17.3318 12.5733 16.6639L16.7152 18.7848C16.6389 19.0311 16.5859 19.2876 16.5859 19.5586C16.5859 21.0126 17.7687 22.1953 19.2227 22.1953C20.6766 22.1953 21.8594 21.0126 21.8594 19.5586C21.8594 18.1046 20.6766 16.9219 19.2227 16.9219Z"
+                                fill="black" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_1372_7414">
+                                <rect width="15" height="15" fill="white"
+                                    transform="translate(7.19531 7.19531)" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                </a>
             </div>
             <div class="col-12 mb-3 mt-2">
                 <div class="row">
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
                         @if ($this->user->profile_image)
-                            <img class="ms-md-4 square-img-profile"
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
                         <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                            @if ($this->user->gst)
+                            @if ($user->gst && !empty($user->gst))
                                 <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
                                     </span>
                                     {{ $this->user->gst }}</span>

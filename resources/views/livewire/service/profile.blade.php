@@ -1,3 +1,16 @@
+@push('meta')
+    <meta property="og:title" content="{{ env('APP_NAME') }}" />
+    <meta property="og:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta property="og:image" content="{{ asset('storage/' . $user->profile_image) }}" />
+    <meta property="og:url" content="{{ route('view-shop', ['uuid' => $user->uuid]) }}" />
+    <meta property="og:type" content="website" />
+
+    <!-- Optional Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ env('APP_NAME') }}" />
+    <meta name="twitter:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta name="twitter:image" content="{{ asset('storage/' . $user->profile_image) }}" />
+@endpush
 <div>
     <div class="container">
         <div class="row">
@@ -22,8 +35,13 @@
                             src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
-                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
-                    onclick="copyCurrentUrl()">
+                @php
+                    $profileLink = route('view-shop', ['uuid' => $user->uuid]);
+                    $message = $profileLink;
+                @endphp
+                {{-- <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    onclick="copyCurrentUrl()"> --}}
+                <a role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1" href="https://wa.me/?text={{ urlencode($message) }}" target="_blank" rel="noopener noreferrer">
 
                     <svg width="40" height="40" viewBox="0 0 30 30" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +60,7 @@
                         </defs>
                     </svg>
 
-                </label>
+                </a>
 
             </div>
             <div class="col-12 mb-3 mt-2">
