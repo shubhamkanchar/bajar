@@ -111,11 +111,11 @@ class Edit extends Component
                 'string',
                 'min:10',
                 'max:15',
-                Rule::unique('users', 'phone')->ignore($this->user->id()),
+                Rule::unique('users', 'phone')->ignore($this->user->id),
             ],
             'email' => [
                 'email',
-                Rule::unique('users', 'email')->ignore($this->user->id()),
+                Rule::unique('users', 'email')->ignore($this->user->id),
             ],
             'state' => 'string',
             'city' => 'string',

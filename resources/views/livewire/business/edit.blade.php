@@ -68,12 +68,12 @@
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
                         @if ($profileImage)
-                            <img class="ms-md-4 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif($user->profile_image)
-                            <img class="ms-md-4 square-img-profile"
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
                                 src="{{ asset('storage/' . $user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
                         <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4 pe-md-0"
@@ -93,12 +93,14 @@
                         </label>
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
-                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center">
+                        <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
                             <span class="fw-bold fs-4">{{ $user->name }}</span>
+                            @if($user->gst && !empty($user->gst))
                             <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number : </span>
                                 {{ $user->gst }}</span>
+                            @endif
                         </div>
-                        <div class="ms-xl-2 mt-2 d-flex">
+                        <div class="ms-xl-2 mt-2 d-flex p-md-2">
                             <span class="me-2">
                                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">

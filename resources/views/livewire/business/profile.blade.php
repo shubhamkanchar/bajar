@@ -3,11 +3,13 @@
         <div class="row">
             @if(!$user->activeSubscription)
                 <div class="col-12">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Attention!</strong> Your account is inactive Please subscribe to activate account.
-                        <a href="{{ route('business.edit', ['uuid' => $user->uuid]) }}#subcriptionSection" class="btn btn-dark">Subscribe</a>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+                    <div>
+                        <strong>Attention!</strong> Your account is inactive. Please subscribe to activate account.
                     </div>
+                    <a href="{{ route('business.edit', ['uuid' => $user->uuid]) }}#subcriptionSection" class="btn btn-dark">Subscribe</a>
+                </div>
+
                 </div>
             @endif
             <div class="col-12 mt-4 position-relative">
@@ -49,17 +51,17 @@
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
                         @if ($this->user->profile_image)
-                            <img class="ms-md-4 square-img-profile"
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 square-img-profile"
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
                                 src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
                         <div class="d-xl-flex align-items-center ms-xl-2 text-md-start text-center p-md-2">
                             <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                            @if ($this->user->gst)
+                            @if ($user->gst && !empty($user->gst))
                                 <span class="badge text-bg-light fs-6 ms-xl-2"><span class="fw-light">GST Number :
                                     </span>
                                     {{ $this->user->gst }}</span>

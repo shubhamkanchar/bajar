@@ -31,7 +31,7 @@
                     </h3>
                 </div>
                 <div class="row">
-                    <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3 position-relative">
+                    <div class="col-xxl-4 col-xl-4 col-md-6 col-lg-6 col-6 mb-3 position-relative">
                         <button
                             class="border rounded-4 position-relative text-center {{ $userType === 'individual' ? 'border-dark' : '' }} w-100 w-md-auto h-180"
                             wire:click="selectUserType('individual')">
@@ -62,7 +62,7 @@
                             @endif
                         </button>
                     </div>
-                    <div class="col-xxl-4 col-xl-2 col-md-6 col-lg-6 col-6 mb-3">
+                    <div class="col-xxl-4 col-xl-4 col-md-6 col-lg-6 col-6 mb-3">
                         <button
                             class="border rounded-4 h-180 position-relative text-center {{ $userType === 'business' ? 'border-dark' : '' }} w-100 w-md-auto"
                             wire:click="selectUserType('business')">
