@@ -1,7 +1,7 @@
 @push('meta')
     <meta property="og:title" content="{{ env('APP_NAME') }}" />
     <meta property="og:description" content="Find trusted building material traders offering a wide range of high quality products." />
-    <meta property="og:image" content="{{ url('storage/' . $user->profile_image) }}" />
+    <meta property="og:image" content="{{ asset('storage/' . $user->profile_image) }}" />
     <meta property="og:url" content="{{ route('view-shop', ['uuid' => $user->uuid]) }}" />
     <meta property="og:type" content="website" />
 
@@ -9,7 +9,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ env('APP_NAME') }}" />
     <meta name="twitter:description" content="Find trusted building material traders offering a wide range of high quality products."/>
-    <meta name="twitter:image" content="{{ url('storage/' . $user->profile_image) }}" />
+    <meta name="twitter:image" content="{{ asset('storage/' . $user->profile_image) }}" />
 @endpush
 <div>
     <div class="container">
