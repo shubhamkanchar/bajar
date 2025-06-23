@@ -1,6 +1,7 @@
 @push('meta')
     <meta property="og:title" content="{{ env('APP_NAME') }}" />
-    <meta property="og:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta property="og:description"
+        content="Find trusted building material traders offering a wide range of high quality products." />
     <meta property="og:image" content="{{ asset('storage/' . $user->profile_image) }}" />
     <meta property="og:url" content="{{ route('view-shop', ['uuid' => $user->uuid]) }}" />
     <meta property="og:type" content="website" />
@@ -8,7 +9,8 @@
     <!-- Optional Twitter cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ env('APP_NAME') }}" />
-    <meta name="twitter:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta name="twitter:description"
+        content="Find trusted building material traders offering a wide range of high quality products." />
     <meta name="twitter:image" content="{{ asset('storage/' . $user->profile_image) }}" />
 @endpush
 <div>
@@ -31,7 +33,8 @@
                 @endphp
                 {{-- <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
                     onclick="copyCurrentUrl()"> --}}
-                <a role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1" href="https://wa.me/?text={{ urlencode($message) }}" target="_blank" rel="noopener noreferrer">
+                <a role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                    href="https://wa.me/?text={{ urlencode($message) }}" target="_blank" rel="noopener noreferrer">
 
                     <svg width="40" height="40" viewBox="0 0 30 30" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +63,8 @@
                             <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile" src="{{ asset('assets/image/profile.png') }}">
+                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
+                                src="{{ asset('assets/image/profile.png') }}">
                         @endif
                     </div>
                     <div class="col-md-4 col-lg-5 col-xl-5 col-12">
@@ -126,8 +130,8 @@
                             <span
                                 class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-light-emphasis bg-light-subtle border border-light-subtle rounded-2 me-2">
 
-                                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_287_3784)">
                                         <path
                                             d="M10.0026 0.828125C8.18961 0.828125 6.41733 1.36574 4.90988 2.37299C3.40243 3.38023 2.22752 4.81187 1.53371 6.48686C0.839909 8.16185 0.658379 10.005 1.01208 11.7831C1.36577 13.5613 2.23881 15.1946 3.5208 16.4766C4.80278 17.7586 6.43612 18.6316 8.21428 18.9853C9.99244 19.339 11.8356 19.1575 13.5105 18.4637C15.1855 17.7699 16.6172 16.595 17.6244 15.0875C18.6317 13.5801 19.1693 11.8078 19.1693 9.99479C19.1664 7.56452 18.1997 5.23461 16.4813 3.51615C14.7628 1.79768 12.4329 0.830992 10.0026 0.828125ZM10.0026 17.4948C8.51925 17.4948 7.0692 17.0549 5.83583 16.2308C4.60246 15.4067 3.64117 14.2354 3.07351 12.8649C2.50585 11.4945 2.35733 9.98647 2.64672 8.53161C2.93611 7.07676 3.65041 5.74038 4.69931 4.69149C5.7482 3.6426 7.08457 2.92829 8.53943 2.6389C9.99429 2.34951 11.5023 2.49804 12.8727 3.0657C14.2432 3.63335 15.4145 4.59465 16.2386 5.82801C17.0627 7.06138 17.5026 8.51143 17.5026 9.99479C17.5002 11.9832 16.7092 13.8894 15.3032 15.2954C13.8972 16.7014 11.991 17.4924 10.0026 17.4948Z"
@@ -170,7 +174,7 @@
                                 </svg>
                                 Call
                             </a>
-                            @if (Auth::user()->is_reviewer)
+                            @if (Auth::user()?->is_reviewer)
                                 <button class="btn btn-dark my-2" x-data
                                     x-on:click="$wire.set('showReviewForm', true)">
                                     Review {{ $user->offering === 'product' ? 'Seller' : 'Service Provider' }}
@@ -208,6 +212,7 @@
                             @foreach ($products as $product)
                                 <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 col-6 mb-3">
                                     <div class="border rounded position-relative h-100 d-flex flex-column my-2">
+                                        {{-- Carousel --}}
                                         <div id="carouselProduct{{ $product->id }}" class="carousel slide"
                                             data-bs-ride="carousel">
                                             <div class="carousel-inner">
@@ -233,19 +238,27 @@
                                                 <span class="visually-hidden">Next</span>
                                             </button>
                                         </div>
-                                        <div class="p-2 text-start fw-bold flex-grow-1" style="font-size: 12px;">
+
+                                        {{-- Product Info --}}
+                                        <div class="p-2 text-start fw-bold flex-grow-1 d-flex flex-column"
+                                            style="font-size: 12px;">
                                             <span class="d-block p-1" style="min-height: 20px;">
                                                 {{ substr($product->description, 0, 50) }}
                                             </span>
                                             <span
                                                 class="text-secondary fw-light text-start p-1">{{ $product->brand_name }}</span>
+
                                             @if ($product->show_price)
-                                                <span class="d-block p-1">Rs.{{ $product->price }}<span
-                                                        class="p-1 text-secondary fw-light">per</span>Unit</span>
+                                                <span class="d-block p-1">
+                                                    Rs.{{ $product->price }}
+                                                    <span class="p-1 text-secondary fw-light">per</span>Unit
+                                                </span>
                                             @else
-                                                <span class="d-block">Contact Us for pricing</span>
+                                                <span class="d-block p-1">Contact Us for pricing</span>
                                             @endif
-                                            <div class="d-flex gap-2 justify-content-between mt-auto">
+
+                                            {{-- Action Buttons Pinned to Bottom --}}
+                                            <div class="d-flex gap-2 justify-content-between mt-auto pt-2">
                                                 <a href="tel:{{ $user->phone }}" class="w-50 btn btn-dark">
                                                     <i class="fas fa-phone me-2"></i>
                                                 </a>
@@ -256,10 +269,13 @@
                                             </div>
                                         </div>
 
+                                        {{-- Wishlist Icon --}}
                                         @php
-                                            $inWishlist = in_array($product->id, $this->wishlistIds);
+                                            $inWishlist = !empty($this->wishlistIds)
+                                                ? in_array($product->id, $this->wishlistIds)
+                                                : null;
                                         @endphp
-                                        @if (auth()->user()->role == 'individual')
+                                        @if (auth()->user()?->role == 'individual')
                                             <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
                                                 style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"
                                                 wire:click.prevent="toggleWishlist({{ $product->id }})">
@@ -341,8 +357,9 @@
         </div>
     </div>
 
-    <div class="slider-overlay @if($showDetailSlider || $showReviewForm) open @endif" 
-    x-on:click="showReviewForm = false; $wire.set('showReviewForm', false);showDetailSlider = false;$wire.set('showDetailSlider', false)"></div>
+    <div class="slider-overlay @if ($showDetailSlider) open @endif"
+        x-on:click="showReviewForm = false; $wire.set('showReviewForm', false);showDetailSlider = false;$wire.set('showDetailSlider', false)">
+    </div>
     <div class="slider-form" wire:ignore.self x-cloak x-data="{ showDetailSlider: @entangle('showDetailSlider') }" x-show="showDetailSlider"
         x-on:click.away="showDetailSlider = false; $wire.set('showDetailSlider', false)">
         <div class="slider-content">
@@ -489,162 +506,171 @@
             @endif
         </div>
     </div>
-    <div class="slider-review-form" x-cloak x-data="{ showReviewForm: @entangle('showReviewForm') }" x-show="showReviewForm"
-        x-on:click.away="showReviewForm = false; $wire.set('showReviewForm', false)" wire:ignore.self>
-        <div class="slider-content">
-            <div class="row">
-                <div class="col-md-8">
-                    <p class="fw-bold fs-3">Review Product Seller</p>
+    @if (Auth::user())
+        <div class="slider-overlay @if ($showReviewForm) open @endif"
+            x-on:click="showReviewForm = false; $wire.set('showReviewForm', false);showDetailSlider = false;$wire.set('showDetailSlider', false)">
+        </div>
+        <div class="slider-review-form" x-cloak x-data="{ showReviewForm: @entangle('showReviewForm') }" x-show="showReviewForm"
+            x-on:click.away="showReviewForm = false; $wire.set('showReviewForm', false)" wire:ignore.self>
+            <div class="slider-content">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="fw-bold fs-3">Review Product Seller</p>
+                    </div>
+                    <div class="col-md-4 text-md-end mb-2">
+                        <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
+                            x-on:click="showReviewForm = false; $wire.set('showReviewForm', false)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="col-md-4 text-md-end mb-2">
-                    <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
-                        x-on:click="showReviewForm = false; $wire.set('showReviewForm', false)">
-                        <i class="fa-solid fa-xmark"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="d-flex border rounded-4 p-2 gap-3">
-                        @if ($this->user->bg_image)
-                            <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
-                                src="{{ asset('storage/' . $this->user->bg_image) }}">
-                        @else
-                            <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
-                                src="{{ asset('assets/bg/bg_profile.png') }}">
-                        @endif
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="d-flex border rounded-4 p-2 gap-3">
+                            @if ($this->user->bg_image)
+                                <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
+                                    src="{{ asset('storage/' . $this->user->bg_image) }}">
+                            @else
+                                <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
+                                    src="{{ asset('assets/bg/bg_profile.png') }}">
+                            @endif
 
-                        <div class="d-flex flex-column justify-content-center">
-                            <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                            <div class="d-flex align-items-start mt-1 text-muted" style="font-size: 0.9rem;">
-                                <span class="me-2">
-                                    <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M11.5 8.50051C11.5 7.11924 10.3808 6 9.00051 6C7.61924 6 6.5 7.11924 6.5 8.50051C6.5 9.88076 7.61924 11 9.00051 11C10.3808 11 11.5 9.88076 11.5 8.50051Z"
-                                            stroke="#808080" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M8.99951 19C7.80104 19 1.5 13.8984 1.5 8.56329C1.5 4.38664 4.8571 1 8.99951 1C13.1419 1 16.5 4.38664 16.5 8.56329C16.5 13.8984 10.198 19 8.99951 19Z"
-                                            stroke="#808080" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </span>
-                                <span>
-                                    {{ $this->user->address->address }}, {{ $this->user->address->city }},
-                                    {{ $this->user->address->state }}
-                                </span>
+                            <div class="d-flex flex-column justify-content-center">
+                                <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                                <div class="d-flex align-items-start mt-1 text-muted" style="font-size: 0.9rem;">
+                                    <span class="me-2">
+                                        <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M11.5 8.50051C11.5 7.11924 10.3808 6 9.00051 6C7.61924 6 6.5 7.11924 6.5 8.50051C6.5 9.88076 7.61924 11 9.00051 11C10.3808 11 11.5 9.88076 11.5 8.50051Z"
+                                                stroke="#808080" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M8.99951 19C7.80104 19 1.5 13.8984 1.5 8.56329C1.5 4.38664 4.8571 1 8.99951 1C13.1419 1 16.5 4.38664 16.5 8.56329C16.5 13.8984 10.198 19 8.99951 19Z"
+                                                stroke="#808080" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                        {{ $this->user->address->state }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row mt-3 p-4">
-                <!-- Question 1: Is the contact information accurate? -->
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="form-label text-secondary">
-                        Is the contact information accurate?
-                    </label>
-                    <div class="form-group">
-                        <div class="form-check-inline">
-                            <input class="square-checkbox" name="is_contact_accurate" type="radio" id="contactYes"
-                                value="yes" wire:model="is_contact_accurate">
-                            <label class="form-check-label" for="contactYes">Yes</label>
+                <div class="row mt-3 p-4">
+                    <!-- Question 1: Is the contact information accurate? -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="form-label text-secondary">
+                            Is the contact information accurate?
+                        </label>
+                        <div class="form-group">
+                            <div class="form-check-inline">
+                                <input class="square-checkbox" name="is_contact_accurate" type="radio"
+                                    id="contactYes" value="yes" wire:model="is_contact_accurate">
+                                <label class="form-check-label" for="contactYes">Yes</label>
+                            </div>
+                            <div class="form-check-inline">
+                                <input class="square-checkbox" name="is_contact_accurate" type="radio"
+                                    id="contactNo" value="no" wire:model="is_contact_accurate">
+                                <label class="form-check-label" for="contactNo">No</label>
+                            </div>
+                            @error('is_contact_accurate')
+                                <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-check-inline">
-                            <input class="square-checkbox" name="is_contact_accurate" type="radio" id="contactNo"
-                                value="no" wire:model="is_contact_accurate">
-                            <label class="form-check-label" for="contactNo">No</label>
+                    </div>
+
+                    <!-- Question 2: Is the location accurate? -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="form-label text-secondary">
+                            Is the location accurate?
+                        </label>
+                        <div class="form-group">
+                            <div class="form-check-inline">
+                                <input class="square-checkbox" name="is_location_accurate" type="radio"
+                                    id="locationYes" value="yes" wire:model="is_location_accurate">
+                                <label class="form-check-label" for="locationYes">Yes</label>
+                            </div>
+                            <div class="form-check-inline">
+                                <input class="square-checkbox" name="is_location_accurate" type="radio"
+                                    id="locationNo" value="no" wire:model="is_location_accurate">
+                                <label class="form-check-label" for="locationNo">No</label>
+                            </div>
                         </div>
                         @error('is_contact_accurate')
                             <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-
-                <!-- Question 2: Is the location accurate? -->
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="form-label text-secondary">
-                        Is the location accurate?
-                    </label>
-                    <div class="form-group">
-                        <div class="form-check-inline">
-                            <input class="square-checkbox" name="is_location_accurate" type="radio"
-                                id="locationYes" value="yes" wire:model="is_location_accurate">
-                            <label class="form-check-label" for="locationYes">Yes</label>
+                    <!-- Question 1: Rate the contact information -->
+                    <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('communication_and_professionalism') }" style="user-select: none;">
+                        <label class="form-label text-secondary"
+                            style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                            How would you rate communication and professionalism?
+                        </label>
+                        <div class="rating fs-5">
+                            <template x-for="i in 5" :key="i">
+                                <span x-on:click="rating = i; $wire.set('communication_and_professionalism', i)"
+                                    style="cursor: pointer;">
+                                    <i
+                                        :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                                </span>
+                            </template>
                         </div>
-                        <div class="form-check-inline">
-                            <input class="square-checkbox" name="is_location_accurate" type="radio"
-                                id="locationNo" value="no" wire:model="is_location_accurate">
-                            <label class="form-check-label" for="locationNo">No</label>
+                        @error('communication_and_professionalism')
+                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('quality_or_service') }" style="user-select: none;">
+                        <label class="form-label text-secondary"
+                            style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                            How satisfied are you with the quality of the products or services provided?
+                        </label>
+                        <div class="rating fs-5">
+                            <template x-for="i in 5" :key="i">
+                                <span x-on:click="rating = i; $wire.set('quality_or_service', i)"
+                                    style="cursor: pointer;">
+                                    <i
+                                        :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                                </span>
+                            </template>
                         </div>
-                    </div>
-                    @error('is_contact_accurate')
-                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                    @enderror
-                </div>
-                <!-- Question 1: Rate the contact information -->
-                <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('communication_and_professionalism') }" style="user-select: none;">
-                    <label class="form-label text-secondary"
-                        style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
-                        How would you rate communication and professionalism?
-                    </label>
-                    <div class="rating fs-5">
-                        <template x-for="i in 5" :key="i">
-                            <span x-on:click="rating = i; $wire.set('communication_and_professionalism', i)"
-                                style="cursor: pointer;">
-                                <i :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
-                            </span>
-                        </template>
-                    </div>
-                    @error('communication_and_professionalism')
-                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('quality_or_service') }" style="user-select: none;">
-                    <label class="form-label text-secondary"
-                        style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
-                        How satisfied are you with the quality of the products or services provided?
-                    </label>
-                    <div class="rating fs-5">
-                        <template x-for="i in 5" :key="i">
-                            <span x-on:click="rating = i; $wire.set('quality_or_service', i)"
-                                style="cursor: pointer;">
-                                <i :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
-                            </span>
-                        </template>
-                    </div>
-                    @error('quality_or_service')
-                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                    @enderror
+                        @error('quality_or_service')
+                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                        @enderror
 
-                </div>
-                <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('recommendation') }" style="user-select: none;">
-                    <label class="form-label text-secondary"
-                        style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
-                        How likely are you to recommend this seller/service provider to others?
-                    </label>
-                    <div class="rating fs-5">
-                        <template x-for="i in 5" :key="i">
-                            <span x-on:click="rating = i; $wire.set('recommendation', i)" style="cursor: pointer;">
-                                <i :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
-                            </span>
-                        </template>
                     </div>
-                    @error('recommendation')
-                        <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('recommendation') }" style="user-select: none;">
+                        <label class="form-label text-secondary"
+                            style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                            How likely are you to recommend this seller/service provider to others?
+                        </label>
+                        <div class="rating fs-5">
+                            <template x-for="i in 5" :key="i">
+                                <span x-on:click="rating = i; $wire.set('recommendation', i)"
+                                    style="cursor: pointer;">
+                                    <i
+                                        :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                                </span>
+                            </template>
+                        </div>
+                        @error('recommendation')
+                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <!-- Question 2: Rate the location -->
-            </div>
-            <div class="row p-4">
-                <div class="col-12">
-                    <button class="btn px-4 btn-dark" wire:click.prevent="submitReview">Submit review</button>
+                    <!-- Question 2: Rate the location -->
+                </div>
+                <div class="row p-4">
+                    <div class="col-12">
+                        <button class="btn px-4 btn-dark" wire:click.prevent="submitReview">Submit review</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
     <input type="hidden" value="{{ route('view-shop', ['uuid' => $this->user->uuid]) }}" id="businessLink">
 </div>
 @section('style')

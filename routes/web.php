@@ -50,9 +50,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-edit/{uuid}', UserEdit::class)->name('user.edit');
     Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-    Route::get('/view-business-profile/{uuid}', ViewBusinessProfile::class)->name('view-shop');
-
+    
 });
+Route::get('/view-business-profile/{uuid}', ViewBusinessProfile::class)->name('view-shop');
 
 Route::middleware(['auth','admin'])->group(function () {
     Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');

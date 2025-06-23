@@ -267,7 +267,7 @@ class ViewBusinessProfile extends Component
                 'is_location_accurate' => $this->is_location_accurate,
                 'communication_and_professionalism' => $this->communication_and_professionalism,
                 'quality_or_service' => $this->quality_or_service,
-                'is_expert' => Auth::user()->is_reviewer,
+                'is_expert' => Auth::user()->is_reviewer ?? NULL,
                 'recommendation' => $this->recommendation,
             ]
         );
@@ -289,7 +289,7 @@ class ViewBusinessProfile extends Component
         $type = $this->user->offering === 'product' ? Product::class : Service::class;
         
         return Auth::user()
-            ->wishlist()
+            ?->wishlist()
             ->where('wishable_type', $type)
             ->pluck('wishable_id')
             ->toArray();
