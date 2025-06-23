@@ -188,7 +188,7 @@
                                 </div>
                                 <div class="row mt-2 text-center">
                                     <div class="col-md-12 my-5">
-                                        New to {{ env('APP_NAME') }}? <a class="text-primary">Sign In</a>
+                                        New to {{ env('APP_NAME') }}? <a href="{{ route('login') }}" class="text-primary">Sign In</a>
                                     </div>
                                 </div>
                             </form>

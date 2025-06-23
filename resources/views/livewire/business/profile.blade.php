@@ -70,10 +70,10 @@
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
                         @if ($this->user->profile_image)
-                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
+                            <img class="ms-md-4 p-2 p-sm-0 square-img-profile"
                                 src="{{ asset('storage/' . $this->user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
+                            <img class="ms-md-4 p-2 p-sm-0 square-img-profile"
                                 src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                     </div>

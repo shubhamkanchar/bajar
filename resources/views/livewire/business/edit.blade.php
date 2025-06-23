@@ -68,12 +68,12 @@
                     <div class="col-md-4 col-lg-3 col-xl-2 col-6 offset-3 offset-sm-0 position-relative"
                         style="margin-top:-70px">
                         @if ($profileImage)
-                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
+                            <img class="ms-md-4 p-2 p-sm-0 square-img-profile" src="{{ $profileImage->temporaryUrl() }}">
                         @elseif($user->profile_image)
-                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile"
+                            <img class="ms-md-4 p-2 p-sm-0 square-img-profile"
                                 src="{{ asset('storage/' . $user->profile_image) }}">
                         @else
-                            <img class="ms-md-4 p-3 p-sm-0 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
+                            <img class="ms-md-4 p-2 p-sm-0 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
                         <input type="file" wire:model="profileImage" hidden id="profileImage">
                         <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4 pe-md-0"
