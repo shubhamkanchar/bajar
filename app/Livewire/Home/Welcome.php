@@ -72,6 +72,7 @@ class Welcome extends Component
 
     public function searchProduct($id = NULL)
     {
+        $this->isOpen = false;
         if ($id) {
             $this->searchStarted = true;
                 $query = User::with(['address', 'ratings']);

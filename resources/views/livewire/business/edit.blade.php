@@ -8,14 +8,14 @@
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . $user->bg_image) }}">
                 @else
-                    <picture>
+                    <picture wire:ignore>
                         <source media="(max-width: 767px)"
                             srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
                         <img class="w-100 h-250 object-fit-cover rounded-4"
                             src="{{ asset('assets/image/desktop/banner_0' . rand(1, 8) . '.png') }}" alt="Banner">
                     </picture>
                 @endif
-                <input type="file" wire:model="bgImage" hidden id="bgImage">
+                <input type="file" wire:model="bgImage" hidden id="bgImage" accept="image/*">
                 <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
                     wire:target="bgImage" for="bgImage">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
@@ -75,7 +75,7 @@
                         @else
                             <img class="ms-md-4 p-2 p-sm-0 square-img-profile" src="{{ asset('assets/image/business_profile.png') }}">
                         @endif
-                        <input type="file" wire:model="profileImage" hidden id="profileImage">
+                        <input type="file" wire:model="profileImage" hidden id="profileImage" accept="image/*">
                         <label for="profileImage" role="button" class="position-absolute top-0 end-0 p-2 pe-4 pe-md-0"
                             style="z-index: 1">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
@@ -227,7 +227,12 @@
                                 Verified</button>
                         @else
                             <button type="button" wire:click="openVerifySlider('email')"
-                                class="btn btn-dark mt-2 fw-bold py-3 px-4">Verify</button>
+                                class="btn btn-dark mt-2 fw-bold py-3 px-4">
+                                <div wire:loading wire:target="openVerifySlider" class="spinner-border text-light me-1" style="width: 15px;height:15px" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                                Verify
+                            </button>
                         @endif
                     </div>
                 </div>
@@ -607,7 +612,14 @@
                             @enderror
                         </div>
                         <div class="col-md-12 text-end mt-2">
-                            Resend OTP in <span class="text-dark fw-bold">5 Sec</span>
+                            {{-- Resend OTP in <span class="text-dark fw-bold">5 Sec</span> --}}
+                            @if ($seconds > 0)
+                                        Resend OTP in <span class="text-dark fw-bold"
+                                            wire:poll.1s="tick">{{ $seconds }} Sec</span>
+                            @else
+                                <button class="btn btn-dark" type="button" wire:click="resendOtp()">Resend
+                                    OTP</button>
+                            @endif
                         </div>
                     </div>
                     <div class="row mb-0">

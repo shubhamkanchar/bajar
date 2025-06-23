@@ -19,7 +19,7 @@
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . $this->user->bg_image) }}">
                 @else
-                    <picture>
+                    <picture wire:ignore>
                         <source media="(max-width: 767px)" srcset="{{ asset('assets/image/mobile/banner_01.png') }}">
                         <img class="w-100 h-250 object-fit-cover rounded-4"
                             src="{{ asset('assets/image/desktop/banner_01.png') }}" alt="Banner">

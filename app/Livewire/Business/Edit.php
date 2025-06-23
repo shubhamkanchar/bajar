@@ -26,7 +26,7 @@ class Edit extends Component
     public $phone, $state, $city, $sliderStatus, $emailVerifiedAt, $phoneVerifiedAt;
     public $name, $cityOptions = [], $stateOptions = [];
     public $one, $two, $three, $four, $five, $six;
-    public $profileImage, $bgImage, $address, $map, $gst, $offering, $user;
+    public $profileImage, $bgImage, $address, $map, $gst, $offering, $user,$otp,$seconds;
     public $categoryIds = [];
     public $days = [
         'Monday',
@@ -150,24 +150,43 @@ class Edit extends Component
         }
     }
 
+    public function tick()
+    {
+        if ($this->seconds > 0) {
+            $this->seconds--;
+        }
+    }
+
     public function openVerifySlider($model)
     {
         $this->sliderStatus = 'open';
         $this->model = $model;
+        $this->seconds = 120;
+        $this->otp = GlobalHelper::generateOtp();
         if ($model == 'email') {
-            $otp = rand(000000, 999999);
-
-            $this->user->email_otp = $otp;
+            $this->user->email_otp = $this->otp;
             $this->user->save();
-            Mail::to($this->user->email)->send(new OtpMail($otp, $this->user));
+            Mail::to($this->user->email)->send(new OtpMail($this->otp, $this->user));
         }
 
         if ($model == 'phone') {
-            $otp = rand(000000, 999999);
-
-            $this->user->phone_otp = $otp;
+            $this->user->phone_otp = $this->otp;
             $this->user->save();
-            GlobalHelper::sendOtp($this->phone, $otp);
+            GlobalHelper::sendOtp($this->phone, $this->otp);
+        }
+    }
+
+    public function resendOtp(){
+        $this->otp = GlobalHelper::generateOtp();
+        if ($this->user) {
+            $this->user->email_otp = $this->otp;
+            $this->user->save();
+            Mail::to($this->user->email)->send(new OtpMail($this->otp, $this->user));
+            $this->seconds = 120;
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'OTP send successfully'
+            ]);
         }
     }
 
@@ -298,6 +317,12 @@ class Edit extends Component
                     'email_verified_at' => Carbon::now(),
                     'email_otp' => NULL
                 ]);
+                $this->sliderStatus = '';
+            }else{
+                $this->dispatch('notify', [
+                    'type' => 'error',
+                    'message' => 'Wrong OTP',
+                ]);
             }
         } else if ($this->model == 'phone') {
             if ($this->user->phone_otp == $otp) {
@@ -305,9 +330,15 @@ class Edit extends Component
                     'phone_verified_at' => Carbon::now(),
                     'phone_otp' => NULL
                 ]);
+                $this->sliderStatus = '';
+            }else{
+                $this->dispatch('notify', [
+                    'type' => 'error',
+                    'message' => 'Wrong OTP',
+                ]);
             }
         }
-        $this->sliderStatus = '';
+        $this->one =$this->two= $this->three= $this->four= $this->five= $this->six ='';
     }
 
     public function addCategory($id)

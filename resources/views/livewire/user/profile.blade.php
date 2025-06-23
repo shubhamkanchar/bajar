@@ -48,7 +48,7 @@
                     <img class="w-100 h-250 object-fit-cover rounded-4"
                         src="{{ asset('storage/' . auth()->user()->bg_image) }}">
                 @else
-                    <picture>
+                    <picture wire:ignore>
                         <source media="(max-width: 767px)"
                             srcset="{{ asset('assets/image/mobile/banner_0' . rand(1, 8) . '.png') }}">
                         <img class="w-100 h-250 object-fit-cover rounded-4"
