@@ -80,6 +80,7 @@ class Welcome extends Component
                     $query->whereHas('address', function ($query) {
                         $query->where('addresses.city','LIKE','%'.$this->selectedCity.'%');
                         $query->orWhere('addresses.state','LIKE','%'.$this->selectedState.'%');
+                        $query->orWhere('addresses.address','LIKE','%'.$this->selectedCity.'%');
                     });
                 }
                 $this->sellers = $query->whereHas('activeSubscription')
