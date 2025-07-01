@@ -78,7 +78,8 @@ class Welcome extends Component
                 $query = User::with(['address', 'ratings']);
                 if($this->selectedCity){
                     $query->whereHas('address', function ($query) {
-                        $query->where('addresses.city', $this->selectedCity);
+                        $query->where('addresses.city','LIKE','%'.$this->selectedCity.'%');
+                        $query->orWhere('addresses.state','LIKE','%'.$this->selectedState.'%');
                     });
                 }
                 $this->sellers = $query->whereHas('activeSubscription')

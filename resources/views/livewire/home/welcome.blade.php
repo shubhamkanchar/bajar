@@ -310,7 +310,7 @@
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
         const data = await response.json();
-        const city = data.address.city || data.address.town || data.address.village || "Unknown city";
+        const city = data.address.district || "Unknown city";
         const state = data.address.state || "Unknown state";
         console.log(`City: ${city}, State: ${state}`);
         if(city != 'Unknown city'){
