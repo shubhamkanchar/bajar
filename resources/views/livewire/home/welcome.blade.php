@@ -310,9 +310,9 @@
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
         const data = await response.json();
-        const city = data.address.district || "Unknown city";
+        console.log(data)
+        const city = data.address.district || data.address.city || data.address.town || data.address.village || "Unknown city";
         const state = data.address.state || "Unknown state";
-        console.log(`City: ${city}, State: ${state}`);
         if(city != 'Unknown city'){
             Livewire.dispatch('selectedCityfun', {'value':city});
         }
