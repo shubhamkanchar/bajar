@@ -78,7 +78,7 @@ class Welcome extends Component
                 $query = User::with(['address', 'ratings']);
                 if($this->selectedCity){
                     $query->whereHas('address', function ($query) {
-                        $query->where('addresses.city','LIKE','%'.$this->selectedCity.'%');
+                        $query->orWhere('addresses.city','LIKE','%'.$this->selectedCity.'%');
                         $query->orWhere('addresses.state','LIKE','%'.$this->selectedState.'%');
                         $query->orWhere('addresses.address','LIKE','%'.$this->selectedCity.'%');
                     });
