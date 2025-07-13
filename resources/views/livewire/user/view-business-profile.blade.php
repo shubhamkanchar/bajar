@@ -1,6 +1,7 @@
 @push('meta')
     <meta property="og:title" content="{{ env('APP_NAME') }}" />
-    <meta property="og:description" content="Find trusted building material traders offering a wide range of high quality products." />
+    <meta property="og:description"
+        content="Find trusted building material traders offering a wide range of high quality products." />
     <meta property="og:image" content="{{ url('public/storage/' . $user->profile_image) }}" />
     <meta property="og:url" content="{{ route('view-shop', ['uuid' => $user->uuid]) }}" />
     <meta property="og:type" content="website" />
@@ -8,7 +9,8 @@
     <!-- Optional Twitter cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ env('APP_NAME') }}" />
-    <meta name="twitter:description" content="Find trusted building material traders offering a wide range of high quality products."/>
+    <meta name="twitter:description"
+        content="Find trusted building material traders offering a wide range of high quality products." />
     <meta name="twitter:image" content="{{ url('public/storage/' . $user->profile_image) }}" />
 @endpush
 <div>
@@ -172,7 +174,7 @@
                                 </svg>
                                 Call
                             </a>
-                            @if (Auth::user()?->is_reviewer)
+                            @if (Auth::user())
                                 <button class="btn btn-dark my-2" x-data
                                     x-on:click="$wire.set('showReviewForm', true)">
                                     Review {{ $user->offering === 'product' ? 'Seller' : 'Service Provider' }}
@@ -354,320 +356,324 @@
             </div>
         </div>
     </div>
-
-    <div class="slider-overlay @if ($showDetailSlider) open @endif"
-        x-on:click="showReviewForm = false; $wire.set('showReviewForm', false);showDetailSlider = false;$wire.set('showDetailSlider', false)">
-    </div>
-    <div class="slider-form" wire:ignore.self x-cloak x-data="{ showDetailSlider: @entangle('showDetailSlider') }" x-show="showDetailSlider"
-        x-on:click.away="showDetailSlider = false; $wire.set('showDetailSlider', false)">
-        <div class="slider-content">
-            <div class="row">
-                <div class="col-md-8">
-                    <p class="fw-bold fs-3">
-                        {{ $user->offering === 'product' ? 'Product Details' : 'Service Details' }}</p>
-                </div>
-                <div class="col-md-4 text-md-end mb-2">
-                    <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" id="closeSliderBtn">
-                        <i class="fa-solid fa-xmark"></i>
-                    </a>
-                </div>
-            </div>
-
-            @if ($user->offering === 'product')
+    <div x-data="{ showDetailSlider: @entangle('showDetailSlider') }" x-cloak x-show="showDetailSlider" class="slider-detail-wrapper">
+        <!-- Overlay -->
+        <div class="slider-overlay open" x-on:click.self="showDetailSlider = false; $wire.set('showDetailSlider', false); showReviewForm = false; $wire.set('showReviewForm', false)"></div>
+        <!-- Slider Content -->
+        <div class="slider-form" wire:ignore.self>
+            <div class="slider-content">
                 <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner ratio">
-                                @foreach ($product_images as $key => $image)
-                                    @if ($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
-                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                            <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}"
-                                                class="d-block w-100 rounded carousel-fixed-image"
-                                                alt="Product Image">
+                    <div class="col-md-8">
+                        <p class="fw-bold fs-3">
+                            {{ $user->offering === 'product' ? 'Product Details' : 'Service Details' }}
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mb-2">
+                        <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
+                            x-on:click="showDetailSlider = false; $wire.set('showDetailSlider', false)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    </div>
+                </div>
+
+                @if ($user->offering === 'product')
+                    <!-- Product Details Block -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner ratio">
+                                    @foreach ($product_images as $key => $image)
+                                        @if ($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
+                                            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                                <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}"
+                                                    class="d-block w-100 rounded carousel-fixed-image"
+                                                    alt="Product Image">
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                                @if (count(array_filter($product_images)) > 1)
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="product-details">
+                                <h4 class="fw-bold">{{ $product_name }}</h4>
+                                <p class="text-muted">{{ $brand_name }}</p>
+                                <hr>
+
+                                <div class="mb-3">
+                                    <h6>Description</h6>
+                                    <p>{{ $description }}</p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <h6>Category</h6>
+                                        <p>
+                                            @foreach ($this->categories as $cat)
+                                                @if ($cat->id == $category)
+                                                    {{ $cat->title }}
+                                                @endif
+                                            @endforeach
+                                        </p>
+                                    </div>
+
+                                    @if ($showPrice && $price)
+                                        <div class="col-md-6 mb-3">
+                                            <h6>Price</h6>
+                                            <p>Rs. {{ number_format($price, 2) }} per {{ $quantity }}</p>
                                         </div>
                                     @endif
-                                @endforeach
+                                </div>
+
+                                <div class="d-grid gap-2 mt-4">
+                                    <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
+                                        <i class="fas fa-phone me-2"></i> Call Us
+                                    </a>
+                                </div>
                             </div>
-                            @if (count(array_filter($product_images)) > 1)
-                                <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#productCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button"
-                                    data-bs-target="#productCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            @endif
                         </div>
                     </div>
-
-                    <div class="col-md-12">
-                        <div class="product-details">
-                            <h4 class="fw-bold">{{ $product_name }}</h4>
-                            <p class="text-muted">{{ $brand_name }}</p>
-                            <hr>
-
-                            <div class="mb-3">
-                                <h6>Description</h6>
-                                <p>{{ $description }}</p>
+                @else
+                    <!-- Service Details Block -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner ratio">
+                                    @foreach ($service_images as $key => $image)
+                                        @if ($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
+                                            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                                <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}"
+                                                    class="d-block w-100 rounded carousel-fixed-image"
+                                                    alt="Service Image">
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                                @if (count(array_filter($service_images)) > 1)
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#serviceCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#serviceCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                @endif
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                        <div class="col-md-12">
+                            <div class="service-details">
+                                <h4 class="fw-bold">{{ $work_brief }}</h4>
+                                <hr>
+
+                                <div class="mb-3">
+                                    <h6>Description</h6>
+                                    <p>{{ $service_description }}</p>
+                                </div>
+
+                                <div class="mb-3">
                                     <h6>Category</h6>
                                     <p>
                                         @foreach ($this->categories as $cat)
-                                            @if ($cat->id == $category)
+                                            @if ($cat->id == $service_category)
                                                 {{ $cat->title }}
                                             @endif
                                         @endforeach
                                     </p>
                                 </div>
 
-                                @if ($showPrice && $price)
-                                    <div class="col-md-6 mb-3">
-                                        <h6>Price</h6>
-                                        <p>Rs. {{ number_format($price, 2) }} per {{ $quantity }}</p>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <div class="d-grid gap-2 mt-4">
-                                <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
-                                    <i class="fas fa-phone me-2"></i> Call Us
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner ratio">
-                                @foreach ($service_images as $key => $image)
-                                    @if ($image && (gettype($image) == 'string' || $image->getClientOriginalName()))
-                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                            <img src="{{ is_string($image) ? asset('storage/' . $image) : $image->temporaryUrl() }}"
-                                                class="d-block w-100 rounded carousel-fixed-image"
-                                                alt="Service Image">
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                            @if (count(array_filter($service_images)) > 1)
-                                <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#serviceCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button"
-                                    data-bs-target="#serviceCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="service-details">
-                            <h4 class="fw-bold">{{ $work_brief }}</h4>
-                            <hr>
-
-                            <div class="mb-3">
-                                <h6>Description</h6>
-                                <p>{{ $service_description }}</p>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Category</h6>
-                                <p>
-                                    @foreach ($this->categories as $cat)
-                                        @if ($cat->id == $service_category)
-                                            {{ $cat->title }}
-                                        @endif
-                                    @endforeach
-                                </p>
-                            </div>
-
-                            <div class="d-grid gap-2 mt-4">
-                                <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
-                                    <i class="fas fa-phone me-2"></i> Call Us
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
-    @if (Auth::user())
-        <div class="slider-overlay @if ($showReviewForm) open @endif"
-            x-on:click="showReviewForm = false; $wire.set('showReviewForm', false);showDetailSlider = false;$wire.set('showDetailSlider', false)">
-        </div>
-        <div class="slider-review-form" x-cloak x-data="{ showReviewForm: @entangle('showReviewForm') }" x-show="showReviewForm"
-            x-on:click.away="showReviewForm = false; $wire.set('showReviewForm', false)" wire:ignore.self>
-            <div class="slider-content">
-                <div class="row">
-                    <div class="col-md-8">
-                        <p class="fw-bold fs-3">Review Product Seller</p>
-                    </div>
-                    <div class="col-md-4 text-md-end mb-2">
-                        <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
-                            x-on:click="showReviewForm = false; $wire.set('showReviewForm', false)">
-                            <i class="fa-solid fa-xmark"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 p-0">
-                        <div class="d-flex border rounded-4 p-2 gap-3">
-                            @if ($this->user->bg_image)
-                                <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
-                                    src="{{ asset('storage/' . $this->user->bg_image) }}">
-                            @else
-                                <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
-                                    src="{{ asset('assets/bg/bg_profile.png') }}">
-                            @endif
-
-                            <div class="d-flex flex-column justify-content-center">
-                                <span class="fw-bold fs-4">{{ $this->user->name }}</span>
-                                <div class="d-flex align-items-start mt-1 text-muted" style="font-size: 0.9rem;">
-                                    <span class="me-2">
-                                        <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.5 8.50051C11.5 7.11924 10.3808 6 9.00051 6C7.61924 6 6.5 7.11924 6.5 8.50051C6.5 9.88076 7.61924 11 9.00051 11C10.3808 11 11.5 9.88076 11.5 8.50051Z"
-                                                stroke="#808080" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M8.99951 19C7.80104 19 1.5 13.8984 1.5 8.56329C1.5 4.38664 4.8571 1 8.99951 1C13.1419 1 16.5 4.38664 16.5 8.56329C16.5 13.8984 10.198 19 8.99951 19Z"
-                                                stroke="#808080" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                    <span>
-                                        {{ $this->user->address->address }}, {{ $this->user->address->city }},
-                                        {{ $this->user->address->state }}
-                                    </span>
+                                <div class="d-grid gap-2 mt-4">
+                                    <a href="tel:{{ $user->phone }}" class="btn btn-dark btn-lg">
+                                        <i class="fas fa-phone me-2"></i> Call Us
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mt-3 p-4">
-                    <!-- Question 1: Is the contact information accurate? -->
-                    <div class="col-12 col-md-6 mb-3">
-                        <label class="form-label text-secondary">
-                            Is the contact information accurate?
-                        </label>
-                        <div class="form-group">
-                            <div class="form-check-inline">
-                                <input class="square-checkbox" name="is_contact_accurate" type="radio"
-                                    id="contactYes" value="yes" wire:model="is_contact_accurate">
-                                <label class="form-check-label" for="contactYes">Yes</label>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    @if (Auth::user())
+        <div x-data="{ showReviewForm: @entangle('showReviewForm') }" x-cloak x-show="showReviewForm" class="slider-review-wrapper">
+            <!-- Overlay -->
+            <div class="slider-overlay open" x-on:click.self="showReviewForm = false; $wire.set('showReviewForm', false); showDetailSlider = false; $wire.set('showDetailSlider', false)"></div>
+            <!-- Slider Form -->
+            <div class="slider-review-form" wire:ignore.self>
+                <div class="slider-content">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="fw-bold fs-3">Review Product Seller</p>
+                        </div>
+                        <div class="col-md-4 text-md-end mb-2">
+                            <a class="btn btn-default rounded-5 bg-custom-secondary" role="button"
+                                x-on:click="showReviewForm = false; $wire.set('showReviewForm', false)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 p-0">
+                            <div class="d-flex border rounded-4 p-2 gap-3">
+                                @if ($this->user->bg_image)
+                                    <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
+                                        src="{{ asset('storage/' . $this->user->bg_image) }}">
+                                @else
+                                    <img style="height: 75px; width: 100px;" class="object-fit-cover rounded-4"
+                                        src="{{ asset('assets/bg/bg_profile.png') }}">
+                                @endif
+
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="fw-bold fs-4">{{ $this->user->name }}</span>
+                                    <div class="d-flex align-items-start mt-1 text-muted" style="font-size: 0.9rem;">
+                                        <span class="me-2">
+                                            <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M11.5 8.50051C11.5 7.11924 10.3808 6 9.00051 6C7.61924 6 6.5 7.11924 6.5 8.50051C6.5 9.88076 7.61924 11 9.00051 11C10.3808 11 11.5 9.88076 11.5 8.50051Z"
+                                                    stroke="#808080" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M8.99951 19C7.80104 19 1.5 13.8984 1.5 8.56329C1.5 4.38664 4.8571 1 8.99951 1C13.1419 1 16.5 4.38664 16.5 8.56329C16.5 13.8984 10.198 19 8.99951 19Z"
+                                                    stroke="#808080" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </span>
+                                        <span>
+                                            {{ $this->user->address->address }}, {{ $this->user->address->city }},
+                                            {{ $this->user->address->state }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-check-inline">
-                                <input class="square-checkbox" name="is_contact_accurate" type="radio"
-                                    id="contactNo" value="no" wire:model="is_contact_accurate">
-                                <label class="form-check-label" for="contactNo">No</label>
+                        </div>
+                    </div>
+                    <div class="row mt-3 p-4">
+                        <!-- Question 1: Is the contact information accurate? -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label text-secondary">
+                                Is the contact information accurate?
+                            </label>
+                            <div class="form-group">
+                                <div class="form-check-inline">
+                                    <input class="square-checkbox" name="is_contact_accurate" type="radio"
+                                        id="contactYes" value="yes" wire:model="is_contact_accurate">
+                                    <label class="form-check-label" for="contactYes">Yes</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="square-checkbox" name="is_contact_accurate" type="radio"
+                                        id="contactNo" value="no" wire:model="is_contact_accurate">
+                                    <label class="form-check-label" for="contactNo">No</label>
+                                </div>
+                                @error('is_contact_accurate')
+                                    <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Question 2: Is the location accurate? -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label text-secondary">
+                                Is the location accurate?
+                            </label>
+                            <div class="form-group">
+                                <div class="form-check-inline">
+                                    <input class="square-checkbox" name="is_location_accurate" type="radio"
+                                        id="locationYes" value="yes" wire:model="is_location_accurate">
+                                    <label class="form-check-label" for="locationYes">Yes</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="square-checkbox" name="is_location_accurate" type="radio"
+                                        id="locationNo" value="no" wire:model="is_location_accurate">
+                                    <label class="form-check-label" for="locationNo">No</label>
+                                </div>
                             </div>
                             @error('is_contact_accurate')
                                 <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
-
-                    <!-- Question 2: Is the location accurate? -->
-                    <div class="col-12 col-md-6 mb-3">
-                        <label class="form-label text-secondary">
-                            Is the location accurate?
-                        </label>
-                        <div class="form-group">
-                            <div class="form-check-inline">
-                                <input class="square-checkbox" name="is_location_accurate" type="radio"
-                                    id="locationYes" value="yes" wire:model="is_location_accurate">
-                                <label class="form-check-label" for="locationYes">Yes</label>
+                        <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('communication_and_professionalism') }" style="user-select: none;">
+                            <label class="form-label text-secondary"
+                                style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                                How would you rate communication and professionalism?
+                            </label>
+                            <div class="rating fs-5">
+                                <template x-for="i in 5" :key="i">
+                                    <span x-on:click="rating = i; $wire.set('communication_and_professionalism', i)"
+                                        style="cursor: pointer;">
+                                        <i
+                                            :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                                    </span>
+                                </template>
                             </div>
-                            <div class="form-check-inline">
-                                <input class="square-checkbox" name="is_location_accurate" type="radio"
-                                    id="locationNo" value="no" wire:model="is_location_accurate">
-                                <label class="form-check-label" for="locationNo">No</label>
+                            @error('communication_and_professionalism')
+                                <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('quality_or_service') }" style="user-select: none;">
+                            <label class="form-label text-secondary"
+                                style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                                How satisfied are you with the quality of the products or services provided?
+                            </label>
+                            <div class="rating fs-5">
+                                <template x-for="i in 5" :key="i">
+                                    <span x-on:click="rating = i; $wire.set('quality_or_service', i)"
+                                        style="cursor: pointer;">
+                                        <i
+                                            :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                                    </span>
+                                </template>
                             </div>
-                        </div>
-                        @error('is_contact_accurate')
-                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <!-- Question 1: Rate the contact information -->
-                    <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('communication_and_professionalism') }" style="user-select: none;">
-                        <label class="form-label text-secondary"
-                            style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
-                            How would you rate communication and professionalism?
-                        </label>
-                        <div class="rating fs-5">
-                            <template x-for="i in 5" :key="i">
-                                <span x-on:click="rating = i; $wire.set('communication_and_professionalism', i)"
-                                    style="cursor: pointer;">
-                                    <i
-                                        :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
-                                </span>
-                            </template>
-                        </div>
-                        @error('communication_and_professionalism')
-                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('quality_or_service') }" style="user-select: none;">
-                        <label class="form-label text-secondary"
-                            style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
-                            How satisfied are you with the quality of the products or services provided?
-                        </label>
-                        <div class="rating fs-5">
-                            <template x-for="i in 5" :key="i">
-                                <span x-on:click="rating = i; $wire.set('quality_or_service', i)"
-                                    style="cursor: pointer;">
-                                    <i
-                                        :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
-                                </span>
-                            </template>
-                        </div>
-                        @error('quality_or_service')
-                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                        @enderror
+                            @error('quality_or_service')
+                                <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                            @enderror
 
-                    </div>
-                    <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('recommendation') }" style="user-select: none;">
-                        <label class="form-label text-secondary"
-                            style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
-                            How likely are you to recommend this seller/service provider to others?
-                        </label>
-                        <div class="rating fs-5">
-                            <template x-for="i in 5" :key="i">
-                                <span x-on:click="rating = i; $wire.set('recommendation', i)"
-                                    style="cursor: pointer;">
-                                    <i
-                                        :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
-                                </span>
-                            </template>
                         </div>
-                        @error('recommendation')
-                            <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
-                        @enderror
+                        <div class="col-12 col-md-12 mb-3" x-data="{ rating: @entangle('recommendation') }" style="user-select: none;">
+                            <label class="form-label text-secondary"
+                                style="font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; line-height: 14px;">
+                                How likely are you to recommend this seller/service provider to others?
+                            </label>
+                            <div class="rating fs-5">
+                                <template x-for="i in 5" :key="i">
+                                    <span x-on:click="rating = i; $wire.set('recommendation', i)"
+                                        style="cursor: pointer;">
+                                        <i
+                                            :class="rating >= i ? 'fas fa-star star-color' : 'far fa-star star-color-outer'"></i>
+                                    </span>
+                                </template>
+                            </div>
+                            @error('recommendation')
+                                <div class="text-danger mt-1" style="font-size: 0.85rem;">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
-
-                    <!-- Question 2: Rate the location -->
-                </div>
-                <div class="row p-4">
-                    <div class="col-12">
-                        <button class="btn px-4 btn-dark" wire:click.prevent="submitReview">Submit review</button>
+                    <div class="row p-4">
+                        <div class="col-12">
+                            <button class="btn px-4 btn-dark" wire:click.prevent="submitReview">Submit review</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     @endif
     <input type="hidden" value="{{ route('view-shop', ['uuid' => $this->user->uuid]) }}" id="businessLink">
 </div>
@@ -812,18 +818,7 @@
         }
     </style>
 @endsection
-
 <script>
-    // Toggle slider form on button click
-    // const openSliderBtn = document.getElementById("openSliderBtn");
-    const sliderForm = document.querySelector(".slider-form");
-    const closeSliderBtn = document.getElementById("closeSliderBtn");
-
-    closeSliderBtn.addEventListener("click", function() {
-        @this.set('showDetailSlider', false);
-        @this.call('resetProduct')
-    });
-
     document.addEventListener('click', function(event) {
         let target = event.target.closest('.view-product');
         if (target) {
@@ -840,13 +835,7 @@
         setTimeout(function() {
             @this.set('isLoaded', true);
         }, 500);
-
-        setTimeout(() => {
-            @this.set('showReviewForm', true);
-        }, 15000);
     });
-
-
 
     function copyCurrentUrl() {
         const url = $('#businessLink').val();

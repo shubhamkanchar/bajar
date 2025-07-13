@@ -8,6 +8,7 @@ use App\Models\BusinessCategory;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Product;
+use App\Models\ProductSellerReview;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -56,13 +57,13 @@ class Welcome extends Component
         return redirect()->route('blog', ['slug' => $slug]);
     }
 
-    public function updatedSearch()
+    public function updatedSelectedCity()
     {
         if ($this->selectedState) {
             $stateId = State::where('title', 'like', '%' . $this->selectedState . '%')->value('id');
         }
         $this->isOpen = true;
-        $query = City::where('title', 'like', '%' . $this->search . '%')
+        $query = City::where('title', 'like', '%' . $this->selectedCity . '%')
             ->limit(50);
         if (isset($stateId)) {
             $query->where('state_id', $stateId);
@@ -75,20 +76,25 @@ class Welcome extends Component
         $this->isOpen = false;
         if ($id) {
             $this->searchStarted = true;
-                $query = User::with(['address', 'ratings']);
-                if($this->selectedCity){
-                    $query->whereHas('address', function ($query) {
-                        $query->orWhere('addresses.city','LIKE','%'.$this->selectedCity.'%');
-                        $query->orWhere('addresses.state','LIKE','%'.$this->selectedState.'%');
-                        $query->orWhere('addresses.address','LIKE','%'.$this->selectedCity.'%');
-                    });
-                }
-                $this->sellers = $query->whereHas('activeSubscription')
-                ->whereHas('categories', function ($query) use ($id) {
-                    $query->where('categories.id', $id);
-                })->whereNotIn('role', ['superadmin', 'admin'])
-                ->where('offering', $this->section)
-                ->get();
+            $query = User::with(['address', 'ratings']);
+            if($this->selectedCity){
+                $query->whereHas('address', function ($q) {
+                    $q->where('addresses.city','LIKE','%'.$this->selectedCity.'%');
+                    // $q->orWhere('addresses.state','LIKE','%'.$this->selectedState.'%');
+                    $q->orWhere('addresses.address','LIKE','%'.$this->selectedCity.'%');
+                });
+            }
+            $this->sellers = $query->whereHas('activeSubscription')
+            ->whereHas('categories', function ($query) use ($id) {
+                $query->where('categories.id', $id);
+            })->whereNotIn('role', ['superadmin', 'admin'])
+            ->where('offering', $this->section)
+            ->addSelect([
+                'total_score' => ProductSellerReview::selectRaw('COUNT(communication_and_professionalism)')
+                    ->whereColumn('seller_id', 'users.id')
+            ])
+            ->orderByDesc('total_score')
+            ->get();
         } elseif ($this->selectedCity) {
             $this->searchStarted = true;
             $this->sellers = User::with(['address', 'categories', 'ratings'])
@@ -98,6 +104,11 @@ class Welcome extends Component
                 ->whereHas('activeSubscription')
                 ->whereNotIn('role', ['superadmin', 'admin'])
                 ->where('offering', $this->section)
+                ->addSelect([
+                    'total_score' => ProductSellerReview::selectRaw('COUNT(communication_and_professionalism)')
+                        ->whereColumn('seller_id', 'users.id')
+                ])
+                ->orderByDesc('total_score')
                 ->get();
         } else {
             $text = $this->section == 'product' ? 'product sellers' : 'service providers';
@@ -123,15 +134,14 @@ class Welcome extends Component
     public function selectCity($city)
     {
         $this->selectedCity = $city;
-        $this->search = '';
         $this->isOpen = false;
     }
 
     public function toggle()
     {
         $this->isOpen = !$this->isOpen;
-        if ($this->isOpen && $this->search === '') {
-            $this->updatedSearch();
+        if ($this->isOpen && $this->selectedCity === '') {
+            $this->updatedSelectedCity();
         }
     }
 

@@ -57,7 +57,7 @@
                     </picture>
                 @endif
                 <input type="file" wire:model="bgImage" hidden id="bgImage">
-                <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
+                {{-- <label role="button" class="position-absolute top-0 end-0 p-2 pe-4" style="z-index: 1"
                     wire:target="bgImage" for="bgImage">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +71,7 @@
                         <path d="M19.0234 14L24.4757 18.1871" stroke="black" stroke-width="1.5" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                </label>
+                </label> --}}
                 @php
                     if ($user->onboard_completed) {
                         if ($user->role == 'individual') {
@@ -259,9 +259,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
+                    {{-- <div class="alert bg-custom-secondary fw-bold mt-3" role="alert">
                         Subscription Details
-                    </div>
+                    </div> --}}
                     @if (in_array(Auth::user()->role,['admin','superadmin']))
                         <div class="col-md-3" wire:click="setReviewer()">
                             <button type="button"

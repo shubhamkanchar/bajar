@@ -19,14 +19,11 @@
                 <div class="d-md-flex position-relative justify-content-center mb-4">
                     <div class="bg-white rounded-5 p-2 border me-2" x-data="{ focused: false }"
                         :class="{ 'border-2 border-dark': focused }">
-                        <input class="form-select rounded-5 mt-1 border border-0 bg-white" name="city" placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle" wire:model="selectedCity" />
+                        <input class="form-select rounded-5 mt-1 border border-0 bg-white" name="city" placeholder="City" @focus="focused = true" @blur="focused = false" wire:click="toggle" wire:model.live="selectedCity" />
                     </div>
                     @if ($isOpen)
                         <div class="position-absolute mt-2 w-sp shadow bg-white border rounded-4 p-3"
                             style="z-index: 1050; max-height: 300px; overflow-y: auto;top:65px">
-                            <input type="text" class="form-control mb-3" placeholder="Search"
-                                wire:model.live="search">
-
                             @if (count($cities) > 0)
                                 <div class="row row-cols-2 row-cols-md-4 g-2">
                                     @foreach ($cities as $city)
