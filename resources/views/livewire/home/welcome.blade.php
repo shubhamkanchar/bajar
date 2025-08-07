@@ -307,10 +307,12 @@
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
         const data = await response.json();
-        console.log(data)
         const city = data.address.state_district ? (data.address.state_district.replace(' District','')) :(data.address.city || data.address.town || data.address.village || "Unknown city");
         const state = data.address.state || "Unknown state";
         if(city != 'Unknown city'){
+            if(city == 'Ahmadnagar' || city == 'ahmadnagar' || city == 'Ahamadnagar' || city == 'ahamadnagar'){
+                city = 'Ahilyanagar';
+            }
             Livewire.dispatch('selectedCityfun', {'value':city});
         }
         Livewire.dispatch('selectedStatefun', {'value':state});
@@ -318,14 +320,10 @@
         console.log("Failed to fetch location details.");
       }
     }
-
     function error() {
       console.log("Permission denied or unable to get location.");
     }
-
     getLocation();
-
-    
   </script>
 @endpush
 @push('style')
