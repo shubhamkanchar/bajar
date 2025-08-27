@@ -62,7 +62,7 @@ class Login extends Component
                 $user->phone = $this->phone;
                 $user->phone_otp = $this->otp;
                 $user->save();
-                // GlobalHelper::sendOtp($user->phone, $this->otp);
+                GlobalHelper::sendOtp($user->phone, $this->otp);
             }
         }
         if ($user) {
