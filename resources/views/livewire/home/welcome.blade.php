@@ -310,7 +310,7 @@
         const city = data.address.state_district ? (data.address.state_district.replace(' District','')) :(data.address.city || data.address.town || data.address.village || "Unknown city");
         const state = data.address.state || "Unknown state";
         if(city != 'Unknown city'){
-            if(city == 'Ahmadnagar' || city == 'ahmadnagar' || city == 'Ahamadnagar' || city == 'ahamadnagar'){
+            if(city == 'Ahmednagar' || city == 'ahmednagar'){
                 city = 'Ahilyanagar';
             }
             Livewire.dispatch('selectedCityfun', {'value':city});

@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="row">
                                     <h3 class="fw-bold">OTP Verification</h3>
-                                    <p>Enter OTP shared on @if($tab == 'email') {{$email}} @else {{$phone}} @endif is {{$otp}}</p>
+                                    <p>Enter OTP shared on @if($tab == 'email') {{$email}} @else {{$phone}} @endif</p>
                                 </div>
                                 <div class="row mb-5">
                                     <div class="col-md-12">
