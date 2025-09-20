@@ -153,7 +153,8 @@
 
         @include('layouts.partials.footer')
     </div>
-    @livewireScriptConfig
+    @livewireScripts
+@livewireScriptConfig
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"
         integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
     <script

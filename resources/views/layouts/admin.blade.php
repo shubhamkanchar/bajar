@@ -281,6 +281,7 @@
             @yield('content')
         </div>
     </div>
+    @livewireScripts
     @livewireScriptConfig
     @stack('scripts')
     @yield('scripts')
