@@ -34,31 +34,30 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::middleware(['web'])->group(function () {
-    Route::get('/', Welcome::class)->name('home');
-    Route::get('/login', Login::class)->name('login');
-    Route::get('/signup', Signup::class)->name('signup');
-    Route::get('/blog', Blog::class)->name('blogs');
-    Route::get('/blogs/{slug}', Blog::class)->name('blog');
-    Route::get('page/{slug}', Page::class)->name('page');
+Route::get('/', Welcome::class)->name('home');
+Route::get('/login', Login::class)->name('login');
+Route::get('/signup', Signup::class)->name('signup');
+Route::get('/blog',Blog::class)->name('blogs');
+Route::get('/blogs/{slug}',Blog::class)->name('blog');
+Route::get('page/{slug}',Page::class)->name('page');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/on-boarding', LivewireOnboarding::class)->name('onboarding');
-        Route::get('/business-profile', Profile::class)->name('business.profile');
-        Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
-        Route::get('/service-profile', ServiceProfile::class)->name('service.profile');
-        Route::get('/user-profile', UserProfile::class)->name('user.profile');
-        Route::get('/user-edit/{uuid}', UserEdit::class)->name('user.edit');
-        Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
-        Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-    });
-    Route::get('/view-business-profile/{uuid}', ViewBusinessProfile::class)->name('view-shop');
+Route::middleware('auth')->group(function () {
+    Route::get('/on-boarding', LivewireOnboarding::class)->name('onboarding');
+    Route::get('/business-profile', Profile::class)->name('business.profile');
+    Route::get('/business-edit/{uuid}', Edit::class)->name('business.edit');
+    Route::get('/service-profile', ServiceProfile::class)->name('service.profile');
+    Route::get('/user-profile', UserProfile::class)->name('user.profile');
+    Route::get('/user-edit/{uuid}', UserEdit::class)->name('user.edit');
+    Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+    
+});
+Route::get('/view-business-profile/{uuid}', ViewBusinessProfile::class)->name('view-shop');
 
-    Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
-    });
+Route::middleware(['auth','admin'])->group(function () {
+    Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
+});
 
-    Route::get('/auth/redirect/google', function () {
-        return Socialite::driver('google')->redirect();
-    });
+Route::get('/auth/redirect/google', function () {
+    return Socialite::driver('google')->redirect();
 });
