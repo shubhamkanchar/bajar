@@ -67,6 +67,7 @@
         </main>
     </div>
     @livewireScripts
+    @livewireScriptConfig
     @stack('scripts')
     @yield('scripts')
     @include('layouts.partials.notify')

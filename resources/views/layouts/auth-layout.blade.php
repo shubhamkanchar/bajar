@@ -22,6 +22,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
+    @livewireScriptConfig
     @stack('style')
     @yield('style')
     <style>
