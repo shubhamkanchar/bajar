@@ -19,7 +19,7 @@ class Login extends Component
     public  $email, $phone = '', $tab = 'phone', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
     public $remember = true;
-    public $seconds,$otp;
+    public $seconds, $otp;
 
     public function tick()
     {
@@ -68,7 +68,7 @@ class Login extends Component
         if ($user) {
             $this->page = 'otp';
             $this->seconds = 120;
-        }else{
+        } else {
             $this->dispatch('notify', [
                 'type' => 'error',
                 'message' => 'User not found. Please signup'
@@ -76,7 +76,8 @@ class Login extends Component
         }
     }
 
-    public function resendOtp(){
+    public function resendOtp()
+    {
         $this->otp = GlobalHelper::generateOtp();
         $user = User::where([
             'phone' => $this->phone
@@ -137,7 +138,7 @@ class Login extends Component
                     'phone_otp' => NULL
                 ]);
                 $success = true;
-            }else{
+            } else {
                 $this->dispatch('notify', [
                     'type' => 'error',
                     'message' => 'Inavlid OTP. Please retry again!'
@@ -150,25 +151,30 @@ class Login extends Component
         }
     }
 
-    public function loginSucess($user)
+    public function loginSuccess($user)
     {
-        Auth::login($user,$this->remember);
+        // 🔑 Log the user in securely
+        Auth::login($user, $this->remember);
         session()->regenerate();
-        if($user->role == 'superadmin' || $user->role == 'admin'){
-            return redirect()->route('admin.dashboard');
-        }else if ($user->onboard_completed) {
-            if ($user->role == 'individual') {
-                return redirect()->route('user.profile');
-            } else if ($user->role == 'business') {
-                if($user->offering == 'product'){
-                    return redirect()->route('business.profile');
-                }else{
-                    return redirect()->route('service.profile');
-                }
-            }
-        } else {
-            return redirect()->route('onboarding');
+
+        // 🔀 Redirect based on role
+        if (in_array($user->role, ['superadmin', 'admin'])) {
+            return $this->redirectRoute('admin.dashboard', navigate: true);
         }
+
+        if ($user->onboard_completed) {
+            if ($user->role === 'individual') {
+                return $this->redirectRoute('user.profile', navigate: true);
+            }
+
+            if ($user->role === 'business') {
+                return $user->offering === 'product'
+                    ? $this->redirectRoute('business.profile', navigate: true)
+                    : $this->redirectRoute('service.profile', navigate: true);
+            }
+        }
+
+        return $this->redirectRoute('onboarding', navigate: true);
     }
 
     public function tabChange($value)

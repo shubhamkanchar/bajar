@@ -126,24 +126,29 @@ class Signup extends Component
             }
         }
 
-        if($success){
+        if ($user) {
+            // 🔑 Secure login + regenerate session
             Auth::login($user);
             session()->regenerate();
-            if($user->role == 'superadmin' || $user->role == 'admin'){
-                return redirect()->route('admin.dashboard');
-            }else if ($user->onboard_completed) {
-                if ($user->role == 'individual') {
-                    return redirect()->route('user.profile');
-                } else if ($user->role == 'business') {
-                    if($user->offering == 'product'){
-                        return redirect()->route('business.profile');
-                    }else{
-                        return redirect()->route('service.profile');
-                    }
-                }
-            } else {
-                return redirect()->route('onboarding');
+
+            // 🔀 Livewire-friendly redirects
+            if (in_array($user->role, ['superadmin', 'admin'])) {
+                return $this->redirectRoute('admin.dashboard', navigate: true);
             }
+
+            if ($user->onboard_completed) {
+                if ($user->role === 'individual') {
+                    return $this->redirectRoute('user.profile', navigate: true);
+                }
+
+                if ($user->role === 'business') {
+                    return $user->offering === 'product'
+                        ? $this->redirectRoute('business.profile', navigate: true)
+                        : $this->redirectRoute('service.profile', navigate: true);
+                }
+            }
+
+            return $this->redirectRoute('onboarding', navigate: true);
         }
     }
 
