@@ -317,7 +317,7 @@
     @include('livewire.business.partial.slider')
     <input type="hidden" value="{{route("view-shop",["uuid"=>$this->user->uuid])}}" id="businessLink">
 </div>
-@section('style')
+@push('style')
     <style>
         /* Initially set the slider to be hidden off-screen on the right */
         .slider-form {
@@ -418,7 +418,7 @@
             overflow: hidden;
         }
     </style>
-@endsection
+@endpush
 
 @push('scripts')
     <script>

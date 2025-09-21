@@ -312,7 +312,7 @@
     <input type="hidden" value="{{ route('view-shop', ['uuid' => $user->uuid]) }}" id="businessLink">
 </div>
 
-@section('style')
+@push('style')
     <style>
         .slider-form {
             position: fixed;
@@ -407,7 +407,7 @@
             overflow: hidden;
         }
     </style>
-@endsection
+@endpush
 @push('scripts')
     <script>
         const stars = document.querySelectorAll('.star-rating i');

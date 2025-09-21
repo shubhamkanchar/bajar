@@ -38,7 +38,7 @@
     @endswitch
 </div>
 
-@section('style')
+@push('style')
     <style>
         /* Initially set the slider to be hidden off-screen on the right */
         .slider-form {
@@ -80,4 +80,4 @@
             }
         }
     </style>
-@endsection
+@endpush

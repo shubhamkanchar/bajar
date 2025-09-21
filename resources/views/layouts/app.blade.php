@@ -19,7 +19,6 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
     @stack('style')
-    @yield('style')
     <style>
         @media (max-width: 767.98px) {
             .h-250 {
@@ -67,9 +66,7 @@
         </main>
     </div>
     @livewireScripts
-    @livewireScriptConfig
     @stack('scripts')
-    @yield('scripts')
     @include('layouts.partials.notify')
 </body>
 

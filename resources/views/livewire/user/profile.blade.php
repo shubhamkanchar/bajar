@@ -1,4 +1,4 @@
-@section('style')
+@push('style')
     <style>
         .product-card,
         .service-card {
@@ -38,7 +38,7 @@
             z-index: 10;
         }
     </style>
-@endsection
+@endpush
 
 <div>
     <div class="container" x-data="{ tab: @entangle('tab') }">

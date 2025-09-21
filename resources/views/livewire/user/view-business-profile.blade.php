@@ -677,7 +677,7 @@
     @endif
     <input type="hidden" value="{{ route('view-shop', ['uuid' => $this->user->uuid]) }}" id="businessLink">
 </div>
-@section('style')
+@push('style')
     <style>
         /* Initially set the slider to be hidden off-screen on the right */
         .slider-form {
@@ -817,7 +817,7 @@
             /* Ensures the wrapper doesn't stretch too much */
         }
     </style>
-@endsection
+@endpush
 <script>
     document.addEventListener('click', function(event) {
         let target = event.target.closest('.view-product');
