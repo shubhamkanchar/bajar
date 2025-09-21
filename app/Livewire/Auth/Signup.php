@@ -128,6 +128,7 @@ class Signup extends Component
 
         if($success){
             Auth::login($user);
+            session()->regenerate();
             if($user->role == 'superadmin' || $user->role == 'admin'){
                 return redirect()->route('admin.dashboard');
             }else if ($user->onboard_completed) {
