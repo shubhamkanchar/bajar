@@ -10,6 +10,7 @@ use App\Models\ProductImage;
 use App\Models\ProductSellerReview;
 use App\Models\Subscription;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -71,15 +72,19 @@ class Profile extends Component
 
         $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
         if($razorpaySubscriptionId){
-            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
-            $subscription = $api->subscription->fetch($razorpaySubscriptionId);
-            if($subscription->start_at){
-                Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
-                ->update([
-                    'status' => $subscription->status,
-                    'start_at' => Carbon::createFromTimestamp($subscription->current_start),
-                    'end_at' => Carbon::createFromTimestamp($subscription->current_end),
-                ]);
+            try{
+                $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+                $subscription = $api->subscription->fetch($razorpaySubscriptionId);
+                if($subscription->start_at){
+                    Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
+                    ->update([
+                        'status' => $subscription->status,
+                        'start_at' => Carbon::createFromTimestamp($subscription->current_start),
+                        'end_at' => Carbon::createFromTimestamp($subscription->current_end),
+                    ]);
+                }
+            }catch(Exception $e){
+
             }
         }
     }
@@ -159,6 +164,7 @@ class Profile extends Component
         }
 
         $this->isEdit = true;
+        $this->openSlider();
     }
 
     #[Computed]
@@ -354,6 +360,21 @@ class Profile extends Component
     {
         $this->product_images[$image] = null;
         // dd($this->product_images);
+    }
+
+    public function addNewTag(string $tag)
+    {
+        $tag = trim($tag);
+
+        if ($tag === '' || in_array($tag, $this->allTags)) {
+            return;
+        }
+
+        // Optionally persist to DB here...
+        $this->allTags[] = $tag;
+
+        // Set as selected
+        $this->product_tag = $tag;
     }
 
     public function render()

@@ -11,12 +11,13 @@ use Livewire\Attributes\On;
 
 class SubscriptionForm extends Component
 {
-    public $planId = 'plan_Qh6fmlB7qj7uIT'; // Replace with your Razorpay plan_id
+    public $planId = '';//'plan_Qh6fmlB7qj7uIT'; // Replace with your Razorpay plan_id
     public $subscriptionId,$planName,$amount,$interval;
     public $user,$loader = false;
     protected $listeners = ['paymentSuccess'];
 
     public function mount($user){
+        $this->planId = env('PLAN_ID');
         $this->user = $user;
         $this->getRazorpayPlanById();
 

@@ -6,7 +6,7 @@
                 <p class="fw-bold fs-3">Add work portfolio</p>
             </div>
             <div class="col-md-4 text-md-end mb-2">
-                <span class="badge rounded-pill text-bg-light p-3 me-3">
+                {{-- <span class="badge rounded-pill text-bg-light p-3 me-3">
                     <svg class="me-2" width="12" height="13" viewBox="0 0 12 13" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -20,7 +20,7 @@
                             fill="black" />
                     </svg>
                     Bulk Upload
-                </span>
+                </span> --}}
                 <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" wire:click="closeSlider()">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
@@ -161,7 +161,7 @@
                 </div>
                 
                 <div class="col-md-6" wire:ignore>
-                    <div class="form-floating my-2">
+                    {{-- <div class="form-floating my-2">
                         <select class="form-control" id="tagInput" wire:model="service_tag">
                             <option disabled value="" selected>Service Tag/Service Group</option>
                             @foreach($allTags as $tag)
@@ -169,6 +169,40 @@
                             @endforeach
                         </select>
                         <label for="tagInput">Service Tag/Service Group</label>
+                    </div> --}}
+                    <div x-data="{ showModal: false, newTag: '' }" x-init="$watch('showModal', value => { if (!value) newTag = '' })">
+
+                        <div class="form-floating my-2">
+                            <select class="form-control select2" id="tagInput" wire:model="service_tag"
+                                @change="if ($event.target.value === 'create_new_tag') showModal = true">
+                                <option disabled value="" selected>Product Tag/Product Group</option>
+                                <option value="create_new_tag">+ Create new tag</option>
+
+                                @foreach ($allTags as $tag)
+                                    <option @if($service_tag == $tag) selected @endif value="{{ $tag }}">{{ $tag }}</option>
+                                @endforeach
+                            </select>
+                            <label for="tagInput">Product Tag/Product Group</label>
+                        </div>
+
+                        <!-- Modal -->
+                        <div x-show="showModal"
+                            style="display: none">
+                            <div class="d-flex mb-3">
+                                <input type="text" class="form-control" placeholder="Enter new tag" x-model="newTag">
+                                <button type="button" class="btn btn-secondary mx-1" @click="showModal = false">Cancel</button>
+                                <button 
+                                    type="button"
+                                    class="btn btn-primary" 
+                                    @click="
+                                        $wire.addNewTag(newTag)
+                                        showModal = false
+                                    "
+                                    :disabled="!newTag.trim()"
+                                >Save</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-12">

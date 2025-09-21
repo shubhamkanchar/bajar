@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
@@ -80,19 +81,22 @@ class Edit extends Component
                 'close' => optional($existingHours->where('day', $day)->first())->close_time ?? ''
             ];
         }
-        
-        $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
-        if($razorpaySubscriptionId){
-            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
-            $subscription = $api->subscription->fetch($razorpaySubscriptionId);
-            if($subscription->start_at){
-                Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
-                ->update([
-                    'status' => $subscription->status,
-                    'start_at' => Carbon::createFromTimestamp($subscription->current_start),
-                    'end_at' => Carbon::createFromTimestamp($subscription->current_end),
-                ]);
+        try{
+            $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
+            if($razorpaySubscriptionId){
+                $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+                $subscription = $api->subscription->fetch($razorpaySubscriptionId);
+                if($subscription->start_at){
+                    Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
+                    ->update([
+                        'status' => $subscription->status,
+                        'start_at' => Carbon::createFromTimestamp($subscription->current_start),
+                        'end_at' => Carbon::createFromTimestamp($subscription->current_end),
+                    ]);
+                }
             }
+        }catch(Exception $e){
+
         }
 
     }

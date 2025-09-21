@@ -1,12 +1,12 @@
-<div class="slider-overlay {{$sliderStatus}}" wire:click="closeSlider()"></div>
-<div class="slider-form {{$sliderStatus}}">
+<div class="slider-overlay {{ $sliderStatus }}" wire:click="closeSlider()"></div>
+<div class="slider-form {{ $sliderStatus }}">
     <div class="slider-content">
         <div class="row">
             <div class="col-md-8">
                 <p class="fw-bold fs-3">Add Product</p>
             </div>
             <div class="col-md-4 text-md-end mb-2">
-                <span class="badge rounded-pill text-bg-light p-3 me-3">
+                {{-- <span class="badge rounded-pill text-bg-light p-3 me-3">
                     <svg class="me-2" width="12" height="13" viewBox="0 0 12 13" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -20,7 +20,7 @@
                             fill="black" />
                     </svg>
                     Bulk Upload
-                </span>
+                </span> --}}
                 <a class="btn btn-default rounded-5 bg-custom-secondary" role="button" wire:click="closeSlider()">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
@@ -51,7 +51,9 @@
 
                         </label>
                     @endif
-                    <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="productImage1">
+                    <label
+                        class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                        style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="productImage1">
                         @if ($isEdit && gettype($product_images['product_image1']) == 'string')
                             <img src="{{ asset('storage/' . $product_images['product_image1']) }}" class="img-fluid">
                         @elseif ($product_images['product_image1'])
@@ -114,7 +116,10 @@
 
                                     </label>
                                 @endif
-                                <label class="dashed-border d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;width: 100%;aspect-ratio: 1 / 1" for="productImage{{ $index }}">
+                                <label
+                                    class="dashed-border d-flex flex-column justify-content-center align-items-center text-center"
+                                    style="height: 100%;width: 100%;aspect-ratio: 1 / 1"
+                                    for="productImage{{ $index }}">
                                     @if ($isEdit && gettype($product_images['product_image' . $index]) == 'string')
                                         <img src="{{ asset('storage/' . $product_images['product_image' . $index]) }}"
                                             class="img-fluid">
@@ -128,7 +133,8 @@
                                                 wire:model.blur="product_images.product_image{{ $index }}"
                                                 id="productImage{{ $index }}" hidden>
                                             <span>
-                                                <i class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
+                                                <i
+                                                    class="fa-regular d-flex fa-square-plus fs-1 text-secondary justify-content-center align-items-center"></i>
                                             </span>
                                         </span>
                                     @endif
@@ -185,20 +191,40 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-md-6" wire:ignore>
-                    <div class="form-floating my-2" wire:ignore>
-                        <select class="form-control select2" id="tagInput" wire:ignore>
-                            <option disabled value="" selected>Product Tag/Product Group</option>
-                            @foreach ($allTags as $tag)
-                                <option {{ $tag == $product_tag ? 'selected' : '' }} value="{{ $tag }}">
-                                    {{ $tag }}</option>
-                            @endforeach
-                        </select>
-                        <label for="tagInput">Product Tag/Product Group</label>
-                        {{-- <label for="tagInput">Product Tag/Product Group</label>
-                        @error('product_tag')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror --}}
+                <div class="col-md-6">
+                    <div x-data="{ showModal: false, newTag: '' }" x-init="$watch('showModal', value => { if (!value) newTag = '' })">
+
+                        <div class="form-floating my-2">
+                            <select class="form-control select2" id="tagInput" wire:model="product_tag"
+                                @change="if ($event.target.value === 'create_new_tag') showModal = true">
+                                <option disabled value="" selected>Product Tag/Product Group</option>
+                                <option value="create_new_tag">+ Create new tag</option>
+
+                                @foreach ($allTags as $tag)
+                                    <option @if($product_tag == $tag) selected @endif value="{{ $tag }}">{{ $tag }}</option>
+                                @endforeach
+                            </select>
+                            <label for="tagInput">Product Tag/Product Group</label>
+                        </div>
+
+                        <!-- Modal -->
+                        <div x-show="showModal"
+                            style="display: none">
+                            <div class="d-flex mb-3">
+                                <input type="text" class="form-control" placeholder="Enter new tag" x-model="newTag">
+                                <button type="button" class="btn btn-secondary mx-1" @click="showModal = false">Cancel</button>
+                                <button 
+                                    type="button"
+                                    class="btn btn-primary" 
+                                    @click="
+                                        $wire.addNewTag(newTag)
+                                        showModal = false
+                                    "
+                                    :disabled="!newTag.trim()"
+                                >Save</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-md-6 d-flex align-items-center justify-content-center">

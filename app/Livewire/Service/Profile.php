@@ -204,6 +204,7 @@ class Profile extends Component
         }
 
         $this->isEdit = true;
+        $this->openSlider();
     }
 
     public function messages()
@@ -281,6 +282,21 @@ class Profile extends Component
     public function removeImage($image)
     {
         $this->service_images[$image] = null;
+    }
+
+    public function addNewTag(string $tag)
+    {
+        $tag = trim($tag);
+
+        if ($tag === '' || in_array($tag, $this->allTags)) {
+            return;
+        }
+
+        // Optionally persist to DB here...
+        $this->allTags[] = $tag;
+
+        // Set as selected
+        $this->service_tag = $tag;
     }
 
     public function render()

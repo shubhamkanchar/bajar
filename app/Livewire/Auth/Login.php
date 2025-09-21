@@ -153,6 +153,7 @@ class Login extends Component
     public function loginSucess($user)
     {
         Auth::login($user,$this->remember);
+        session()->regenerate();
         if($user->role == 'superadmin' || $user->role == 'admin'){
             return redirect()->route('admin.dashboard');
         }else if ($user->onboard_completed) {

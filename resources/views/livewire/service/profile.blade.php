@@ -467,38 +467,38 @@
             // sliderForm.classList.remove("open");
         });
 
-        function initTagInput() {
-            const $tagInput = $('#tagInput');
+        // function initTagInput() {
+        //     const $tagInput = $('#tagInput');
 
-            // Prevent reinitialization if already applied
-            if ($tagInput.hasClass('select2-hidden-accessible')) {
-                $tagInput.select2('destroy');
-            }
+        //     // Prevent reinitialization if already applied
+        //     if ($tagInput.hasClass('select2-hidden-accessible')) {
+        //         $tagInput.select2('destroy');
+        //     }
 
-            $tagInput.select2({
-                tags: true,
-                placeholder: 'Select or type tags',
-                width: '100%',
-                allowClear: true
-            });
-        }
+        //     $tagInput.select2({
+        //         tags: true,
+        //         placeholder: 'Select or type tags',
+        //         width: '100%',
+        //         allowClear: true
+        //     });
+        // }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initTagInput();
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     initTagInput();
 
-            // Livewire v3 hook to reinitialize after DOM updates
-            window.Livewire.hook('commit', ({ succeed }) => {
-                succeed(() => {
-                    setTimeout(() => {
-                        initTagInput();
-                    }, 0);
-                });
-            });
-        });
+        //     // Livewire v3 hook to reinitialize after DOM updates
+        //     window.Livewire.hook('commit', ({ succeed }) => {
+        //         succeed(() => {
+        //             setTimeout(() => {
+        //                 initTagInput();
+        //             }, 0);
+        //         });
+        //     });
+        // });
 
-        $('#tagInput').on('change', function() {
-            @this.set('service_tag', $(this).val());
-        });
+        // $('#tagInput').on('change', function() {
+        //     @this.set('service_tag', $(this).val());
+        // });
 
         function copyCurrentUrl() {
             const url = $('#businessLink').val();

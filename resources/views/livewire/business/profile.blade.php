@@ -431,7 +431,7 @@
                 backgroundColor: event.detail[0].type === 'success' ? "green" : "black",
             }).showToast();
 
-            window.location.reload();
+            // window.location.reload();
         });
 
         document.addEventListener('productDeleted', event => {
@@ -446,38 +446,38 @@
             // sliderForm.classList.remove("open");
         });
 
-        function initTagInput() {
-            const $tagInput = $('#tagInput');
+        // function initTagInput() {
+        //     const $tagInput = $('#tagInput');
 
-            // Prevent reinitialization if already applied
-            if ($tagInput.hasClass('select2-hidden-accessible')) {
-                $tagInput.select2('destroy');
-            }
+        //     // Prevent reinitialization if already applied
+        //     if ($tagInput.hasClass('select2-hidden-accessible')) {
+        //         $tagInput.select2('destroy');
+        //     }
 
-            $tagInput.select2({
-                tags: true,
-                placeholder: 'Select or type tags',
-                width: '100%',
-                allowClear: true
-            });
-        }
+        //     $tagInput.select2({
+        //         tags: true,
+        //         placeholder: 'Select or type tags',
+        //         width: '100%',
+        //         allowClear: true
+        //     });
+        // }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initTagInput();
+            // initTagInput();
 
             // Livewire v3 hook to reinitialize after DOM updates
-            window.Livewire.hook('commit', ({ succeed }) => {
-                succeed(() => {
-                    setTimeout(() => {
-                        initTagInput();
-                    }, 0);
-                });
-            });
+            // window.Livewire.hook('commit', ({ succeed }) => {
+            //     succeed(() => {
+            //         setTimeout(() => {
+            //             initTagInput();
+            //         }, 0);
+            //     });
+            // });
         });
 
-        $('#tagInput').on('change', function() {
-            @this.set('product_tag', $(this).val());
-        });
+        // $('#tagInput').on('change', function() {
+        //     @this.set('product_tag', $(this).val());
+        // });
 
         function copyCurrentUrl() {
             const url = $('#businessLink').val();
@@ -500,5 +500,16 @@
                 document.body.removeChild(textarea);
             }
         }
+        document.addEventListener('click', function(event) {
+            let target = event.target.closest('.editProduct');
+            if (target) {
+                event.stopPropagation();
+                let serviceId = target.getAttribute('data-id');
+
+                @this.call('editProduct', serviceId).then(function() {
+                    // sliderForm.classList.toggle("open");
+                });
+            }
+        });
     </script>
 @endpush
