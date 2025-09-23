@@ -13,6 +13,7 @@ class Signup extends Component
     public  $email, $phone, $tab = 'phone', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
     public $seconds,$otp;
+    public $remember = true;
 
     public function tick()
     {
@@ -127,7 +128,7 @@ class Signup extends Component
         }
 
         if($success){
-            Auth::login($user);
+            Auth::login($user,$this->remember);
             session()->regenerate();
             if($user->role == 'superadmin' || $user->role == 'admin'){
                 return redirect()->route('admin.dashboard');
