@@ -105,7 +105,6 @@
                 border-bottom: none !important;
             }
         }
-
         .text-description {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -144,7 +143,6 @@
         <main class="content">
             @yield('content')
         </main>
-
         @include('layouts.partials.footer')
     </div>
     @livewireScripts
@@ -170,7 +168,6 @@
                 },
             }).mount(window.splide.Extensions);
         }
-        console.log(window.livewire);
     </script>
 </body>
 

@@ -19,7 +19,6 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
     @stack('style')
-    @yield('style')
     <style>
         .email-toggle-btn {
             padding-right: 33px;
