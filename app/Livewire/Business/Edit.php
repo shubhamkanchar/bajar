@@ -275,9 +275,9 @@ class Edit extends Component
                 'message' => 'User deleted successfully',
             ]);
             if($this->offering == 'product'){
-                return redirect()->route('admin.dashboard',['tab'=>'product-sellers']);
+                $this->redirectRoute('admin.dashboard',['tab'=>'product-sellers']);
             }else{
-                return redirect()->route('admin.dashboard',['tab'=>'service-providers']);
+                $this->redirectRoute('admin.dashboard',['tab'=>'service-providers']);
             }
         }else{
             $this->dispatch('notify', [

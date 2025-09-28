@@ -34,7 +34,7 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('', Welcome::class)->name('home');
+Route::get('/', Welcome::class)->name('home');
 Route::get('/login', Login::class)->name('login');
 Route::get('/signup', Signup::class)->name('signup');
 Route::get('/blog',Blog::class)->name('blogs');
