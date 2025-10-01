@@ -57,3 +57,7 @@ Route::get('/profile/{uuid}', ViewBusinessProfile::class)->name('view-shop');
 Route::middleware(['auth','admin'])->group(function () {
     Route::get('/admin/dashboard/{tab?}', Dashboard::class)->name('admin.dashboard');
 });
+
+Route::get('/refresh-csrf', function () {
+    return response()->json(['token' => csrf_token()]);
+})->name('refresh-csrf');
