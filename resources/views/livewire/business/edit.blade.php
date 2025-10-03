@@ -153,6 +153,7 @@
             </div>
             <hr>
             <form>
+                @csrf
                 <div class="alert bg-custom-secondary fw-bold" role="alert">
                     Business Details
                 </div>

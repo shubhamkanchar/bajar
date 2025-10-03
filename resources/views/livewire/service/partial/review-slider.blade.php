@@ -12,6 +12,7 @@
         </div>
 
         <form>
+            @csrf
             <div class="row">
                 <div class="col-12 border p-0">
                     <div class="row">

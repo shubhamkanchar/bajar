@@ -27,7 +27,8 @@
             </div>
         </div>
 
-        <form>
+        <form wire:submit.prevent="saveService">
+            @csrf
             <div class="row">
                 <div class="col-md-5 mb-3 position-relative">
                     @if ($service_images['service_image1'])

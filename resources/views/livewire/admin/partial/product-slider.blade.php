@@ -12,6 +12,7 @@
         </div>
         @if ($selectedProduct)
             <form>
+                @csrf
                 <div class="row">
                     <div class="col-md-5 mb-3 position-relative">
                         <div class="dashed-border ratio ratio-1x1">

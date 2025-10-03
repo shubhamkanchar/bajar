@@ -145,6 +145,7 @@
             </div>
             <hr>
             <form class="mb-5">
+                @csrf
                 <div class="alert bg-custom-secondary fw-bold" role="alert">
                     Personal Details
                 </div>

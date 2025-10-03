@@ -9,6 +9,7 @@
         </div>
 
         <form wire:submit.prevent="logout">
+            @csrf
             <button class="btn btn-dark">Log Out</button>
         </form>
     </div>
