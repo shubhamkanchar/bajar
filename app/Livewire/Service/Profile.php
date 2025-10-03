@@ -59,7 +59,7 @@ class Profile extends Component
 
     public function mount(){
         $this->user = Auth::user();
-        $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag');
+        $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag')->toArray();
 
         $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
         if($razorpaySubscriptionId){
