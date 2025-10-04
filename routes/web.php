@@ -59,5 +59,6 @@ Route::middleware(['auth','admin'])->group(function () {
 });
 
 Route::get('/refresh-csrf', function () {
+    session()->flush();
     return response()->json(['token' => csrf_token()]);
 })->name('refresh-csrf');
