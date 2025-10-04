@@ -161,7 +161,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6" wire:ignore>
+                <div class="col-md-6">
                     {{-- <div class="form-floating my-2">
                         <select class="form-control" id="tagInput" wire:model="service_tag">
                             <option disabled value="" selected>Service Tag/Service Group</option>
@@ -176,14 +176,14 @@
                         <div class="form-floating my-2">
                             <select class="form-control select2" id="tagInput" wire:model="service_tag"
                                 @change="if ($event.target.value === 'create_new_tag') showModal = true">
-                                <option disabled value="" selected>Product Tag/Product Group</option>
+                                <option disabled value="" selected>Servicw Tag/Service Group</option>
                                 <option value="create_new_tag">+ Create new tag</option>
 
                                 @foreach ($allTags as $tag)
                                     <option @if($service_tag == $tag) selected @endif value="{{ $tag }}">{{ $tag }}</option>
                                 @endforeach
                             </select>
-                            <label for="tagInput">Product Tag/Product Group</label>
+                            <label for="tagInput">Service Tag/Service Group</label>
                         </div>
 
                         <!-- Modal -->
