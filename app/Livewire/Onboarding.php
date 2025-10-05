@@ -37,14 +37,14 @@ class Onboarding extends Component
     {
         $user = Auth::user();
         // if ($user->role == 'superadmin' || $user->role == 'admin') {
-        //     $this->redirectRoute('admin.dashboard');
+        //     return redirect()->route('admin.dashboard');
         // }elseif ($user->onboard_completed) {
         //     if ($user->role == 'individual') {
-        //         $this->redirectRoute('user.profile');
+        //         return redirect()->route('user.profile');
         //     } else if ($user->offering == 'product') {
-        //         $this->redirectRoute('business.profile');
+        //         return redirect()->route('business.profile');
         //     } else if ($user->offering == 'service') {
-        //         $this->redirectRoute('service.profile');
+        //         return redirect()->route('service.profile');
         //     }
         // }
     }
@@ -174,11 +174,11 @@ class Onboarding extends Component
         $user->save();
 
         if ($user->role == 'individual') {
-            $this->redirectRoute('home');
+            return redirect()->route('home');
         } else if ($user->offering == 'product') {
-            $this->redirectRoute('business.profile');
+            return redirect()->route('business.profile');
         } else if ($user->offering == 'service') {
-            $this->redirectRoute('service.profile');
+            return redirect()->route('service.profile');
         }
     }
 

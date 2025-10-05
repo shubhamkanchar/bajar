@@ -13,7 +13,7 @@ class Signup extends Component
     public  $email, $phone, $tab = 'phone', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
     public $seconds,$otp;
-    public $remember = true;
+    public $remember = false;
 
     public function tick()
     {
@@ -131,19 +131,19 @@ class Signup extends Component
             Auth::login($user,$this->remember);
             // session()->regenerate();
             if($user->role == 'superadmin' || $user->role == 'admin'){
-                $this->redirectRoute('admin.dashboard');
+                return redirect()->route('admin.dashboard');
             }else if ($user->onboard_completed) {
                 if ($user->role == 'individual') {
-                    $this->redirectRoute('user.profile');
+                    return redirect()->route('user.profile');
                 } else if ($user->role == 'business') {
                     if($user->offering == 'product'){
-                        $this->redirectRoute('business.profile');
+                        return redirect()->route('business.profile');
                     }else{
-                        $this->redirectRoute('service.profile');
+                        return redirect()->route('service.profile');
                     }
                 }
             } else {
-                $this->redirectRoute('onboarding');
+                return redirect()->route('onboarding');
             }
         }
     }

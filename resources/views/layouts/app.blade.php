@@ -69,36 +69,41 @@
     @stack('scripts')
     @include('layouts.partials.notify')
     <script>
-        Livewire.hook("request", ({
-            fail
-        }) => {
-            fail(async ({
-                status,
-                preventDefault,
-                retry
-            }) => {
-                if (status === 419) {
-                    preventDefault();
+    Livewire.hook('request', ({ fail }) => {
+        fail(async ({ status, preventDefault, retry }) => {
+            if (status === 419) {
+                preventDefault(); // Prevent Livewire's default error handling
 
-                    const response = await fetch("/refresh-csrf", {
-                        method: "GET",
+                try {
+                    const response = await fetch('/refresh-csrf', {
                         headers: {
-                            "Accept": "application/json",
+                            'Accept': 'application/json',
                         },
-                        credentials: "same-origin",
+                        credentials: 'same-origin', // Required for session cookie
                     });
 
                     const data = await response.json();
-                    const token = data.token;
+                    const newToken = data.token;
 
-                    document.querySelector('meta[name="csrf-token"]').setAttribute("content", token);
+                    // Update CSRF token in <meta> tag
+                    const meta = document.querySelector('meta[name="csrf-token"]');
+                    if (meta) {
+                        meta.setAttribute('content', newToken);
+                    }
 
-                    Livewire.csrfToken = token;
-                    //retry();
+                    // Update Livewire's CSRF token
+                    Livewire.csrfToken = newToken;
+
+                    // Retry the failed Livewire request
+                    retry();
+                } catch (e) {
+                    console.error("Failed to refresh CSRF token", e);
                 }
-            });
+            }
         });
-    </script>
+    });
+</script>
+
 </body>
 
 </html>

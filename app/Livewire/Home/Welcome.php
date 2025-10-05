@@ -54,7 +54,7 @@ class Welcome extends Component
 
     public function viewBlog($slug)
     {
-        $this->redirectRoute('blog', ['slug' => $slug]);
+        return redirect()->route('blog', ['slug' => $slug]);
     }
 
     public function updatedSelectedCity()
