@@ -15,6 +15,12 @@ class Signup extends Component
     public $seconds,$otp;
     public $remember = false;
 
+    public function mount(){
+        if(Auth::user()){
+          $this->loginSucess(Auth::user()); 
+        }
+    }
+
     public function tick()
     {
         if ($this->seconds > 0) {
@@ -128,23 +134,28 @@ class Signup extends Component
         }
 
         if($success){
-            Auth::login($user,$this->remember);
-            // session()->regenerate();
-            if($user->role == 'superadmin' || $user->role == 'admin'){
-                return redirect()->route('admin.dashboard');
-            }else if ($user->onboard_completed) {
-                if ($user->role == 'individual') {
-                    return redirect()->route('user.profile');
-                } else if ($user->role == 'business') {
-                    if($user->offering == 'product'){
-                        return redirect()->route('business.profile');
-                    }else{
-                        return redirect()->route('service.profile');
-                    }
+           $this->loginSucess($user);
+        }
+    }
+
+    public function loginSucess($user)
+    {
+         Auth::login($user,$this->remember);
+        // session()->regenerate();
+        if($user->role == 'superadmin' || $user->role == 'admin'){
+            return redirect()->route('admin.dashboard');
+        }else if ($user->onboard_completed) {
+            if ($user->role == 'individual') {
+                return redirect()->route('user.profile');
+            } else if ($user->role == 'business') {
+                if($user->offering == 'product'){
+                    return redirect()->route('business.profile');
+                }else{
+                    return redirect()->route('service.profile');
                 }
-            } else {
-                return redirect()->route('onboarding');
             }
+        } else {
+            return redirect()->route('onboarding');
         }
     }
 

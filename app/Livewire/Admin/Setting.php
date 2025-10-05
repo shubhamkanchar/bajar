@@ -44,6 +44,10 @@ class Setting extends Component
                 $user->save();
             }
         }
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Admin data Updated Successfully'
+        ]);
         
     }
 

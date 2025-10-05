@@ -11,6 +11,7 @@ use App\Models\ProductSellerReview;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -65,8 +66,16 @@ class Profile extends Component
     #[Validate(rule: 'required', message: 'Please select product tag/group')]
     public $product_tag = '';
 
-    public function mount()
+    public function mount(Request $request)
     {
+        if(!Auth::user()){
+            Auth::logout();
+            session()->flush();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('login');  
+        }
+    
         $this->user = Auth::user();
         $this->allTags = Product::where('user_id',Auth::user()->id)->pluck('product_tag')->toArray();
 

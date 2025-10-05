@@ -13,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -42,6 +43,15 @@ class Edit extends Component
 
     public function mount(Request $request)
     {
+        if(!Auth::user()){
+            Auth::logout();
+            session()->flush();
+            
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('login');  
+        }
+
         $this->user = User::where('uuid', $request->uuid)->first();
         if ($this->user->email) {
             $this->email = $this->user->email;

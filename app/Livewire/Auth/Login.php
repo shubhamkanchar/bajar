@@ -21,6 +21,12 @@ class Login extends Component
     public $remember = false;
     public $seconds,$otp;
 
+    public function mount(){
+        if(Auth::user()){
+          $this->loginSucess(Auth::user()); 
+        }
+    }
+
     public function tick()
     {
         if ($this->seconds > 0) {

@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductSellerReview;
 use App\Models\State;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -44,8 +45,14 @@ class Welcome extends Component
         $this->selectedState = $value;  // Set property from JS
     }
 
-    public function mount()
+    public function mount(Request $request)
     {
+        if(!Auth::user()){
+            Auth::logout();
+            session()->flush();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
         $this->blogs = Blog::orderBy('updated_at', 'DESC')->limit(6)->get();
         $this->ads = Advertisement::all();
         $this->section = 'product';
