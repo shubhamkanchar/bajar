@@ -36,20 +36,20 @@
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Product Name" value="{{ $selectedProduct->name }}">
+                                placeholder="Product Name" value="{{ $selectedProduct->name }}" disabled>
                             <label for="name">Product Name</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-2 mt-2">
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Brand Name" value="{{ $selectedProduct->brand_name }}">
+                                placeholder="Brand Name" value="{{ $selectedProduct->brand_name }}" disabled>
                             <label for="name">Brand Name</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-2 mt-2">
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
                                 @foreach ($this->categories as $category)
                                     <option value="{{ $category->id }}" @selected($category->id == $selectedProduct->category_id)>
                                         {{ $category->title }}</option>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating my-2" wire:ignore>
-                            <input class="form-control" id="tagInput" value="{{$selectedProduct->product_tag}}">
+                            <input class="form-control" id="tagInput" value="{{$selectedProduct->product_tag}}" disabled>
                                 
                             <label for="tagInput">Tags</label>
                         </div>
@@ -68,12 +68,12 @@
                     <div class="col-md-6 d-flex align-items-center justify-content-center">
                         <div class="form-floating mb-2 mt-2 w-100">
                             <input type="text" name="name" class="form-control" id="price" placeholder="Price"
-                                value="{{ $selectedProduct->price }}">
+                                value="{{ $selectedProduct->price }}" disabled>
                             <label for="name">Price</label>
                         </div>
                         <span class="m-2">Per</span>
                         <div class="form-floating mb-2 mt-2 w-100">
-                            <input type="text" min="0" class="form-control" placeholder="Qty" id="floatingSelect"  value="{{ $selectedProduct->quantity }}">
+                            <input type="text" min="0" class="form-control" placeholder="Qty" id="floatingSelect"  value="{{ $selectedProduct->quantity }}" disabled>
                             <label for="floatingSelect">Qty</label>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5">{{ $selectedProduct->description}}</textarea>
+                        <textarea class="form-control mt-3 mb-3" placeholder="Product Description" line="5" disabled>{{ $selectedProduct->description}}</textarea>
                     </div>
                     <div class="row">
                         <div class="text-secondary-subtle">Added by <a>{{$selectedProduct->user->name}}</a></div>

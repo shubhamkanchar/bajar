@@ -176,7 +176,7 @@
                         <div class="form-floating my-2">
                             <select class="form-control select2" id="tagInput" wire:model="service_tag"
                                 @change="if ($event.target.value === 'create_new_tag') showModal = true">
-                                <option disabled value="" selected>Servicw Tag/Service Group</option>
+                                <option disabled value="" selected>Service Tag/Service Group</option>
                                 <option value="create_new_tag">+ Create new tag</option>
 
                                 @foreach ($allTags as $tag)

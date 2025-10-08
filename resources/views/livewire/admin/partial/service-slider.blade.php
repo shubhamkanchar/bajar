@@ -37,34 +37,30 @@
                 <div class="col-12">
                     <div class="form-floating mb-2 mt-2">
                         <input type="text" name="work_brief" class="form-control" id="workBrief"
-                            placeholder="Work Brief" value="{{$selectedProduct->work_brief}}">
+                            placeholder="Work Brief" value="{{$selectedProduct->work_brief}}" disabled>
                         <label for="name">Work Brief</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-2 mt-2">
-                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
                             @foreach ($this->categories as $category)
                                 <option value="{{ $category->id }}" @selected($category->id == $selectedProduct->category_id)>
                                     {{ $category->title }}</option>
                             @endforeach
                         </select>
-                        <label for="floatingSelect">Product Category</label>
+                        <label for="floatingSelect">Service Category</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-2 mt-2">
-                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                            @foreach ($this->categories as $category)
-                                <option value="{{ $category->id }}" @selected($category->id == $selectedProduct->product_tag_group_id)>
-                                    {{ $category->title }}</option>
-                            @endforeach
-                        </select>
-                        <label for="floatingSelect">Product Tag/Product Group</label>
+                        <input class="form-control" id="tagInput" value="{{$selectedProduct->service_tag}}" disabled>
+                                
+                        <label for="floatingSelect">Service Tag/Service Group</label>
                     </div>
                 </div>
                 <div class="col-12">
-                    <textarea class="form-control mt-3 mb-3" placeholder="Work Description" line="5">{{$selectedProduct->description}}</textarea>
+                    <textarea class="form-control mt-3 mb-3" placeholder="Work Description" line="5" disabled>{{$selectedProduct->description}}</textarea>
                 </div>
                 <div class="col-md-12 mt-4">
                     <div class="row">
