@@ -60,14 +60,6 @@ class Profile extends Component
 
     public function mount(Request $request){
 
-        if(!Auth::user()){
-            Auth::logout();
-            session()->flush();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect()->route('login');  
-        }
-
         $this->user = Auth::user();
         $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag')->toArray();
 

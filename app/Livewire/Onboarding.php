@@ -36,17 +36,17 @@ class Onboarding extends Component
     public function mount()
     {
         $user = Auth::user();
-        // if ($user->role == 'superadmin' || $user->role == 'admin') {
-        //     return redirect()->route('admin.dashboard');
-        // }elseif ($user->onboard_completed) {
-        //     if ($user->role == 'individual') {
-        //         return redirect()->route('user.profile');
-        //     } else if ($user->offering == 'product') {
-        //         return redirect()->route('business.profile');
-        //     } else if ($user->offering == 'service') {
-        //         return redirect()->route('service.profile');
-        //     }
-        // }
+        if ($user->role == 'superadmin' || $user->role == 'admin') {
+            return redirect()->route('admin.dashboard');
+        }elseif ($user->onboard_completed) {
+            if ($user->role == 'individual') {
+                return redirect()->route('user.profile');
+            } else if ($user->offering == 'product') {
+                return redirect()->route('business.profile');
+            } else if ($user->offering == 'service') {
+                return redirect()->route('service.profile');
+            }
+        }
     }
     // Define validation rules for step 2
     protected function rules()

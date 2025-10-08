@@ -13,7 +13,7 @@ class Signup extends Component
     public  $email, $phone, $tab = 'phone', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
     public $seconds,$otp;
-    public $remember = false;
+    public $remember = true;
 
     public function mount(){
         if(Auth::user()){
@@ -140,8 +140,7 @@ class Signup extends Component
 
     public function loginSucess($user)
     {
-         Auth::login($user,$this->remember);
-        // session()->regenerate();
+        Auth::login($user,$this->remember);
         if($user->role == 'superadmin' || $user->role == 'admin'){
             return redirect()->route('admin.dashboard');
         }else if ($user->onboard_completed) {

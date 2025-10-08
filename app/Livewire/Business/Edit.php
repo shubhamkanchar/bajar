@@ -43,14 +43,6 @@ class Edit extends Component
 
     public function mount(Request $request)
     {
-        if(!Auth::user()){
-            Auth::logout();
-            session()->flush();
-            
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect()->route('login');  
-        }
 
         $this->user = User::where('uuid', $request->uuid)->first();
         if ($this->user->email) {

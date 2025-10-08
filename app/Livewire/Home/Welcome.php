@@ -47,12 +47,6 @@ class Welcome extends Component
 
     public function mount(Request $request)
     {
-        if(!Auth::user()){
-            Auth::logout();
-            session()->flush();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
         $this->blogs = Blog::orderBy('updated_at', 'DESC')->limit(6)->get();
         $this->ads = Advertisement::all();
         $this->section = 'product';

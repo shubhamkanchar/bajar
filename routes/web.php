@@ -59,6 +59,5 @@ Route::middleware(['auth','admin'])->group(function () {
 });
 
 Route::get('/refresh-csrf', function () {
-    // Safely regenerate CSRF token without clearing the entire session
     return response()->json(['token' => csrf_token()]);
 })->name('refresh-csrf');

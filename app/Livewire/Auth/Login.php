@@ -18,7 +18,7 @@ class Login extends Component
 {
     public  $email, $phone = '', $tab = 'phone', $page = 'signin';
     public $one, $two, $three, $four, $five, $six;
-    public $remember = false;
+    public $remember = true;
     public $seconds,$otp;
 
     public function mount(){
@@ -159,7 +159,6 @@ class Login extends Component
     public function loginSucess($user)
     {
         Auth::login($user,$this->remember);
-        // session()->regenerate();
         if($user->role == 'superadmin' || $user->role == 'admin'){
             return redirect()->route('admin.dashboard');
         }else if ($user->onboard_completed) {
