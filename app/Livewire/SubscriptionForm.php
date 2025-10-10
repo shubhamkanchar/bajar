@@ -5,8 +5,10 @@ namespace App\Livewire;
 use Livewire\Component;
 use Razorpay\Api\Api;
 use App\Models\Subscription;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 
 class SubscriptionForm extends Component
@@ -35,8 +37,10 @@ class SubscriptionForm extends Component
             }
         }
     }
+
     public function createSubscription()
     {
+        try{
         $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
 
         $subscription = $api->subscription->create([
@@ -54,6 +58,9 @@ class SubscriptionForm extends Component
             'status' => 'created',
         ]);
         $this->dispatch('subscriptionReady', $this->subscriptionId);
+    }catch(Exception $e){
+        Log::info($e->getMessage());
+    }
     }
 
     public function getRazorpayPlanById()
@@ -61,6 +68,7 @@ class SubscriptionForm extends Component
         $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
         try {
             $plan = $api->plan->fetch($this->planId);
+            Log::info($plan->toArray());
             $this->planName = $plan->item->name;
             $this->amount = $plan->item->amount; // in paise
             $this->interval = $plan->period;

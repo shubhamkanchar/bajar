@@ -113,7 +113,7 @@
                     document.querySelector('meta[name="csrf-token"]').setAttribute("content", token);
 
                     Livewire.csrfToken = token;
-                    //retry();
+                    retry();
                 }
             });
         });

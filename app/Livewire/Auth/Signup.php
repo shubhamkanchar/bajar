@@ -3,21 +3,25 @@
 namespace App\Livewire\Auth;
 
 use App\Helpers\GlobalHelper;
+use App\Mail\OtpMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Signup extends Component
 {
-    public  $email, $phone, $tab = 'phone', $page = 'signup';
+    public $email, $phone, $tab = 'phone', $page = 'signup';
     public $one, $two, $three, $four, $five, $six;
-    public $seconds,$otp;
+    public $seconds, $otp;
     public $remember = true;
 
-    public function mount(){
-        if(Auth::user()){
-          $this->loginSucess(Auth::user()); 
+    public function mount()
+    {
+        // Check if already authenticated
+        if (Auth::check()) {
+            $this->loginSuccess(Auth::user());
         }
     }
 
@@ -44,40 +48,41 @@ class Signup extends Component
 
         if ($this->tab == 'email') {
             $this->otp = GlobalHelper::generateOtp();
-            $user = User::firstOrNew([
-                'email' => $this->email
-            ]);
+            $user = User::firstOrNew(['email' => $this->email]);
             $user->email = $this->email;
             $user->email_otp = $this->otp;
             $user->save();
+            
+            // Send OTP via email
+            Mail::to($user->email)->send(new OtpMail($this->otp, $user));
         } else {
             $this->otp = GlobalHelper::generateOtp();
-            $user = User::firstOrNew([
-                'phone' => $this->phone
-            ]);
+            $user = User::firstOrNew(['phone' => $this->phone]);
             $user->phone = $this->phone;
             $user->phone_otp = $this->otp;
             $user->save();
+            
+            // Send OTP via SMS
             GlobalHelper::sendOtp($user->phone, $this->otp);
         }
+        
         $this->page = 'otp';
         $this->seconds = 120;
     }
 
-    public function resendOtp(){
+    public function resendOtp()
+    {
         $this->otp = GlobalHelper::generateOtp();
-        $user = User::where([
-            'phone' => $this->phone
-        ])->first();
+        $user = User::where('phone', $this->phone)->first();
+        
         if ($user) {
-            $user->phone = $this->phone;
             $user->phone_otp = $this->otp;
             $user->save();
             GlobalHelper::sendOtp($user->phone, $this->otp);
             $this->seconds = 120;
             $this->dispatch('notify', [
                 'type' => 'success',
-                'message' => 'OTP send successfully'
+                'message' => 'OTP sent successfully'
             ]);
         }
     }
@@ -92,22 +97,25 @@ class Signup extends Component
             'five' => 'required',
             'six' => 'required',
         ], [
-            'one' => 'OTP is required',
-            'two' => 'OTP is required',
-            'three' => 'OTP is required',
-            'four' => 'OTP is required',
-            'five' => 'OTP is required',
-            'six' => 'OTP is required',
+            'one.required' => 'OTP is required',
+            'two.required' => 'OTP is required',
+            'three.required' => 'OTP is required',
+            'four.required' => 'OTP is required',
+            'five.required' => 'OTP is required',
+            'six.required' => 'OTP is required',
         ]);
 
-        $this->otp = $this->one.$this->two.$this->three.$this->four.$this->five.$this->six;
+        $this->otp = $this->one . $this->two . $this->three . $this->four . $this->five . $this->six;
         $success = false;
+        $user = null;
+
         if ($this->tab == 'email') {
             $user = User::where([
                 'email' => $this->email,
                 'email_otp' => $this->otp
             ])->first();
-            if($user){
+            
+            if ($user) {
                 $user->update([
                     'email_verified_at' => Carbon::now(),
                     'email_otp' => NULL
@@ -119,43 +127,66 @@ class Signup extends Component
                 'phone' => $this->phone,
                 'phone_otp' => $this->otp
             ])->first();
-            if($user){
+            
+            if ($user) {
                 $user->update([
                     'phone_verified_at' => Carbon::now(),
                     'phone_otp' => NULL
                 ]);
                 $success = true;
-            }else{
+            } else {
                 $this->dispatch('notify', [
                     'type' => 'error',
-                    'message' => 'Inavlid OTP. Please retry again!'
+                    'message' => 'Invalid OTP. Please retry again!'
                 ]);
             }
         }
 
-        if($success){
-           $this->loginSucess($user);
+        if ($success && $user) {
+            $this->loginSuccess($user);
         }
     }
 
-    public function loginSucess($user)
+    /**
+     * CRITICAL FIX: Properly handle login with session regeneration
+     */
+    public function loginSuccess($user)
     {
-        Auth::login($user,$this->remember);
-        if($user->role == 'superadmin' || $user->role == 'admin'){
-            return redirect()->route('admin.dashboard');
-        }else if ($user->onboard_completed) {
-            if ($user->role == 'individual') {
-                return redirect()->route('user.profile');
-            } else if ($user->role == 'business') {
-                if($user->offering == 'product'){
-                    return redirect()->route('business.profile');
-                }else{
-                    return redirect()->route('service.profile');
-                }
-            }
-        } else {
-            return redirect()->route('onboarding');
+        // Login the user
+        Auth::login($user, $this->remember);
+        
+        // CRITICAL: Regenerate session to prevent session fixation
+        request()->session()->regenerate();
+        
+        // Determine redirect route
+        $redirectRoute = $this->getRedirectRoute($user);
+        
+        return redirect()->route($redirectRoute);
+    }
+
+    /**
+     * Get the appropriate redirect route based on user role
+     */
+    private function getRedirectRoute($user): string
+    {
+        // Admin users
+        if (in_array($user->role, ['superadmin', 'admin'])) {
+            return 'admin.dashboard';
         }
+        
+        // Users who haven't completed onboarding
+        if (!$user->onboard_completed) {
+            return 'onboarding';
+        }
+        
+        // Regular users based on role
+        return match($user->role) {
+            'individual' => 'user.profile',
+            'business' => $user->offering === 'product' 
+                ? 'business.profile' 
+                : 'service.profile',
+            default => 'onboarding'
+        };
     }
 
     public function tabChange($value)

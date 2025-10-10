@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -41,9 +42,15 @@ class Edit extends Component
     ];
     public $storeHours = [];
 
+    public function boot(){
+        if(!Auth::user()){
+            Auth::logout();
+            return redirect()->route('login');
+        }
+    }
+
     public function mount(Request $request)
     {
-
         $this->user = User::where('uuid', $request->uuid)->first();
         if ($this->user->email) {
             $this->email = $this->user->email;
@@ -83,24 +90,25 @@ class Edit extends Component
                 'close' => optional($existingHours->where('day', $day)->first())->close_time ?? ''
             ];
         }
-        try{
+        try {
             $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
-            if($razorpaySubscriptionId){
+
+            if ($razorpaySubscriptionId && str_starts_with($razorpaySubscriptionId, 'sub_')) {
                 $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
                 $subscription = $api->subscription->fetch($razorpaySubscriptionId);
-                if($subscription->start_at){
+
+                if (isset($subscription->current_start)) {
                     Subscription::where('razorpay_subscription_id', $razorpaySubscriptionId)
-                    ->update([
-                        'status' => $subscription->status,
-                        'start_at' => Carbon::createFromTimestamp($subscription->current_start),
-                        'end_at' => Carbon::createFromTimestamp($subscription->current_end),
-                    ]);
+                        ->update([
+                            'status' => $subscription->status,
+                            'start_at' => Carbon::createFromTimestamp($subscription->current_start),
+                            'end_at' => Carbon::createFromTimestamp($subscription->current_end),
+                        ]);
                 }
             }
-        }catch(Exception $e){
-
+        } catch (\Exception $e) {
+            Log::error('Razorpay error: ' . $e->getMessage());
         }
-
     }
 
     public function setOffering($offering)
