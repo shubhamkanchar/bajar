@@ -48,7 +48,7 @@
                             <div class="h3 fw-bold">Trending blog post ideas</div>
                             <div class="row mt-5 text-start justify-content-center">
                                 @foreach ($trendingBlogs as $data)
-                                    <div class="col-md-3 col-lg-2 col-6" wire:click="viewBlog('{{ $data->slug }}')">
+                                    <div class="col-md-3 col-lg-2 col-6 my-2" wire:click="viewBlog('{{ $data->slug }}')">
                                         <div class="border rounded position-relative rounded-3">
                                             <div class="ratio ratio-16x9">
                                                 <img src="{{ asset('storage/' . $data->blog_image) }}"
