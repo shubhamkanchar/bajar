@@ -46,10 +46,6 @@ class Welcome extends Component
     public function boot(){
         $this->blogs = Blog::orderBy('updated_at', 'DESC')->limit(6)->get();
         $this->ads = Advertisement::all();
-        
-        if(!Auth::check()){
-            Auth::logout();
-        }
     }
 
     public function mount(Request $request)

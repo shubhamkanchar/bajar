@@ -36,11 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/service-profile', [ProfileController::class, 'serviceProfile'])->name('service.profile');
     Route::get('/user-profile', [ProfileController::class, 'userProfile'])->name('user.profile');
     Route::get('/user-edit/{uuid}', [ProfileController::class, 'userEdit'])->name('user.edit');
-    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-    
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');   
 });
-Route::get('/profile/{uuid}', [ProfileController::class, 'viewBusiness'])->name('view-shop');
 
+Route::get('/profile/{uuid}', [ProfileController::class, 'viewBusiness'])->name('view-shop');
 Route::middleware(['auth','admin'])->group(function () {
     Route::get('/admin/dashboard/{tab?}', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
