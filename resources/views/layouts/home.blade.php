@@ -10,10 +10,15 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css" integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css"
+        integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
+        integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     @stack('style')
@@ -105,6 +110,7 @@
                 border-bottom: none !important;
             }
         }
+
         .text-description {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -129,12 +135,88 @@
             display: block;
             border-radius: 15px;
         }
-        .img-fluid{
+
+        .img-fluid {
             max-width: 100% !important;
             max-height: 100% !important
         }
+
+        .form-control:focus {
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+            border-color: rgb(0, 0, 0);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(255, 255, 255);
+        }
+
+        .form-select:focus {
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+            border-color: rgb(0, 0, 0);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(255, 255, 255);
+        }
+
+        .category-image {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 5px
+        }
+
+        @media (min-width: 768px) {
+            .category-image {
+                aspect-ratio: 16/9;
+                object-fit: cover;
+                border-radius: 5px
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .category-image {
+                aspect-ratio: 16/9;
+                object-fit: cover;
+                border-radius: 10px
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .w-sp {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .w-sp {
+                width: 100%;
+            }
+        }
+
+        .ratio-21x9 {
+            --bs-aspect-ratio: 28.857143%;
+        }
+
+        .text-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .text-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .splide__list {
+            align-items: center !important
+        }
     </style>
     @livewireStyles
+    @stack('style')
 </head>
 
 <body>
@@ -148,7 +230,9 @@
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"
         integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js" integrity="sha256-A+2opyqhvbBV8tbd9mIM8w9zvvMYHOawY03BQRtq7Kw=" crossorigin="anonymous"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js"
+        integrity="sha256-A+2opyqhvbBV8tbd9mIM8w9zvvMYHOawY03BQRtq7Kw=" crossorigin="anonymous"></script>
     @stack('scripts')
     @include('layouts.partials.notify')
     <script>
@@ -201,5 +285,4 @@
         });
     </script>
 </body>
-
 </html>
