@@ -287,7 +287,7 @@
                     <a href="{{ route('blogs') }}" class="btn btn-dark rounded-5 m-4">Read more</a>
                     <div class="row mt-5 text-start justify-content-center">
                         @foreach ($blogs as $data)
-                            <div class="col-md-3 col-lg-2 col-6 mt-2" wire:click="viewBlog('{{ $data->slug }}')">
+                            <div class="col-md-3 col-lg-2 col-6 my-2" wire:click="viewBlog('{{ $data->slug }}')">
                                 <div class="border rounded position-relative rounded-3">
                                     <div class="ratio ratio-16x9">
                                         <img src="{{ asset('storage/' . $data->blog_image) }}"
@@ -428,7 +428,7 @@
             overflow: hidden;
         }
         .splide__list{
-            align-items: center
+            align-items: center !important
         }
     </style>
 @endpush
