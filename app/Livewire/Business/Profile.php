@@ -383,6 +383,6 @@ class Profile extends Component
     {
         return view(
             'livewire.business.profile',
-        )->extends('layouts.profile-layout');
+        );
     }
 }

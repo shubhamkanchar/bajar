@@ -250,6 +250,6 @@ class Onboarding extends Component
         }
         $productCategories = Category::where('type', 'product')->get();
         $serviceCategories = Category::where('type', 'service')->get();
-        return view('livewire.onboarding', compact('productCategories', 'serviceCategories'))->extends('layouts.app');
+        return view('livewire.onboarding', compact('productCategories', 'serviceCategories'));
     }
 }

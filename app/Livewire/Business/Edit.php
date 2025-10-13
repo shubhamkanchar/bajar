@@ -384,6 +384,6 @@ class Edit extends Component
         $serviceCategories = Category::where('type', 'service')->get();
         $this->emailVerifiedAt = $this->user->email_verified_at;
         $this->phoneVerifiedAt = $this->user->phone_verified_at;
-        return view('livewire.business.edit', compact('productCategories', 'serviceCategories'))->extends('layouts.profile-layout');
+        return view('livewire.business.edit', compact('productCategories', 'serviceCategories'));
     }
 }

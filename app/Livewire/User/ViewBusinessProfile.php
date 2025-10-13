@@ -297,6 +297,6 @@ class ViewBusinessProfile extends Component
 
     public function render()
     {
-        return view('livewire.user.view-business-profile')->extends('layouts.profile-layout');
+        return view('livewire.user.view-business-profile');
     }
 }

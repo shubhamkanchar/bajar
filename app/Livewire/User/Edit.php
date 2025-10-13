@@ -214,6 +214,6 @@ class Edit extends Component
     {
         $this->emailVerifiedAt = $this->user->email_verified_at;
         $this->phoneVerifiedAt = $this->user->phone_verified_at;
-        return view('livewire.user.edit')->extends('layouts.profile-layout');
+        return view('livewire.user.edit');
     }
 }

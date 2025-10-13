@@ -46,7 +46,7 @@ class Welcome extends Component
     public function boot(){
         $this->blogs = Blog::orderBy('updated_at', 'DESC')->limit(6)->get();
         $this->ads = Advertisement::all();
-        $this->data = Category::where('type', $this->section)->get();
+        
         if(!Auth::check()){
             Auth::logout();
         }
@@ -55,6 +55,7 @@ class Welcome extends Component
     public function mount(Request $request)
     {
         $this->section = 'product';
+        $this->data = Category::where('type', $this->section)->get();
     }
 
     public function viewBlog($slug)
@@ -195,6 +196,6 @@ class Welcome extends Component
 
     public function render()
     {
-        return view('livewire.home.welcome')->extends('layouts.home');
+        return view('livewire.home.welcome');
     }
 }

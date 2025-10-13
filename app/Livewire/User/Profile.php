@@ -13,7 +13,7 @@ class Profile extends Component
     public $tab = "product";
     public function render()
     {
-        return view('livewire.user.profile')->extends('layouts.profile-layout');
+        return view('livewire.user.profile');
     }
 
     public function removeFromWishlist($id)
