@@ -70,7 +70,7 @@ class Profile extends Component
     {
     
         $this->user = Auth::user();
-        $this->allTags = Product::where('user_id',Auth::user()->id)->pluck('product_tag')->toArray();
+        $this->allTags = Product::where('user_id',$this->user->id)->pluck('product_tag')->toArray();
 
         $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
         if($razorpaySubscriptionId){
@@ -113,7 +113,7 @@ class Profile extends Component
     public function bussinessTime()
     {
         $time = BusinessTime::where([
-            'user_id' => Auth::user()->id,
+            'user_id' => $this->user->id,
             'day' => date("l")
         ])->first();
         if ($time && $time['open_time'] && $time['close_time']) {
@@ -172,41 +172,30 @@ class Profile extends Component
     #[Computed]
     public function allProducts()
     {
-        if ($this->selectedCategory == 'all') {
-            // return Product::select('*',DB::raw('category.title:product_tag'))->with(['images', 'category'])->where('user_id', auth()->id())->get()->groupBy('category.title');
-            return Product::select(
-                'products.*',
-                DB::raw("CONCAT(categories.title, ' : ', products.product_tag) as category_tag")
-            )
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->where('products.user_id', auth()->id())
-            ->with(['images']) // you can still eager load other relations like images
-            ->get()
-            ->groupBy('category_tag');
+        $query = Product::with(['images', 'category'])
+            ->where('user_id', $this->user->id);
+
+        if ($this->selectedCategory !== 'all') {
+            $query->where('category_id', $this->selectedCategory);
         }
-        // return Product::with(['images', 'category'])->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
-        return Product::with(['images', 'category'])
-            ->where([
-                'user_id' => auth()->id(),
-                'category_id' => $this->selectedCategory,
-            ])
-            ->get()
-            ->groupBy(function ($product) {
-                return $product->category?->title . ' : ' . $product->product_tag;
-            });
+
+        return $query->get()->groupBy(function ($product) {
+            return optional($product->category)->title . ' : ' . $product->product_tag;
+        });
     }
+
 
     #[Computed]
     public function categories()
     {
-        $businessCategories = BusinessCategory::where('user_id', Auth::user()->id)->pluck('category_id');
+        $businessCategories = BusinessCategory::where('user_id', $this->user->id)->pluck('category_id');
         return Category::where('type', 'product')->whereIn('id', $businessCategories)->get();
     }
 
     #[Computed]
     public function businessCategories()
     {
-        $ids = Product::where('user_id', auth()->id())->pluck('category_id');
+        $ids = Product::where('user_id', $this->user->id)->pluck('category_id');
         return Category::where('type', 'product')->whereIn('id', $ids)->get();
     }
 
@@ -264,7 +253,7 @@ class Profile extends Component
         $product->product_tag = $this->product_tag;
         $product->price = $this->price;
         $product->quantity = $this->quantity;
-        $product->user_id = auth()->id();
+        $product->user_id = $this->user->id;
         $product->business_id = 1;
         $product->is_approved = 0;
         $product->save();

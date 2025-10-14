@@ -292,7 +292,7 @@ class ViewBusinessProfile extends Component
             ?->wishlist()
             ->where('wishable_type', $type)
             ->pluck('wishable_id')
-            ->toArray();
+            ->toArray() ?? [];
     }
 
     public function render()

@@ -99,7 +99,9 @@ class Welcome extends Component
                 ->whereNotIn('role', ['superadmin', 'admin'])
                 ->where('offering', $this->section)
                 ->addSelect([
-                    'total_score' => ProductSellerReview::selectRaw('COUNT(communication_and_professionalism)')
+                    'total_score' => ProductSellerReview::selectRaw('
+                                COALESCE(SUM(communication_and_professionalism + quality_or_service + recommendation), 0)
+                            ')
                         ->whereColumn('seller_id', 'users.id')
                 ])
                 ->orderByDesc('total_score')
@@ -108,18 +110,20 @@ class Welcome extends Component
         } elseif ($this->selectedCity) {
             $this->searchStarted = true;
             $this->sellers = User::with(['address', 'categories', 'ratings'])
-                ->whereHas('address', function ($query) {
-                    $query->where('addresses.city', $this->selectedCity);
-                })
-                ->whereHas('activeSubscription')
-                ->whereNotIn('role', ['superadmin', 'admin'])
-                ->where('offering', $this->section)
-                ->addSelect([
-                    'total_score' => ProductSellerReview::selectRaw('COUNT(communication_and_professionalism)')
-                        ->whereColumn('seller_id', 'users.id')
-                ])
-                ->orderByDesc('total_score')
-                ->get();
+                        ->whereHas('address', function ($query) {
+                            $query->where('addresses.city', $this->selectedCity);
+                        })
+                        ->whereHas('activeSubscription')
+                        ->whereNotIn('role', ['superadmin', 'admin'])
+                        ->where('offering', $this->section)
+                        ->addSelect([
+                            'total_score' => ProductSellerReview::selectRaw('
+                                COALESCE(SUM(communication_and_professionalism + quality_or_service + recommendation), 0)
+                            ')
+                            ->whereColumn('seller_id', 'users.id')
+                        ])
+                        ->orderByDesc('total_score')
+                        ->get();
         } else {
             $text = $this->section == 'product' ? 'product sellers' : 'service providers';
             $this->dispatch('notify', [

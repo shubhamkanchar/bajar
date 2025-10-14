@@ -61,7 +61,7 @@ class Profile extends Component
     public function mount(Request $request){
 
         $this->user = Auth::user();
-        $this->allTags = Service::where('user_id',Auth::user()->id)->pluck('service_tag')->toArray();
+        $this->allTags = Service::where('user_id',$this->user->id)->pluck('service_tag')->toArray();
 
         $razorpaySubscriptionId = $this->user->latestSubscription?->razorpay_subscription_id;
         if($razorpaySubscriptionId){
@@ -90,32 +90,23 @@ class Profile extends Component
     #[Computed]
     public function allServices()
     {
-        if ($this->selectedCategory == 'all') {
-            // return Service::with('images')->where('user_id', auth()->id())->get()->groupBy('category.title');
-           return Service::with(['images', 'category'])
-                ->where('user_id', auth()->id())
-                ->get()
-                ->groupBy(function ($service) {
-                    return $service->category?->title . ' : ' . $service->service_tag;
-                });
+        $query = Service::with(['images', 'category'])
+            ->where('user_id', $this->user->id);
+
+        if ($this->selectedCategory !== 'all') {
+            $query->where('category_id', $this->selectedCategory);
         }
-        // return Service::with('images')->where(['user_id' => auth()->id(), 'category_id' => $this->selectedCategory])->get()->groupBy('category.title');
-        return Service::with(['images', 'category']) // eager-load relationships
-                ->where([
-                    'user_id' => auth()->id(),
-                    'category_id' => $this->selectedCategory,
-                ])
-                ->get()
-                ->groupBy(function ($service) {
-                    return $service->category?->title . ' : ' . $service->service_tag;
-                });
+
+        return $query->get()->groupBy(function ($service) {
+            return optional($service->category)->title . ' : ' . $service->service_tag;
+        });
     }
 
     #[Computed]
     public function bussinessTime()
     {
         $time = BusinessTime::where([
-            'user_id' => Auth::user()->id,
+            'user_id' => $this->user->id,
             'day' => date("l")
         ])->first();
         if($time && $time['open_time'] && $time['close_time']) {
@@ -127,7 +118,7 @@ class Profile extends Component
     #[Computed]
     public function categories()
     {
-        $businessCategories = BusinessCategory::where('user_id',Auth::user()->id)->pluck('category_id');
+        $businessCategories = BusinessCategory::where('user_id',$this->user->id)->pluck('category_id');
         return Category::where('type', 'service')->whereIn('id',$businessCategories)->get();
     }
 
@@ -145,7 +136,7 @@ class Profile extends Component
 
     #[Computed]
     public function businessCategories() {
-        $ids = Service::where('user_id', auth()->id())->pluck('category_id');
+        $ids = Service::where('user_id', $this->user->id)->pluck('category_id');
         return Category::where('type', 'service')->whereIn('id', $ids)->get();
     }
 
@@ -239,7 +230,7 @@ class Profile extends Component
         $service->category_id = $this->category;
         $service->description = $this->description;
         $service->service_tag = $this->service_tag;
-        $service->user_id = auth()->id();
+        $service->user_id = $this->user->id;
         $service->is_approved = 0;
         $service->save();
 

@@ -337,9 +337,9 @@
                                         </div>
 
                                         @php
-                                            $inWishlist = in_array($service->id, $this->wishlistIds);
+                                            $inWishlist = in_array($service->id, $this->wishlistIds );
                                         @endphp
-                                        @if (auth()->user()->role == 'individual')
+                                        @if ((auth()->user()->role ?? '') == 'individual')
                                             <a class="position-absolute top-0 end-0 m-2 bg-white bg-opacity-75 rounded-pill d-flex align-items-center justify-content-center shadow"
                                                 style="width: 40px; height: 40px; z-index: 1; text-decoration: none;"
                                                 wire:click.prevent="toggleWishlist({{ $service->id }})">

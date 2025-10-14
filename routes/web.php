@@ -28,6 +28,7 @@ Route::get('/signup', [ControllersAuthController::class, 'signup'])->name('signu
 Route::get('/blog', [HomeController::class, 'blog'])->name('blogs');
 Route::get('/blogs/{slug}', [HomeController::class, 'blogShow'])->name('blog');
 Route::get('page/{slug}', [HomeController::class, 'page'])->name('page');
+Route::get('/profile/{uuid}', [ProfileController::class, 'viewBusiness'])->name('view-shop');
 
 Route::middleware('auth')->group(function () {
     Route::get('/on-boarding', [OnboardingController::class, 'index'])->name('onboarding');
@@ -39,7 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');   
 });
 
-Route::get('/profile/{uuid}', [ProfileController::class, 'viewBusiness'])->name('view-shop');
 Route::middleware(['auth','admin'])->group(function () {
     Route::get('/admin/dashboard/{tab?}', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
