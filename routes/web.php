@@ -29,6 +29,9 @@ Route::get('/blog', [HomeController::class, 'blog'])->name('blogs');
 Route::get('/blogs/{slug}', [HomeController::class, 'blogShow'])->name('blog');
 Route::get('page/{slug}', [HomeController::class, 'page'])->name('page');
 Route::get('/profile/{uuid}', [ProfileController::class, 'viewBusiness'])->name('view-shop');
+Route::post('/send-otp', [ControllersAuthController::class, 'sendOtp'])->name('send.otp');
+Route::post('/register', [ControllersAuthController::class, 'register'])->name('register');
+Route::post('/verify-otp', [ControllersAuthController::class, 'verifyOtp'])->name('verify.otp');
 
 Route::middleware('auth')->group(function () {
     Route::get('/on-boarding', [OnboardingController::class, 'index'])->name('onboarding');

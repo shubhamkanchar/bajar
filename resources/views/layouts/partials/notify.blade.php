@@ -3,7 +3,6 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     document.addEventListener('notify', event => {
-        console.log(event);
         Toastify({
             text: event.detail[0].message,
             duration: 3000,
