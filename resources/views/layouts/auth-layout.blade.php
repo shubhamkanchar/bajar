@@ -87,37 +87,5 @@
     @livewireScripts
     @stack('scripts')
     @include('layouts.partials.notify')
-    <script>
-        Livewire.hook("request", ({
-            fail
-        }) => {
-            fail(async ({
-                status,
-                preventDefault,
-                retry
-            }) => {
-                if (status === 419) {
-                    preventDefault();
-
-                    const response = await fetch("/refresh-csrf", {
-                        method: "GET",
-                        headers: {
-                            "Accept": "application/json",
-                        },
-                        credentials: "same-origin",
-                    });
-
-                    const data = await response.json();
-                    const token = data.token;
-
-                    document.querySelector('meta[name="csrf-token"]').setAttribute("content", token);
-
-                    Livewire.csrfToken = token;
-                    retry();
-                }
-            });
-        });
-    </script>
 </body>
-
 </html>
