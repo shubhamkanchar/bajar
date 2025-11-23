@@ -331,11 +331,12 @@
                 const response = await fetch(
                     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
                 const data = await response.json();
-                const city = data.address.state_district ? (data.address.state_district.replace(' District', '')) : (
+                let city = data.address.state_district ? (data.address.state_district.replace(' District', '')) : (
                     data.address.city || data.address.town || data.address.village || "Unknown city");
                 const state = data.address.state || "Unknown state";
+                console.log(city);
                 if (city != 'Unknown city') {
-                    if (city == 'Ahmednagar' || city == 'ahmednagar') {
+                    if (city == 'Ahmednagar' || city == 'ahmednagar' || city == 'अहिल्यानगर') {
                         city = 'Ahilyanagar';
                     }
                     Livewire.dispatch('selectedCityfun', {
