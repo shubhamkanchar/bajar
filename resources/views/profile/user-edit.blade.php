@@ -1,7 +1,5 @@
 @extends('layouts.profile-layout')
 
 @section('content')
-    <livewire:user.edit />
+    @include('partials.user-edit-form')
 @endsection
-
-

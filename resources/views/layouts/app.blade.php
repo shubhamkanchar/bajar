@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css" integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    @livewireStyles
+
     @stack('style')
     <style>
         @media (max-width: 767.98px) {
@@ -65,44 +65,10 @@
             @yield('content')
         </main>
     </div>
-    @livewireScripts
+
     @stack('scripts')
     @include('layouts.partials.notify')
-    <script>
-    Livewire.hook('request', ({ fail }) => {
-        fail(async ({ status, preventDefault, retry }) => {
-            if (status === 419) {
-                preventDefault(); // Prevent Livewire's default error handling
 
-                try {
-                    const response = await fetch('/refresh-csrf', {
-                        headers: {
-                            'Accept': 'application/json',
-                        },
-                        credentials: 'same-origin', // Required for session cookie
-                    });
-
-                    const data = await response.json();
-                    const newToken = data.token;
-
-                    // Update CSRF token in <meta> tag
-                    const meta = document.querySelector('meta[name="csrf-token"]');
-                    if (meta) {
-                        meta.setAttribute('content', newToken);
-                    }
-
-                    // Update Livewire's CSRF token
-                    Livewire.csrfToken = newToken;
-
-                    // Retry the failed Livewire request
-                    retry();
-                } catch (e) {
-                    console.error("Failed to refresh CSRF token", e);
-                }
-            }
-        });
-    });
-</script>
 
 </body>
 

@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Illuminate\Support\Facades\View::composer('partials.subscription-form', \App\View\Composers\SubscriptionComposer::class);
+
         Event::listen(Logout::class, function () {
             session()->flush(); // clear Livewire session state
         });

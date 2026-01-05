@@ -1,7 +1,7 @@
 @extends('layouts.profile-layout')
 
 @section('content')
-    <livewire:business.profile />
+    @include('partials.business-dashboard')
 @endsection
 
 

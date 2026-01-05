@@ -1,7 +1,8 @@
 @extends('layouts.profile-layout')
 
 @section('content')
-    <livewire:business.edit />
+    @include('partials.business-edit-form')
+
 @endsection
 
 
