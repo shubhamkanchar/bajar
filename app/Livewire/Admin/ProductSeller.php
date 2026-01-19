@@ -23,6 +23,7 @@ class ProductSeller extends Component
     public $cityOptions = [];
     public $sellers = [];
     public $orderBy;
+    public $totalSellers = 0;
     public string $type;
 
     public function mount(string $type){
@@ -139,8 +140,8 @@ class ProductSeller extends Component
             });
         }
 
+        $this->totalSellers = $query->count();
         $filteredSellers = $query->get();
-
         if ($this->orderBy === 'state') {
             $filteredSellers = $filteredSellers->groupBy(function ($product) {
                 return $product->address->state;
@@ -154,7 +155,10 @@ class ProductSeller extends Component
                 return $product->address?->city;
             });
         }
-        return $filteredSellers;
+        return [
+            'sellers' => $filteredSellers,
+            'totalSellers' => $this->totalSellers,
+        ];
     }
 
     public function render()

@@ -139,7 +139,7 @@
                             Individuals
                         @endif
                     </span>
-                    <span class="d-block">{{ $this->productSellers->count() }}</span>
+                    <span class="d-block">{{ $this->productSellers['totalSellers'] }}</span>
                 </span>
                 <button class="btn btn-default rounded-5 bg-custom-secondary">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -167,8 +167,8 @@
         </div>
     </div>
     <div class="row justify-content-center product-list p-2">
-        @if (count($this->productSellers) > 0)
-            @foreach ($this->productSellers as $key => $data)
+        @if (count($this->productSellers['sellers']) > 0)
+            @foreach ($this->productSellers['sellers'] as $key => $data)
                 <div class="fw-bold text-secondary">
                     {{ $key }}
                 </div>
