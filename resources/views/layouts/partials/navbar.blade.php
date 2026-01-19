@@ -24,21 +24,25 @@
                     $user = Auth::user();
                     if($user->role == 'superadmin' || $user->role == 'admin'){
                         $route = route('admin.dashboard');
+                        $text = 'Dashboard';
                     }else if ($user->onboard_completed) {
                         if ($user->role == 'individual') {
                             $route = route('user.profile');
+                            $text = 'Profile';
                         } else if ($user->role == 'business') {
                             if($user->offering == 'product'){
                                 $route = route('business.profile');
+                                $text = 'Profile';
                             }else{
                                 $route = route('service.profile');
+                                $text = 'Profile';
                             }
                         }
                     }else{
                         $route = route('onboarding');
                     }
                 @endphp
-                <li><a class="dropdown-item" href="{{$route}}">Profile</a></li>
+                <li><a class="dropdown-item" href="{{$route}}">{{$text}}</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>

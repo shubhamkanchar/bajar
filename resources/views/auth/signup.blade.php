@@ -33,7 +33,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <img class=" logo-img" src="{{ asset('assets/logo/logo.png') }}">
-                                    <h3 class="mt-2">Sign In</h3>
+                                    <h3 class="mt-2">Sign Up</h3>
                                     <p>Great to have you back!</p>
                                 </div>
                             </div>

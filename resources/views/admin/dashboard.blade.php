@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <livewire:admin.dashboard />
+    <livewire:admin.dashboard :tab="$tab"/>
 @endsection
 
 
