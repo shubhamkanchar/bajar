@@ -34,7 +34,7 @@ class ProductSeller extends Component
     #[Computed]
     public function categories()
     {
-        return Category::where('type', 'product')->get();
+        return Category::where('type', $this->type)->get();
     }
 
     #[Computed]

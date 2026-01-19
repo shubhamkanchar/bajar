@@ -85,6 +85,7 @@
                 </div>
             </template>
 
+            @if($type == 'product' || $type == 'service')
             <!-- Selected Category -->
             <template x-if="selectedCategory">
                 <span role="button"
@@ -100,7 +101,7 @@
                 <div class="d-inline-block position-relative">
                     <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
                         x-on:click="showCategory = !showCategory">
-                        Product Category ▼
+                        Category ▼
                     </span>
 
                     <div x-show="showCategory" x-transition
@@ -116,6 +117,7 @@
                     </div>
                 </div>
             </template>
+            @endif
 
             <span role="button"
                 class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1 {{ $expert == 1 ? 'border-dark bg-secondary-subtle' : '' }}"
@@ -128,8 +130,16 @@
         <div class="col-md-3">
             <div class="d-flex float-md-end m-2">
                 <span class="text-end me-2">
-                    <span class="d-block">Total Products</span>
-                    <span class="d-block"></span>
+                    <span class="d-block">Total 
+                        @if($type == 'product')
+                            Products
+                        @elseif($type == 'service')
+                            Services
+                        @else
+                            Individuals
+                        @endif
+                    </span>
+                    <span class="d-block">{{ $this->productSellers->count() }}</span>
                 </span>
                 <button class="btn btn-default rounded-5 bg-custom-secondary">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -191,18 +201,30 @@
                                 <span class="d-block fw-bold text-wrap"> {{ $seller->email }} </span>
                             </div>
 
+                            @if($type == 'product')
                             <div class="col-12 col-md-2 border-end border-secondary">
                                 <span class="text-secondary">Total Products</span>
                                 <span class="d-flex fw-bold">
                                     <span>{{ sprintf('%02d', $seller->product->count()) }}</span>
                                 </span>
                             </div>
+                            @endif
+                            @if($type == 'service')
+                            <div class="col-12 col-md-2 border-end border-secondary">
+                                <span class="text-secondary">Total Services</span>
+                                <span class="d-flex fw-bold">
+                                    <span>{{ sprintf('%02d', $seller->service->count()) }}</span>
+                                </span>
+                            </div>
+                            @endif
+                            @if($type == 'product' || $type == 'service')
                             <div class="col-12 col-md-1 border-end border-secondary">
                                 <span class="text-secondary">Categories</span>
                                 <span class="d-flex fw-bold">
                                     <span>{{ sprintf('%02d', $seller->category->count()) }}</span>
                                 </span>
                             </div>
+                            @endif
                             <div class="col-12 col-md-2 border-end border-secondary">
                                 <span class="text-secondary">Standard</span>
                                 <span class="d-flex fw-bold">

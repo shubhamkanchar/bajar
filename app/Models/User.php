@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
 
+    public function service()
+    {
+        return $this->hasMany(Service::class, 'user_id', 'id');
+    }
+
     public function category()
     {
         return $this->hasMany(BusinessCategory::class, 'user_id', 'id');

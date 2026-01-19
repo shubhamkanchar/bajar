@@ -74,55 +74,55 @@
             </div>
         </div>
     </div>
-    @if($this->products)
-    <div class="row justify-content-center product-list p-2">
-        @foreach ($this->products as $key => $data)
-            <div class="fw-bold text-secondary">
-                {{ $key }}
-            </div>
-            @foreach ($data as $product)
-                <div class="col-12">
-                    <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
-                        <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary text-title"> {{ $product->work_brief }} </span>
-                            <span class="d-block fs-5 fw-bold text-wrap text-description"> {{ $product->description }}
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-6 border-end border-secondary">
-                            <div class="row">
-                                @foreach ($product->images as $image)
-                                    <div class="col-2">
-                                        <img src="{{ asset('storage/' . $image->path) }}"
-                                            class="d-block w-100 rounded ratio ratio-1x1" alt="Service Image"
-                                            loading="lazy">
-                                    </div>
-                                @endforeach
+    @if($this->products->count() > 0)
+        <div class="row justify-content-center product-list p-2">
+            @foreach ($this->products as $key => $data)
+                <div class="fw-bold text-secondary">
+                    {{ $key }}
+                </div>
+                @foreach ($data as $product)
+                    <div class="col-12">
+                        <div class="row bg-secondary-subtle rounded align-items-center m-2 p-2">
+                            <div class="col-12 col-md-2 border-end border-secondary">
+                                <span class="text-secondary text-title"> {{ $product->work_brief }} </span>
+                                <span class="d-block fs-5 fw-bold text-wrap text-description"> {{ $product->description }}
+                                </span>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-2 border-end border-secondary">
-                            <span class="text-secondary">Product Category </span>
-                            <span class="d-flex fw-bold">
-                                <span>{{ $product->category->title }}</span>
-                                <i class="ms-4 fs-5 fas fa-angle-down align-self-center" style="color: #CCCCCC"></i>
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-1 text-end">
-                            <div class="d-flex">
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
-                                    role="button" data-id="{{ $product->id }}"></i>
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
-                                    role="button" onclick="confirmAction('reject', {{ $product->id }})"></i>
-                                <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-square-check m-1 fw-normal p-2"
-                                    role="button" onclick="confirmAction('approve', {{ $product->id }})"></i>
+                            <div class="col-12 col-md-6 border-end border-secondary">
+                                <div class="row">
+                                    @foreach ($product->images as $image)
+                                        <div class="col-2">
+                                            <img src="{{ asset('storage/' . $image->path) }}"
+                                                class="d-block w-100 rounded ratio ratio-1x1" alt="Service Image"
+                                                loading="lazy">
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 border-end border-secondary">
+                                <span class="text-secondary">Product Category </span>
+                                <span class="d-flex fw-bold">
+                                    <span>{{ $product->category->title }}</span>
+                                    <i class="ms-4 fs-5 fas fa-angle-down align-self-center" style="color: #CCCCCC"></i>
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-1 text-end">
+                                <div class="d-flex">
+                                    <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-eye m-1 fw-normal p-2 slider-btn"
+                                        role="button" data-id="{{ $product->id }}"></i>
+                                    <i class="bg-custom-secondary rounded-5 fs-4 text-danger fa-regular fa-trash-can m-1 fw-normal p-2"
+                                        role="button" onclick="confirmAction('reject', {{ $product->id }})"></i>
+                                    <i class="bg-custom-secondary rounded-5 fs-4 text-dark fa-regular fa-square-check m-1 fw-normal p-2"
+                                        role="button" onclick="confirmAction('approve', {{ $product->id }})"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             @endforeach
-        @endforeach
-    </div>
+        </div>
     @else
-    <div class="text-center h4 fw-bold">No data found</div>
+        <div class="text-center h4 fw-bold">No data found</div>
     @endif
     @if ($this->totalPage > 1)
         <div class="d-flex justify-content-between align-items-center p-4" x-data="{ currentPage: @entangle('currentPage'), totalPage: @entangle('totalPage'), perPage: @entangle('perPage') }">

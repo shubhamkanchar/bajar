@@ -103,7 +103,7 @@
                 <div class="d-inline-block position-relative">
                     <span role="button" class="badge rounded-pill text-dark border border-2 fs-6 px-4 py-2 m-1"
                         x-on:click="showCategory = !showCategory">
-                        Product Category ▼
+                        Service Category ▼
                     </span>
 
                     <div x-show="showCategory" x-transition
